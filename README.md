@@ -285,3 +285,110 @@ Next steps:
 ## Notes
 
 This repository is intended to support both the paper and the experimental workflow. It should remain simple, explicit, and robust against changes in the upstream PIV package.
+
+
+# How to use the software
+
+## PIV preprocessing workflow
+
+Raw PIV videos are not analyzed directly. Each run is first converted into a rectified and preprocessed TIFF sequence.
+
+Standard workflow:
+
+1. read one raw PIV video under `data_root/raw/<run_id>/`
+2. select inner basin corners once and save `rectification.mat`
+3. apply projective rectification and light preprocessing
+4. export a TIFF sequence under `data_root/derived/frames/<run_id>/rectified_tif/`
+5. use the TIFF sequence as the common input for either PIVLab or external PIV software
+
+This design keeps geometric correction and low-level preprocessing independent from the later choice of PIV software.
+
+### Why this design
+
+The project supports two possible PIV routes:
+
+- `video -> MATLAB / PIVLab -> canonical .mat -> metrics`
+- `video -> external PIV software -> canonical .mat -> metrics`
+
+To avoid duplicating downstream logic, both routes are expected to converge to a common canonical MATLAB structure after import.
+
+## Metadata tables
+
+The repository stores experimental metadata in CSV format under `metadata/`.
+
+Current core tables are:
+
+- `metadata/runs.csv` : run-level experiment table
+- `metadata/depth_bands.csv` : representative depth bands for plotting and band-wise aggregation
+- `metadata/flow_levels.csv` : nominal flow-level definitions
+
+Metadata tables are version-controlled in GitHub. Large raw data, intermediate files, and derived outputs are stored outside the repository.
+
+## Data storage policy
+
+The repository stores:
+
+- MATLAB code
+- metadata tables
+- lightweight documentation
+- templates and configuration files
+
+The external data root stores:
+
+- raw videos
+- water-level CSV files
+- rectification files
+- rectified TIFF sequences
+- canonical PIV `.mat` files
+- derived metrics CSV files
+- paper figures and tables
+
+This separation keeps the repository lightweight while preserving reproducibility.
+
+## Recommended per-run data structure
+
+Under `data_root/raw/<run_id>/`:
+
+- `piv.mp4`
+- `timelapse.mp4`
+- `waterlevel.csv`
+- `runlog.md`
+
+Under `data_root/derived/rectification/<run_id>/`:
+
+- `rectification.mat`
+
+Under `data_root/derived/frames/<run_id>/rectified_tif/`:
+
+- `img_00001.tif`, `img_00002.tif`, ...
+- processing manifest written by the preprocessing script
+
+## Project startup
+
+The project uses a local initialization script such as `init.m`, rather than a global MATLAB `startup.m`.
+
+Typical usage:
+
+```matlab
+init
+T = read_runs_table();
+```
+
+This keeps the project-local setup separate from the user's global MATLAB environment.
+
+## Current analysis philosophy
+
+The project is organized around the following principles:
+
+- one run is the minimum management unit
+- metadata tables define experimental conditions
+- depth varies continuously within each run and is later grouped for representative analysis
+- primary metrics are defined independently of the chosen PIV software
+- image preparation should remain simple and stable
+
+## See also
+
+- `docs/piv_preprocessing_protocol.md`
+- `metadata/README.md`
+- `config/project_config_template.m`
+- `scripts/s15_prepare_piv_frames_example.m`
