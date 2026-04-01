@@ -1,0 +1,5 @@
+band_id,h_min_m,h_max_m,h_over_a_min,h_over_a_max,label,description,used_for_plot,used_for_metrics
+B1,0.03,0.05,0.55,0.91,shallow_h_lt_a,"Shallow condition with h<a",true,true
+B2,0.05,0.06,0.91,1.09,transition_around_h_over_a_1,"Transition band around h/a≈1",true,true
+B3,0.06,0.075,1.09,1.36,moderately_submerged,"Moderately submerged condition",true,true
+B4,0.075,0.10,1.36,1.82,clearly_submerged,"Clearly submerged condition",true,true

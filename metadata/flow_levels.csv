@@ -1,0 +1,4 @@
+flow_level,nominal_dh_mm_min,nominal_Q_Lps,depth_range_m,nominal_duration_min,label,description,is_default
+low,2.5,0.25,0.03-0.10,28.0,low,"Nominal low-flow condition",true
+medium,5.0,0.50,0.03-0.10,14.0,medium,"Nominal medium-flow condition",true
+high,7.5,0.75,0.03-0.10,9.33,high,"Nominal high-flow condition",true
