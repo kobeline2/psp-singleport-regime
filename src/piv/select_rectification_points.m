@@ -162,6 +162,7 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
     rect.Ny = Ny;
 
     rect.tform = tform;
+    rect.outputRef = imref2d([Ny, Nx]);
 
     % ---------------------------------------------------------------------
     % Save MAT file

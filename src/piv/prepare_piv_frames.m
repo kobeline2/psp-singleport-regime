@@ -44,6 +44,8 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
         mkdir(outDir);
     end
 
+    outputRef = iResolveOutputRef(rect);
+
     v = VideoReader(videoPath);
     nTotal = floor(v.Duration * v.FrameRate);
     startFrame = max(1, opts.start_frame);
@@ -65,7 +67,7 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
         I = read(v, idx);
 
         if opts.rectify_first
-            I = imwarp(I, rect.tform, 'OutputView', rect.outputRef);
+            I = imwarp(I, rect.tform, 'OutputView', outputRef);
         end
 
         J = preprocess_piv_frame(I, opts.preprocess);
@@ -98,4 +100,24 @@ function opts = iDefaults(opts)
     if ~isfield(opts, 'file_prefix');    opts.file_prefix = 'img_'; end
     if ~isfield(opts, 'rectify_first');  opts.rectify_first = true; end
     if ~isfield(opts, 'preprocess');     opts.preprocess = struct(); end
+end
+
+function outputRef = iResolveOutputRef(rect)
+    if isfield(rect, 'outputRef') && isa(rect.outputRef, 'imref2d')
+        outputRef = rect.outputRef;
+        return;
+    end
+
+    if isfield(rect, 'Ny') && isfield(rect, 'Nx') && ...
+            isnumeric(rect.Ny) && isnumeric(rect.Nx) && ...
+            isscalar(rect.Ny) && isscalar(rect.Nx) && ...
+            isfinite(rect.Ny) && isfinite(rect.Nx) && ...
+            rect.Ny > 0 && rect.Nx > 0
+        outputRef = imref2d([round(rect.Ny), round(rect.Nx)]);
+        return;
+    end
+
+    error('prepare_piv_frames:MissingOutputRef', ...
+        ['Rectification data must include rect.outputRef or numeric rect.Ny ' ...
+         'and rect.Nx fields.']);
 end

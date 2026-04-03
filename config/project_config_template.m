@@ -32,13 +32,17 @@ cfg.DOCS_DIR     = fullfile(cfg.REPO_ROOT, 'docs');
 % Data-side folders
 % -------------------------------------------------------------------------
 cfg.RAW_DIR        = fullfile(cfg.DATA_ROOT, 'raw');
-cfg.PIV_EXPORT_DIR = fullfile(cfg.DATA_ROOT, 'piv_exports');
+cfg.WORK_DIR       = fullfile(cfg.DATA_ROOT, 'work');
 cfg.DERIVED_DIR    = fullfile(cfg.DATA_ROOT, 'derived');
 cfg.RESULTS_ROOT   = fullfile(cfg.DATA_ROOT, 'results');
 
 cfg.DERIVED_PIV_DIR     = fullfile(cfg.DERIVED_DIR, 'piv');
 cfg.DERIVED_METRICS_DIR = fullfile(cfg.DERIVED_DIR, 'metrics');
 cfg.DERIVED_QC_DIR      = fullfile(cfg.DERIVED_DIR, 'qc');
+cfg.RECTIFIED_TIF_DIR = 'rectified_tif';
+cfg.RECTIFICATION_FILE = 'rectification.mat';
+cfg.PIVLAB_PROJ_DIR = 'pivlab_proj';
+cfg.PIV_EXPORT_DIR = fullfile(cfg.WORK_DIR, 'exports');
 
 cfg.RESULTS_FIG_DIR   = fullfile(cfg.RESULTS_ROOT, 'figures');
 cfg.RESULTS_TABLE_DIR = fullfile(cfg.RESULTS_ROOT, 'tables');

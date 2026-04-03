@@ -103,16 +103,10 @@ psp-singleport-regime/
 │  ├─ qc/
 │  └─ viz/
 ├─ scripts/
-│  ├─ s00_setup_project.m
-│  ├─ s10_register_runs.m
-│  ├─ s20_import_run_assets.m
-│  ├─ s30_import_piv_short.m
-│  ├─ s31_import_piv_long.m
-│  ├─ s40_merge_dual_dt.m
-│  ├─ s50_compute_frame_metrics.m
-│  ├─ s60_aggregate_band_metrics.m
-│  ├─ s70_export_csv.m
-│  └─ s80_make_paper_figures.m
+│  ├─ s10_prepare_frames.m
+│  ├─ s20_import_piv_results.m
+│  ├─ s30_compute_metrics.m
+│  └─ s40_make_paper_figures.m
 ├─ docs/
 └─ tests/
 ```
@@ -130,7 +124,12 @@ data_root/
 │  │  ├─ waterlevel.csv
 │  │  └─ runlog.md
 │  └─ ...
-├─ piv_exports/
+├─ work/
+│  ├─ R0001/
+│  │  ├─ rectification.mat
+│  │  ├─ rectified_tif/
+│  │  ├─ pivlab_proj/
+│  │  └─ tmp_pivlab_long/
 │  └─ ...
 ├─ derived/
 │  ├─ piv/
@@ -241,15 +240,11 @@ Used for:
 
 A typical workflow is expected to follow these steps.
 
-1. Register runs in `metadata/runs.csv`
-2. Import videos, time-lapse, water-level files, and logs
-3. Import PIV results from PIVLab and/or external software
-4. Convert them into a canonical `.mat` structure
-5. Merge short- and long-\(\Delta t\) velocity fields
-6. Compute frame-wise metrics
-7. Aggregate metrics by depth band
-8. Export CSV tables
-9. Create paper figures
+1. Prepare rectified TIFF frames and optional PIVLab temporary sequences with `scripts/s10_prepare_frames.m`
+2. Import PIV results from PIVLab and/or external software with `scripts/s20_import_piv_results.m`
+3. Convert them into a canonical `.mat` structure and, when needed, merge short- and long-\(\Delta t\) velocity fields
+4. Compute frame-wise and band-wise metrics with `scripts/s30_compute_metrics.m`
+5. Create paper figures with `scripts/s40_make_paper_figures.m`
 
 ## Coding style
 
@@ -286,6 +281,17 @@ Next steps:
 
 This repository is intended to support both the paper and the experimental workflow. It should remain simple, explicit, and robust against changes in the upstream PIV package.
 
+## Script philosophy
+
+This project is intended to stay usable by a very small team over a multi-year period. The top-level `scripts/` folder is therefore intentionally kept coarse-grained:
+
+- `s10_prepare_frames.m`
+- `s20_import_piv_results.m`
+- `s30_compute_metrics.m`
+- `s40_make_paper_figures.m`
+
+Detailed logic should live in reusable functions under `src/`, while the scripts remain short driver entry points.
+
 
 # How to use the software
 
@@ -298,7 +304,7 @@ Standard workflow:
 1. read one raw PIV video under `data_root/raw/<run_id>/`
 2. select inner basin corners once and save `rectification.mat`
 3. apply projective rectification and light preprocessing
-4. export a TIFF sequence under `data_root/derived/frames/<run_id>/rectified_tif/`
+4. export a TIFF sequence under `data_root/work/<run_id>/rectified_tif/`
 5. use the TIFF sequence as the common input for either PIVLab or external PIV software
 
 This design keeps geometric correction and low-level preprocessing independent from the later choice of PIV software.
@@ -339,6 +345,7 @@ The external data root stores:
 - water-level CSV files
 - rectification files
 - rectified TIFF sequences
+- tool-specific working folders
 - canonical PIV `.mat` files
 - derived metrics CSV files
 - paper figures and tables
@@ -354,14 +361,42 @@ Under `data_root/raw/<run_id>/`:
 - `waterlevel.csv`
 - `runlog.md`
 
-Under `data_root/derived/rectification/<run_id>/`:
+Under `data_root/work/<run_id>/`:
 
 - `rectification.mat`
+- `pivlab_proj/`
+- `tmp_pivlab_long/` as needed
 
-Under `data_root/derived/frames/<run_id>/rectified_tif/`:
+Under `data_root/work/<run_id>/rectified_tif/`:
 
 - `img_00001.tif`, `img_00002.tif`, ...
 - processing manifest written by the preprocessing script
+
+The local config uses `cfg.WORK_DIR = fullfile(cfg.DATA_ROOT, 'work')` and `cfg.RECTIFIED_TIF_DIR = 'rectified_tif'`.
+
+## PIVLab temporary sequence
+
+When PIVLab works better with a temporary sequential TIFF folder, create one from the rectified TIFF sequence using `make_pivlab_sequence`. This preparation step now belongs in `scripts/s10_prepare_frames.m`.
+
+Typical usage:
+
+```matlab
+runID = "R0009";
+
+srcDir = fullfile(cfg.WORK_DIR, char(runID), cfg.RECTIFIED_TIF_DIR);
+outDir = fullfile(cfg.WORK_DIR, char(runID), 'tmp_pivlab_long');
+
+manifest = make_pivlab_sequence(srcDir, outDir, ...
+    'frame_step', 3, ...
+    'start_index', 1000, ...
+    'prefix', 'img_', ...
+    'digits', 4, ...
+    'delete_existing', true, ...
+    'copy_mode', 'copy', ...
+    'write_manifest', true);
+```
+
+This creates a temporary renumbered sequence such as `img_1000.tif`, `img_1001.tif`, ... for PIVLab while keeping the rectified source TIFFs unchanged when `copy_mode = 'copy'`.
 
 ## Project startup
 
@@ -391,4 +426,5 @@ The project is organized around the following principles:
 - `docs/piv_preprocessing_protocol.md`
 - `metadata/README.md`
 - `config/project_config_template.m`
-- `scripts/s15_prepare_piv_frames_example.m`
+- `scripts/s10_prepare_frames.m`
+- `src/io/make_pivlab_sequence.m`

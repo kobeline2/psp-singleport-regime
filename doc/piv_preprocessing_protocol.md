@@ -30,9 +30,9 @@ The processing pipeline described here only consumes `piv.mp4` directly.
 ## Output files
 For each run, the current standard outputs are:
 
-- `data_root/derived/rectification/<run_id>/rectification.mat`
-- `data_root/derived/frames/<run_id>/rectified_tif/img_00001.tif`, `img_00002.tif`, ...
-- `data_root/derived/frames/<run_id>/rectified_tif/frame_manifest.csv` or equivalent manifest written by the processing script
+- `data_root/work/<run_id>/rectification.mat`
+- `data_root/work/<run_id>/rectified_tif/img_00001.tif`, `img_00002.tif`, ...
+- `data_root/work/<run_id>/rectified_tif/frame_manifest.csv` or equivalent manifest written by the processing script
 
 No rectification preview PNG is required in the default workflow. The transform can be reproduced from `rectification.mat` when needed.
 
@@ -98,6 +98,29 @@ The default implementation performs the following operations in sequence:
 
 The preferred workflow is to process frames directly from the video into rectified TIFF output. Intermediate unrectified TIFF sequences are not generated.
 
+### Step 5. Optionally create a temporary PIVLab sequence
+If PIVLab needs a temporary renumbered TIFF folder, create one from the rectified sequence:
+
+```matlab
+runID = "R0009";
+
+srcDir = fullfile(cfg.WORK_DIR, char(runID), cfg.RECTIFIED_TIF_DIR);
+outDir = fullfile(cfg.WORK_DIR, char(runID), 'tmp_pivlab_long');
+
+manifest = make_pivlab_sequence(srcDir, outDir, ...
+    'frame_step', 3, ...
+    'start_index', 1000, ...
+    'prefix', 'img_', ...
+    'digits', 4, ...
+    'delete_existing', true, ...
+    'copy_mode', 'copy', ...
+    'write_manifest', true);
+```
+
+This creates a temporary sequential folder for PIVLab without modifying the source rectified TIFF sequence when `copy_mode` is set to `copy`.
+
+In the current project layout, this optional step belongs to `scripts/s10_prepare_frames.m`, not to the later PIV-result import step.
+
 ## Current default preprocessing settings
 The current default settings are intentionally conservative.
 
@@ -132,6 +155,7 @@ The rectification file stores a single struct named `rect`. The minimum expected
 - `rect.Nx`
 - `rect.Ny`
 - `rect.tform`
+- `rect.outputRef`
 
 This is sufficient to re-apply or audit the transform later.
 
@@ -175,12 +199,13 @@ Repository side:
 - `src/piv/select_rectification_points.m`
 - `src/piv/prepare_piv_frames.m`
 - `src/piv/preprocess_piv_frame.m`
-- `scripts/s15_prepare_piv_frames_example.m`
+- `src/io/make_pivlab_sequence.m`
+- `scripts/s10_prepare_frames.m`
 
 Data side:
 
-- `data_root/derived/rectification/<run_id>/rectification.mat`
-- `data_root/derived/frames/<run_id>/rectified_tif/`
+- `data_root/work/<run_id>/rectification.mat`
+- `data_root/work/<run_id>/rectified_tif/`
 
 ## Revision policy
 This protocol may be updated during the pilot stage. Once pilot testing is complete and the main preprocessing settings are fixed, changes should be documented explicitly in the project notes.
