@@ -128,14 +128,20 @@ function make_piv_quiver_movie(u, v, outFile, varargin)
 
     for k = 1:numel(useIdx)
         it = useIdx(k);
-
+    
         Ui = u{it};
         Vi = v{it};
+    
+        if ~isnumeric(Ui) || ~isnumeric(Vi) || ~isequal(size(Ui), [Ny, Nx]) || ~isequal(size(Vi), [Ny, Nx])
+            fprintf('[make_piv_quiver_movie] Skipping frame %d due to invalid size\\n', it);
+            continue;
+        end
+    
         Si = hypot(Ui, Vi);
-
+    
         set(hImg, 'CData', Si);
         set(hQ, 'UData', Ui(jj,ii), 'VData', Vi(jj,ii));
-
+    
         if isempty(prm.dt_s)
             ttl = sprintf('%s, frame %d / %d', prm.title_prefix, it, nFrames);
         else
@@ -143,7 +149,7 @@ function make_piv_quiver_movie(u, v, outFile, varargin)
             ttl = sprintf('%s, t = %.2f s', prm.title_prefix, tsec);
         end
         title(ax, ttl, 'Interpreter', 'none');
-
+    
         drawnow;
         writeVideo(vw, getframe(hFig));
     end
