@@ -45,6 +45,10 @@
 
 多くのスクリプトは内部で `init` を呼ぶので、通常は事前に `init` を手で実行しなくても大丈夫です。
 
+`s10_prepare_frames.m` については、毎回変わる条件は
+`local/settings/s10_prepare_frames_local.m`
+で上書きできるようにしておくと、共有スクリプトを何度も編集せずに済みます。
+
 ## `s10_prepare_frames.m` の使い方
 
 [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) を開いて、冒頭の設定を必要に応じて変更してください。
@@ -67,6 +71,10 @@
 
 - `pivlab_opts`
   PIVLab 用一時画像列の設定です。何フレームおきに使うか、何番から連番を始めるかなどをここで変えます。
+
+これらを頻繁に変える場合は、共有スクリプト本体を毎回書き換えるより、
+`local/settings/s10_prepare_frames_local.m`
+を作って必要な変数だけ上書きする運用をおすすめします。
 
 ### `s10_prepare_frames.m` で作られるもの
 

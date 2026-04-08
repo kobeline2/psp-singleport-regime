@@ -21,6 +21,8 @@ local/
 │  │  ├─ pivlab_proj/
 │  │  └─ tmp_pivlab_long/
 │  └─ exports/
+├─ settings/
+│  └─ s10_prepare_frames_local.m
 ├─ derived/
 │  ├─ piv/
 │  ├─ metrics/
@@ -41,6 +43,37 @@ local/
 5. Keep tool-specific PIVLab project folders under `local/work/<run_id>/pivlab_proj/`.
 6. Keep imported canonical MATLAB outputs under `local/derived/piv/`, metric CSV outputs under `local/derived/metrics/`, and QC files under `local/derived/qc/`.
 7. Save paper figures and tables under `local/results/`.
+
+## Local Script Settings
+
+If you need to change `runID` or other daily-use options for `s10_prepare_frames.m`, do not edit the shared script every time.
+
+Instead, create:
+
+`local/settings/s10_prepare_frames_local.m`
+
+This file is gitignored and can contain simple MATLAB assignments that overwrite the defaults in the shared script.
+
+Example:
+
+```matlab
+runID = "R0009";
+do_select_rectification = false;
+rectification_frame_idx = 1;
+make_pivlab_tmp = true;
+pivlab_variant = "long";
+
+opts.frame_step = 6;
+opts.end_frame = Inf;
+
+pivlab_opts.frame_step = 5;
+pivlab_opts.start_index = 1000;
+```
+
+Important:
+
+- You only need to write the values you want to change.
+- `opts` and `pivlab_opts` already exist in the main script, so it is usually better to update individual fields such as `opts.frame_step` instead of rebuilding the whole struct from scratch.
 
 ## Naming Rules
 

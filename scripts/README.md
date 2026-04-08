@@ -45,6 +45,10 @@ In other words, `s10_prepare_frames.m` is the main script that is currently read
 
 Most scripts call `init` internally, so you usually do not need to run `init` manually first.
 
+For `s10_prepare_frames.m`, daily-use settings can also be overridden in
+`local/settings/s10_prepare_frames_local.m` so that students do not need to
+edit the shared script every time.
+
 ## How To Use `s10_prepare_frames.m`
 
 Open [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) and update the user settings near the top:
@@ -67,6 +71,10 @@ Open [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/s
 
 - `pivlab_opts`
   Controls the temporary PIVLab-ready image sequence, including frame thinning and output numbering.
+
+If you expect to change these values often, prefer creating
+`local/settings/s10_prepare_frames_local.m` and overriding only the needed
+variables there.
 
 ### What `s10_prepare_frames.m` Produces
 

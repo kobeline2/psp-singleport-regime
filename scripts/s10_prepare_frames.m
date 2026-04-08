@@ -5,43 +5,122 @@ clear; clc;
 %
 % This script intentionally combines the old "prepare assets" and
 % "prepare frames" entry points into one simple driver.
+%
+% Daily-use settings should usually be changed in:
+%   local/settings/s10_prepare_frames_local.m
+% rather than by repeatedly editing this file.
 
 init
 
-% -------------------------------------------------------------------------
+%% ------------------------------------------ -------------------------------
 % User settings
 % -------------------------------------------------------------------------
+% Run identifier defined in metadata/runs.csv
 runID = "R0009";
-do_select_rectification = true;
-rectification_frame_idx = 1;
-pivlab_variant = "long";
 
+% If true, open the interactive rectification tool and update the saved
+% corner points. If false, reuse the existing rectification.mat file.
+do_select_rectification = true;
+
+% Video frame used when selecting the 4 rectification points.
+rectification_frame_idx = 1;
+
+% If true, also create a temporary renumbered TIFF sequence for PIVLab.
+make_pivlab_tmp = false;
+
+% Used only for naming the temporary PIVLab folder, for example
+% tmp_pivlab_long or tmp_pivlab_short.
+pivlab_variant = "5fps";
+
+% Options passed to prepare_piv_frames().
+% These settings control how the main rectified TIFF sequence is generated.
 opts = struct();
+
+% First raw-video frame to export.
 opts.start_frame = 1;
+
+% Last raw-video frame to export. Use Inf to process until the end.
 opts.end_frame = Inf;
-opts.frame_step = 1;
+
+% Export every nth frame from the raw video.
+opts.frame_step = 6;
+
+% Prefix used for output TIFF names such as img_00001.tif.
 opts.file_prefix = 'img_';
+
+% If true, write frame_manifest.csv in the rectified_tif folder.
 opts.write_manifest = true;
 
+% Image preprocessing options applied before writing each TIFF frame.
 opts.preprocess = struct();
+
+% Flat-field correction mode:
+%   'divide'   : divide by a blurred background image
+%   'subtract' : subtract from a blurred background image
+%   'none'     : no flat-field correction
 opts.preprocess.flatfield_mode = 'divide';
+
+% Gaussian blur size in pixels used to estimate the background image.
 opts.preprocess.flat_sigma_px = 30;
+
+% Clip grayscale values to these percentiles before normalization.
 opts.preprocess.clip_prctile = [1 99];
+
+% If true, invert intensity so particles appear bright.
 opts.preprocess.invert = true;
+
+% If true, apply CLAHE contrast enhancement.
 opts.preprocess.do_clahe = false;
+
+% If true, apply a median filter after normalization.
 opts.preprocess.do_median = false;
+
+% Output TIFF data type. Common choice: 'uint16'.
 opts.preprocess.output_class = 'uint16';
 
+% Options passed to make_pivlab_sequence().
+% These settings control the temporary image folder prepared for PIVLab.
 pivlab_opts = struct();
+
+% First rectified TIFF index to use from rectified_tif/.
 pivlab_opts.frame_start = 1;
+
+% Last rectified TIFF index to use. Use Inf to include all remaining frames.
 pivlab_opts.frame_end = Inf;
+
+% Use every nth rectified TIFF when creating the temporary PIVLab sequence.
 pivlab_opts.frame_step = 5;
+
+% Starting number for output names, e.g. img_1000.tif.
 pivlab_opts.start_index = 1000;
+
+% Prefix used for the temporary PIVLab filenames.
 pivlab_opts.prefix = 'img_';
+
+% Number of digits used in the output numbering.
 pivlab_opts.digits = 4;
+
+% If true, overwrite an existing tmp_pivlab_* folder.
 pivlab_opts.delete_existing = true;
+
+% 'copy' keeps the original rectified TIFFs. 'move' relocates them.
 pivlab_opts.copy_mode = 'copy';
+
+% If true, write pivlab_sequence_manifest.csv in the temporary folder.
 pivlab_opts.write_manifest = true;
+
+% Optional gitignored local override script.
+% Create local/settings/s10_prepare_frames_local.m and set only the values
+% you want to change for the current run. For example:
+%   runID = "R0012";
+%   do_select_rectification = false;
+%   opts.frame_step = 6;
+%   pivlab_opts.frame_step = 5;
+settingsFile = fullfile(cfg.DATA_ROOT, 'settings', 's10_prepare_frames_local.m');
+if isfile(settingsFile)
+    fprintf('[s10_prepare_frames] Loading local settings: %s\n', settingsFile);
+    run(settingsFile);
+end
 
 % -------------------------------------------------------------------------
 % Resolve run metadata and paths
@@ -90,20 +169,21 @@ fprintf('[s10_prepare_frames] Prepared %d TIFF frames for %s\n', height(manifest
 %% -------------------------------------------------------------------------
 % Step 3. Optionally create a temporary sequential TIFF folder for PIVLab
 % -------------------------------------------------------------------------
+if make_pivlab_tmp
+    pivlabDir = fullfile(workRunDir, sprintf('tmp_pivlab_%s', char(pivlab_variant)));
 
-pivlabDir = fullfile(workRunDir, sprintf('tmp_pivlab_%s', char(pivlab_variant)));
+    pivlabManifest = make_pivlab_sequence(frameDir, pivlabDir, ...
+        'frame_start', pivlab_opts.frame_start, ...
+        'frame_end', pivlab_opts.frame_end, ...
+        'frame_step', pivlab_opts.frame_step, ...
+        'start_index', pivlab_opts.start_index, ...
+        'prefix', pivlab_opts.prefix, ...
+        'digits', pivlab_opts.digits, ...
+        'delete_existing', pivlab_opts.delete_existing, ...
+        'copy_mode', pivlab_opts.copy_mode, ...
+        'write_manifest', pivlab_opts.write_manifest);
 
-pivlabManifest = make_pivlab_sequence(frameDir, pivlabDir, ...
-    'frame_start', pivlab_opts.frame_start, ...
-    'frame_end', pivlab_opts.frame_end, ...
-    'frame_step', pivlab_opts.frame_step, ...
-    'start_index', pivlab_opts.start_index, ...
-    'prefix', pivlab_opts.prefix, ...
-    'digits', pivlab_opts.digits, ...
-    'delete_existing', pivlab_opts.delete_existing, ...
-    'copy_mode', pivlab_opts.copy_mode, ...
-    'write_manifest', pivlab_opts.write_manifest);
-
-disp(pivlabManifest(1:min(5, height(pivlabManifest)), :));
-fprintf('[s10_prepare_frames] Prepared %d PIVLab files in %s\n', ...
-    height(pivlabManifest), pivlabDir);
+    disp(pivlabManifest(1:min(5, height(pivlabManifest)), :));
+    fprintf('[s10_prepare_frames] Prepared %d PIVLab files in %s\n', ...
+        height(pivlabManifest), pivlabDir);
+end
