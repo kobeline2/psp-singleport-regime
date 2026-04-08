@@ -141,6 +141,91 @@ local/
     └─ drafts/
 ```
 
+## Git workflow for one maintainer using two PCs
+
+This repository assumes the following collaboration model:
+
+- one maintainer edits code and metadata
+- the maintainer may work from two different PCs
+- students only pull updates and run the shared scripts on `main`
+
+Recommended rules:
+
+- treat `main` as a sync-only branch
+- do not make code changes directly on `main`
+- create one topic branch per task, for example `feature/frame-prep-cleanup`
+- push that topic branch before moving to the other PC
+- never rely on Git to sync `local/` data between PCs
+- students should stay on `main` and update with `git pull --ff-only`
+
+### Maintainer workflow
+
+Start a new task on either PC:
+
+```sh
+git switch main
+git pull --ff-only
+git switch -c feature/frame-prep-cleanup
+```
+
+Commit and publish the work branch before changing PCs:
+
+```sh
+git add .
+git commit -m "Refine frame prep workflow"
+git push -u origin feature/frame-prep-cleanup
+```
+
+Resume the same task on the other PC:
+
+```sh
+git fetch origin
+git switch main
+git pull --ff-only
+git switch --track origin/feature/frame-prep-cleanup
+```
+
+If the branch already exists locally on that PC, use:
+
+```sh
+git switch feature/frame-prep-cleanup
+git pull --ff-only
+```
+
+When the task is ready for students, update `main` and fast-forward it:
+
+```sh
+git switch main
+git pull --ff-only
+git merge --ff-only feature/frame-prep-cleanup
+git push origin main
+```
+
+If `git merge --ff-only` stops because the branch is behind `main`, rebase the work branch first:
+
+```sh
+git switch feature/frame-prep-cleanup
+git rebase main
+git switch main
+git merge --ff-only feature/frame-prep-cleanup
+git push origin main
+```
+
+### Student workflow
+
+Students should not create code-editing branches unless explicitly asked. Their normal update command is:
+
+```sh
+git switch main
+git pull --ff-only
+```
+
+### Important note about `local/`
+
+Each PC has its own machine-local `local/` directory. Git keeps only the README files and placeholder `.gitkeep` files there.
+
+Raw videos, TIFF sequences, PIVLab projects, temporary outputs, and local MATLAB override files are not synchronized by Git. If two PCs both need the same experiment data, copy or sync those files outside Git using the lab's preferred storage method.
+
 ## Metadata tables
 
 ### `metadata/runs.csv`

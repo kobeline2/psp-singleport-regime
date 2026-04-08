@@ -49,6 +49,23 @@ For `s10_prepare_frames.m`, daily-use settings can also be overridden in
 `local/settings/s10_prepare_frames_local.m` so that students do not need to
 edit the shared script every time.
 
+## How Students Should Update This Repository
+
+This repository assumes that one maintainer edits the code, possibly from two PCs, while students only pull updates and run the shared scripts.
+
+Student workflow:
+
+```sh
+git switch main
+git pull --ff-only
+```
+
+Important:
+
+- stay on `main` unless the maintainer explicitly asks you to use another branch
+- do not commit code changes locally unless you were asked to edit the repository
+- remember that `local/` is machine-local; Git will not sync your raw data, TIFFs, or local settings from another PC
+
 ## How To Use `s10_prepare_frames.m`
 
 Open [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) and update the user settings near the top:

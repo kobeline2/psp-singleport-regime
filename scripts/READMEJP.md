@@ -49,6 +49,23 @@
 `local/settings/s10_prepare_frames_local.m`
 で上書きできるようにしておくと、共有スクリプトを何度も編集せずに済みます。
 
+## 学生さんの更新方法
+
+このリポジトリは、コード改修は管理者 1 人が行い、学生さんは基本的に更新を受け取ってスクリプトを実行するだけ、という運用を前提にしています。
+
+学生さんの通常手順は次の 2 行だけです。
+
+```sh
+git switch main
+git pull --ff-only
+```
+
+注意:
+
+- 管理者から指示がない限り、`main` 以外のブランチは使わないでください。
+- 管理者から依頼されていない限り、リポジトリ内のコードは commit しないでください。
+- `local/` は PC ごとのローカル作業領域です。別の PC の `local/raw/`、`local/work/`、`local/settings/` は Git では同期されません。
+
 ## `s10_prepare_frames.m` の使い方
 
 [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) を開いて、冒頭の設定を必要に応じて変更してください。

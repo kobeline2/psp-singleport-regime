@@ -4,6 +4,20 @@ This directory is the default data root for local experiment files.
 
 Everything under `local/` is intended for machine-local working data. The repository keeps only this README and a few `.gitkeep` placeholder files. Raw videos, intermediate TIFF sequences, PIV projects, and result files should stay here and should not be committed.
 
+## Two-PC note
+
+`local/` belongs to one machine. Git does not synchronize the contents of:
+
+- `local/raw/`
+- `local/work/`
+- `local/derived/`
+- `local/results/`
+- `local/settings/`
+
+If the maintainer switches between two PCs, the Git branch should be pushed in the usual way, but the experiment files under `local/` must be copied or synced separately outside Git.
+
+It is normal for two PCs to have different `local/` contents and different `local/settings/s10_prepare_frames_local.m` files.
+
 ## Standard Layout
 
 ```text
