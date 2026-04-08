@@ -10,15 +10,17 @@ The goal is to convert one raw PIV video per run into a rectified TIFF sequence 
 
 This protocol is intentionally lightweight. It records the minimum required steps and files for reproducibility without introducing unnecessary manual bookkeeping.
 
+In the default project setup, `data_root` corresponds to `local/` under the repository root.
+
 ## Scope
 This protocol applies to the main PIV video of each run, for example:
 
-- `data_root/raw/R0009/piv.mp4`
+- `local/raw/R0009/piv.mp4`
 
 The timelapse video is not part of this preprocessing pipeline. It is used separately for checking quiescent initial conditions.
 
 ## Required inputs per run
-Each run is assumed to have the following files under `data_root/raw/<run_id>/`:
+Each run is assumed to have the following files under `local/raw/<run_id>/`:
 
 - `piv.mp4` : main video for PIV analysis
 - `timelapse.mp4` : timelapse video for residual-motion checks
@@ -30,9 +32,9 @@ The processing pipeline described here only consumes `piv.mp4` directly.
 ## Output files
 For each run, the current standard outputs are:
 
-- `data_root/work/<run_id>/rectification.mat`
-- `data_root/work/<run_id>/rectified_tif/img_00001.tif`, `img_00002.tif`, ...
-- `data_root/work/<run_id>/rectified_tif/frame_manifest.csv` or equivalent manifest written by the processing script
+- `local/work/<run_id>/rectification.mat`
+- `local/work/<run_id>/rectified_tif/img_00001.tif`, `img_00002.tif`, ...
+- `local/work/<run_id>/rectified_tif/frame_manifest.csv` or equivalent manifest written by the processing script
 
 No rectification preview PNG is required in the default workflow. The transform can be reproduced from `rectification.mat` when needed.
 
@@ -204,8 +206,8 @@ Repository side:
 
 Data side:
 
-- `data_root/work/<run_id>/rectification.mat`
-- `data_root/work/<run_id>/rectified_tif/`
+- `local/work/<run_id>/rectification.mat`
+- `local/work/<run_id>/rectified_tif/`
 
 ## Revision policy
 This protocol may be updated during the pilot stage. Once pilot testing is complete and the main preprocessing settings are fixed, changes should be documented explicitly in the project notes.

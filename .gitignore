@@ -15,6 +15,51 @@ config/project_config_local.m
 memo.txt
 
 # ---------------------------------------
+# 1a) リポジトリ内 local/ データルート
+# ---------------------------------------
+# 説明用 README と空ディレクトリ用 .gitkeep だけ残し、
+# 実データ本体は Git 管理しない
+/local/raw/**
+!/local/raw/
+!/local/raw/R0001/
+!/local/raw/.gitkeep
+!/local/raw/R0001/.gitkeep
+
+/local/work/**
+!/local/work/
+!/local/work/R0001/
+!/local/work/R0001/rectified_tif/
+!/local/work/R0001/pivlab_proj/
+!/local/work/exports/
+!/local/work/.gitkeep
+!/local/work/R0001/.gitkeep
+!/local/work/R0001/rectified_tif/.gitkeep
+!/local/work/R0001/pivlab_proj/.gitkeep
+!/local/work/exports/.gitkeep
+
+/local/derived/**
+!/local/derived/
+!/local/derived/piv/
+!/local/derived/metrics/
+!/local/derived/qc/
+!/local/derived/.gitkeep
+!/local/derived/piv/.gitkeep
+!/local/derived/metrics/.gitkeep
+!/local/derived/qc/.gitkeep
+
+/local/results/**
+!/local/results/
+!/local/results/figures/
+!/local/results/tables/
+!/local/results/drafts/
+!/local/results/.gitkeep
+!/local/results/figures/.gitkeep
+!/local/results/tables/.gitkeep
+!/local/results/drafts/.gitkeep
+
+!/local/README.md
+
+# ---------------------------------------
 # 2) Python バイトコード / キャッシュ
 # ---------------------------------------
 __pycache__/

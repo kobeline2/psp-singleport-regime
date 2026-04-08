@@ -2,11 +2,13 @@ clear; clc;
 init
 %%
 runID = "R0009";
+pivlabSubdir = 'pivlab_proj_long';
 
 % Example: load PIVLab-exported u, v
-% Replace this path with your actual file
+% Replace pivlabSubdir if needed for your actual project folder.
 % load(fullfile(cfg.WORK_DIR, char(runID), 'pivlab_short.mat'), 'u', 'v');
-load('/Users/koshiba/Dropbox/git_ignored/psp-singleport-regime/work/R0009/pivlab_proj/pivlab_proj_long/PIVlab.mat',...
+pivlabMat = fullfile(cfg.WORK_DIR, char(runID), cfg.PIVLAB_PROJ_DIR, pivlabSubdir, 'PIVlab.mat');
+load(pivlabMat,...
     'u_filtered', 'v_filtered');
 u = u_filtered; v = v_filtered;
 

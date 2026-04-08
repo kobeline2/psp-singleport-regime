@@ -73,7 +73,7 @@ GitHub is used for:
 - project configuration templates
 - documentation
 
-The following are **not** stored in GitHub and should remain in local/Dropbox storage.
+The following are **not** stored in GitHub and should remain under the gitignored `local/` data root or another gitignored storage location.
 
 - raw videos
 - time-lapse videos
@@ -111,12 +111,12 @@ psp-singleport-regime/
 └─ tests/
 ```
 
-## External data layout
+## Local Data Layout
 
-The repository assumes a separate data root on local storage or Dropbox.
+By default, the repository uses a gitignored data root at `local/` under the repository root.
 
 ```text
-data_root/
+local/
 ├─ raw/
 │  ├─ R0001/
 │  │  ├─ piv.mp4
@@ -301,10 +301,10 @@ Raw PIV videos are not analyzed directly. Each run is first converted into a rec
 
 Standard workflow:
 
-1. read one raw PIV video under `data_root/raw/<run_id>/`
+1. read one raw PIV video under `local/raw/<run_id>/`
 2. select inner basin corners once and save `rectification.mat`
 3. apply projective rectification and light preprocessing
-4. export a TIFF sequence under `data_root/work/<run_id>/rectified_tif/`
+4. export a TIFF sequence under `local/work/<run_id>/rectified_tif/`
 5. use the TIFF sequence as the common input for either PIVLab or external PIV software
 
 This design keeps geometric correction and low-level preprocessing independent from the later choice of PIV software.
@@ -339,7 +339,7 @@ The repository stores:
 - lightweight documentation
 - templates and configuration files
 
-The external data root stores:
+The local data root stores:
 
 - raw videos
 - water-level CSV files
@@ -352,27 +352,27 @@ The external data root stores:
 
 This separation keeps the repository lightweight while preserving reproducibility.
 
-## Recommended per-run data structure
+## Recommended Per-Run Data Structure
 
-Under `data_root/raw/<run_id>/`:
+Under `local/raw/<run_id>/`:
 
 - `piv.mp4`
 - `timelapse.mp4`
 - `waterlevel.csv`
 - `runlog.md`
 
-Under `data_root/work/<run_id>/`:
+Under `local/work/<run_id>/`:
 
 - `rectification.mat`
 - `pivlab_proj/`
 - `tmp_pivlab_long/` as needed
 
-Under `data_root/work/<run_id>/rectified_tif/`:
+Under `local/work/<run_id>/rectified_tif/`:
 
 - `img_00001.tif`, `img_00002.tif`, ...
 - processing manifest written by the preprocessing script
 
-The local config uses `cfg.WORK_DIR = fullfile(cfg.DATA_ROOT, 'work')` and `cfg.RECTIFIED_TIF_DIR = 'rectified_tif'`.
+The default config uses `cfg.DATA_ROOT = fullfile(cfg.REPO_ROOT, 'local')`, `cfg.WORK_DIR = fullfile(cfg.DATA_ROOT, 'work')`, and `cfg.RECTIFIED_TIF_DIR = 'rectified_tif'`.
 
 ## PIVLab temporary sequence
 
@@ -397,6 +397,8 @@ manifest = make_pivlab_sequence(srcDir, outDir, ...
 ```
 
 This creates a temporary renumbered sequence such as `img_1000.tif`, `img_1001.tif`, ... for PIVLab while keeping the rectified source TIFFs unchanged when `copy_mode = 'copy'`.
+
+Students should follow the layout described in [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md) when adding new experiment data.
 
 ## Project startup
 
@@ -426,5 +428,6 @@ The project is organized around the following principles:
 - `docs/piv_preprocessing_protocol.md`
 - `metadata/README.md`
 - `config/project_config_template.m`
+- `local/README.md`
 - `scripts/s10_prepare_frames.m`
 - `src/io/make_pivlab_sequence.m`

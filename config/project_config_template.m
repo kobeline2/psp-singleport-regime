@@ -15,9 +15,11 @@ cfg.PROJECT_NAME = 'psp-singleport-regime';
 cfg.REPO_ROOT = fileparts(fileparts(mfilename('fullpath')));
 
 % -------------------------------------------------------------------------
-% External data root (edit in project_config_local.m)
+% Local data root inside the repository.
+% This directory is intended to be gitignored by default.
+% Override in project_config_local.m only if needed.
 % -------------------------------------------------------------------------
-cfg.DATA_ROOT = 'SET_ME_DATA_ROOT';
+cfg.DATA_ROOT = fullfile(cfg.REPO_ROOT, 'local');
 
 % -------------------------------------------------------------------------
 % Repository-side folders

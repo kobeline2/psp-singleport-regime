@@ -42,7 +42,7 @@ The goal is to support a short-to-medium-term research project on surface-flow r
 - `scripts/` : driver scripts
 - `docs/` : short protocol / workflow notes
 
-### Data-side (outside Git, usually under Dropbox)
+### Data-side (gitignored, default under `local/`)
 - `raw/` : raw videos, water-level csv, run log
 - `work/` : run-wise intermediate files
 - `derived/` : aggregated CSV outputs
