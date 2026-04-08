@@ -107,7 +107,7 @@ psp-singleport-regime/
 │  ├─ s20_import_piv_results.m
 │  ├─ s30_compute_metrics.m
 │  └─ s40_make_paper_figures.m
-├─ docs/
+├─ doc/
 └─ tests/
 ```
 
@@ -425,7 +425,7 @@ The project is organized around the following principles:
 
 ## See also
 
-- `docs/piv_preprocessing_protocol.md`
+- `doc/piv_preprocessing_protocol.md`
 - `metadata/README.md`
 - `config/project_config_template.m`
 - `local/README.md`

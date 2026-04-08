@@ -28,7 +28,7 @@ cfg.CONFIG_DIR   = fullfile(cfg.REPO_ROOT, 'config');
 cfg.METADATA_DIR = fullfile(cfg.REPO_ROOT, 'metadata');
 cfg.SRC_DIR      = fullfile(cfg.REPO_ROOT, 'src');
 cfg.SCRIPTS_DIR  = fullfile(cfg.REPO_ROOT, 'scripts');
-cfg.DOCS_DIR     = fullfile(cfg.REPO_ROOT, 'docs');
+cfg.DOCS_DIR     = fullfile(cfg.REPO_ROOT, 'doc');
 
 % -------------------------------------------------------------------------
 % Data-side folders

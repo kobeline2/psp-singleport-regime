@@ -40,7 +40,7 @@ The goal is to support a short-to-medium-term research project on surface-flow r
 - `metadata/` : CSV tables defining runs, depth bands, and flow levels
 - `src/` : MATLAB functions
 - `scripts/` : driver scripts
-- `docs/` : short protocol / workflow notes
+- `doc/` : short protocol / workflow notes
 
 ### Data-side (gitignored, default under `local/`)
 - `raw/` : raw videos, water-level csv, run log
@@ -160,7 +160,7 @@ When making edits:
 If something is unclear:
 1. Check `README.md`
 2. Check `metadata/README.md`
-3. Check `docs/`
+3. Check `doc/`
 4. Prefer simple implementations that match the current project structure
 5. Avoid inventing a new abstraction unless the existing one clearly fails
 

@@ -36,9 +36,9 @@ function init()
         addpath(metadataDir);
     end
 
-    docsDir = fullfile(projectRoot, 'docs');
-    if isfolder(docsDir)
-        addpath(docsDir);
+    docDir = fullfile(projectRoot, 'doc');
+    if isfolder(docDir)
+        addpath(docDir);
     end
 
     % ---------------------------------------------------------------------
