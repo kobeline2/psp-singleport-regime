@@ -62,6 +62,10 @@ For a new run, create the rectification transform manually using the raw PIV vid
 
 Use the inner water-domain corners, not the outer image frame.
 
+After the 4 points are selected, the function computes a rectified preview
+of the chosen frame. Confirm the preview only if the transformed basin
+looks visually correct and the target aspect ratio is reasonable.
+
 Click in the following order:
 
 1. top-left

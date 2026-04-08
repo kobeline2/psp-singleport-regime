@@ -8,7 +8,7 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
 % Inputs
 %   videoPath : path to raw PIV video
 %   outFile   : full path to output rectification MAT file, e.g.
-%               .../derived/rectification/R0009/rectification.mat
+%               .../local/work/R0009/rectification.mat
 %
 % Name-value pairs
 %   'run_id'        : run identifier, default = parent folder name of videoPath
@@ -28,6 +28,11 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
 %   2. top-right
 %   3. bottom-right
 %   4. bottom-left
+%
+% Interactive confirmation
+%   After selecting the 4 points, the function computes a rectified preview
+%   of the chosen frame so the operator can visually confirm that the basin
+%   corners and aspect ratio look correct before saving.
 
     p = inputParser;
     p.addRequired('videoPath', @(x) ischar(x) || isstring(x));
@@ -78,48 +83,6 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
     I = read(vr, frame_idx);
 
     % ---------------------------------------------------------------------
-    % Click points interactively
-    % ---------------------------------------------------------------------
-    labels = ["top-left", "top-right", "bottom-right", "bottom-left"];
-
-    isAccepted = false;
-    src_pts_px = nan(4,2);
-
-    while ~isAccepted
-        hFig = figure('Name', 'Select rectification points', ...
-                      'NumberTitle', 'off', ...
-                      'Color', 'w');
-        imshow(I, []);
-        hold on;
-
-        title(sprintf(['Select inner basin corners in order:\n' ...
-                       '1) top-left, 2) top-right, 3) bottom-right, 4) bottom-left']), ...
-              'Interpreter', 'none');
-
-        [x, y] = ginput(4);
-        src_pts_px = [x, y];
-
-        plot(src_pts_px(:,1), src_pts_px(:,2), 'ro', 'MarkerSize', 8, 'LineWidth', 1.5);
-        for k = 1:4
-            text(src_pts_px(k,1)+10, src_pts_px(k,2), sprintf('%d: %s', k, labels(k)), ...
-                'Color', 'y', 'FontSize', 10, 'FontWeight', 'bold');
-        end
-        hold off;
-        drawnow;
-
-        if prm.do_confirm
-            reply = input('Accept selected points? [y/n]: ', 's');
-            if strcmpi(strtrim(reply), 'y')
-                isAccepted = true;
-            else
-                close(hFig);
-            end
-        else
-            isAccepted = true;
-        end
-    end
-
-    % ---------------------------------------------------------------------
     % Define rectified image size
     % ---------------------------------------------------------------------
     Nx = round(prm.Lx_m / prm.pixel_size_m) + 1;
@@ -132,10 +95,73 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
         1,  Ny
     ];
 
+    outputRef = imref2d([Ny, Nx]);
+
+    % ---------------------------------------------------------------------
+    % Click points interactively
+    % ---------------------------------------------------------------------
+    labels = ["top-left", "top-right", "bottom-right", "bottom-left"];
+
+    isAccepted = false;
+    src_pts_px = nan(4,2);
+    tform = [];
+
+    while ~isAccepted
+        hFig = figure('Name', 'Select rectification points', ...
+                      'NumberTitle', 'off', ...
+                      'Color', 'w');
+        tl = tiledlayout(hFig, 1, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
+
+        ax1 = nexttile(tl, 1);
+        imshow(I, [], 'Parent', ax1);
+        hold(ax1, 'on');
+        title(ax1, sprintf(['Select inner basin corners in order:\n' ...
+                            '1) top-left, 2) top-right, 3) bottom-right, 4) bottom-left']), ...
+              'Interpreter', 'none');
+
+        [x, y] = ginput(4);
+        src_pts_px = [x, y];
+
+        plot(ax1, src_pts_px(:,1), src_pts_px(:,2), 'ro', 'MarkerSize', 8, 'LineWidth', 1.5);
+        plot(ax1, [src_pts_px(:,1); src_pts_px(1,1)], [src_pts_px(:,2); src_pts_px(1,2)], ...
+            'y-', 'LineWidth', 1.0);
+        for k = 1:4
+            text(ax1, src_pts_px(k,1)+10, src_pts_px(k,2), sprintf('%d: %s', k, labels(k)), ...
+                'Color', 'y', 'FontSize', 10, 'FontWeight', 'bold');
+        end
+        hold(ax1, 'off');
+
+        tform = fitgeotrans(src_pts_px, dst_pts_px, 'projective');
+        J = imwarp(I, tform, 'OutputView', outputRef);
+
+        ax2 = nexttile(tl, 2);
+        imshow(J, [], 'Parent', ax2);
+        title(ax2, sprintf('Rectified preview: %d x %d px', Nx, Ny), ...
+            'Interpreter', 'none');
+        xlabel(ax2, sprintf('Target domain: %.3f m x %.3f m', prm.Lx_m, prm.Ly_m), ...
+            'Interpreter', 'none');
+        drawnow;
+
+        if prm.do_confirm
+            reply = input('Accept this rectification preview? [y/n]: ', 's');
+            if strcmpi(strtrim(reply), 'y')
+                isAccepted = true;
+            else
+                if isgraphics(hFig)
+                    close(hFig);
+                end
+            end
+        else
+            isAccepted = true;
+        end
+    end
+
     % ---------------------------------------------------------------------
     % Compute projective transform
     % ---------------------------------------------------------------------
-    tform = fitgeotrans(src_pts_px, dst_pts_px, 'projective');
+    if isempty(tform)
+        tform = fitgeotrans(src_pts_px, dst_pts_px, 'projective');
+    end
 
     % ---------------------------------------------------------------------
     % Build output struct
@@ -162,7 +188,7 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
     rect.Ny = Ny;
 
     rect.tform = tform;
-    rect.outputRef = imref2d([Ny, Nx]);
+    rect.outputRef = outputRef;
 
     % ---------------------------------------------------------------------
     % Save MAT file
@@ -172,6 +198,10 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
         mkdir(outDir);
     end
     save(outFile, 'rect');
+
+    if exist('hFig', 'var') && isgraphics(hFig)
+        close(hFig);
+    end
 
     fprintf('[select_rectification_points] Saved: %s\n', char(outFile));
     fprintf('[select_rectification_points] run_id = %s, frame_idx = %d\n', char(run_id), frame_idx);
