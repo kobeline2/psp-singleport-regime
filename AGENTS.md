@@ -48,6 +48,13 @@ The goal is to support a short-to-medium-term research project on surface-flow r
 - `derived/` : aggregated CSV outputs
 - `results/` : paper figures, tables, and draft-side exports
 
+## Git workflow conventions
+
+- Treat `main` as a sync-only branch.
+- Do not make substantial code changes directly on `main` unless the user explicitly wants a quick documentation-only update there.
+- When continuing work across two PCs, prefer pushing a topic branch and resuming that same branch on the other machine.
+- Assume `local/` contents are machine-local and are not synchronized by Git.
+
 ## MATLAB coding conventions
 
 - Use **function-based** MATLAB code. Do **not** introduce `classdef`.
@@ -95,6 +102,7 @@ Coordinate convention:
 - Raw video is rectified and optionally preprocessed before PIV.
 - Keep preprocessing simple.
 - Avoid stacking too many image operations unless clearly justified by particle visibility.
+- Prefer progress logs for long-running preprocessing steps so users can see that MATLAB is still working.
 
 ### Rectification
 - Store run-wise rectification metadata in `work/<run_id>/rectification.mat` or equivalent project-approved location.
@@ -105,11 +113,20 @@ Coordinate convention:
 - PIVLab and external software are both acceptable.
 - Tool-specific outputs should remain in `work/<run_id>/`.
 - Downstream analysis should use canonical MATLAB `.mat` outputs, not tool-native project formats.
+- For PIVLab, treat `work/<run_id>/pivlab_setting*.mat` as the authoritative record of the GUI settings actually used for that run.
+- Keep `work/<run_id>/piv_manifest.csv` lean. It should record run-specific context such as effective frame step, `dt_pair_s`, setting file, export file, optional session file, and brief notes.
+- `work/<run_id>/pivlab_proj/` is optional and should only store GUI session checkpoints when they are genuinely useful.
 
 ### Dual-dt logic
 - If short/long frame-pair strategies are used, keep the logic explicit and documented.
 - Record enough metadata to reconstruct the effective `dt_pair_s`.
 - Do not bury the chosen pairing interval in undocumented GUI-only assumptions.
+
+## Local override policy
+
+- Daily-use settings for `scripts/s10_prepare_frames.m` should usually be overridden in `local/settings/s10_prepare_frames_local.m`.
+- Avoid repeatedly editing `scripts/s10_prepare_frames.m` just to change the current `runID`, frame step, or temporary PIVLab sequence settings.
+- If `scripts/s10_prepare_frames.m` is edited during local testing, treat those edits as suspicious until you confirm they are intended project-wide changes rather than run-specific tweaks.
 
 ## Metrics policy
 
