@@ -16,6 +16,7 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
 %       .write_manifest (default true)
 %       .file_prefix    (default 'img_')
 %       .rectify_first  (default true)
+%       .log_every      (default [])
 %       .preprocess     (struct for preprocess_piv_frame)
 %
 % Output:
@@ -57,10 +58,16 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
     source_frame_idx = zeros(nOut,1);
     time_s = zeros(nOut,1);
     file_name = strings(nOut,1);
+    logEvery = iResolveLogEvery(opts.log_every, nOut);
 
     fprintf('[prepare_piv_frames] video: %s\n', videoPath);
     fprintf('[prepare_piv_frames] output: %s\n', outDir);
-    fprintf('[prepare_piv_frames] frames: %d\n', nOut);
+    fprintf('[prepare_piv_frames] source frames: %d:%d:%d\n', ...
+        startFrame, opts.frame_step, endFrame);
+    fprintf('[prepare_piv_frames] output frames: %d\n', nOut);
+    fprintf('[prepare_piv_frames] logging every %d output frames\n', logEvery);
+
+    tStart = tic;
 
     for k = 1:nOut
         idx = frameIdx(k);
@@ -80,6 +87,13 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
         source_frame_idx(k) = idx;
         time_s(k) = (idx - 1) / v.FrameRate;
         file_name(k) = fname;
+
+        if k == 1 || k == nOut || mod(k, logEvery) == 0
+            elapsed_s = toc(tStart);
+            eta_s = elapsed_s / k * (nOut - k);
+            fprintf('[prepare_piv_frames] %d/%d (%.1f%%) source=%d elapsed=%.1fs eta=%.1fs\n', ...
+                k, nOut, 100 * k / nOut, idx, elapsed_s, eta_s);
+        end
     end
 
     manifest = table(seq_idx, source_frame_idx, time_s, file_name);
@@ -89,7 +103,7 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
     end
 
     save(fullfile(outDir, 'prepare_piv_frames_meta.mat'), 'videoPath', 'outDir', 'rect', 'opts');
-    fprintf('[prepare_piv_frames] done.\n');
+    fprintf('[prepare_piv_frames] done in %.1fs\n', toc(tStart));
 end
 
 function opts = iDefaults(opts)
@@ -99,7 +113,20 @@ function opts = iDefaults(opts)
     if ~isfield(opts, 'write_manifest'); opts.write_manifest = true; end
     if ~isfield(opts, 'file_prefix');    opts.file_prefix = 'img_'; end
     if ~isfield(opts, 'rectify_first');  opts.rectify_first = true; end
+    if ~isfield(opts, 'log_every');      opts.log_every = []; end
     if ~isfield(opts, 'preprocess');     opts.preprocess = struct(); end
+end
+
+function logEvery = iResolveLogEvery(logEveryOpt, nOut)
+    if isempty(logEveryOpt)
+        logEvery = max(1, min(200, ceil(nOut / 20)));
+        return;
+    end
+
+    validateattributes(logEveryOpt, {'numeric'}, ...
+        {'scalar', 'integer', 'positive', 'finite'}, ...
+        'prepare_piv_frames', 'opts.log_every');
+    logEvery = logEveryOpt;
 end
 
 function outputRef = iResolveOutputRef(rect)

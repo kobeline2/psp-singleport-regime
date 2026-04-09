@@ -127,6 +127,54 @@ This creates a temporary sequential folder for PIVLab without modifying the sour
 
 In the current project layout, this optional step belongs to `scripts/s10_prepare_frames.m`, not to the later PIV-result import step.
 
+### Step 6. Save PIVLab outputs with minimal provenance
+This project keeps PIVLab saving intentionally simple.
+
+Reusable settings:
+
+- save the PIVLab setting actually used for the run with PIVLab's "Save current PIVlab settings"
+- store the setting file directly under `local/work/<run_id>/`
+- use descriptive filenames such as `pivlab_setting_15fps.mat`
+
+Optional GUI session:
+
+- "Save PIVlab session" is not required for every run
+- use it only when tuning or when a GUI checkpoint is genuinely helpful
+- if used, store the session file under `local/work/<run_id>/pivlab_proj/`
+
+Required run outputs:
+
+- exported PIV result files should be stored directly under `local/work/<run_id>/`
+- typical names are `pivlab_short.mat` and `pivlab_long.mat`
+- for single-`\Delta t` operation, a single exported result file is acceptable
+- each run should also keep `local/work/<run_id>/piv_manifest.csv`
+
+The run-level setting file should be treated as the authoritative record for the PIVLab GUI settings. It already preserves items such as algorithm selection, interrogation window sizes, step sizes, and validation filter thresholds.
+
+Therefore, `piv_manifest.csv` should not duplicate the full setting contents by hand. It should stay lean and only record run-specific context that the setting file does not capture well.
+
+Recommended minimum columns in `piv_manifest.csv` are:
+
+- `run_id`
+- `source_video_fps_hz`
+- `export_step_frames`
+- `effective_sequence_fps_hz`
+- `pair_step_frames`
+- `dt_pair_s`
+- `setting_file`
+- `export_file`
+- `session_file`
+- `notes`
+
+If one run produces multiple exported results, for example short- and long-`\Delta t` files, write one row per exported result in the same `piv_manifest.csv`.
+
+The minimum reproducibility layer is therefore:
+
+- run-level setting file: `local/work/<run_id>/pivlab_setting*.mat`
+- exported PIV result: `local/work/<run_id>/*.mat`
+- run-level manifest: `local/work/<run_id>/piv_manifest.csv`
+- session file: optional
+
 ## Current default preprocessing settings
 The current default settings are intentionally conservative.
 
@@ -212,6 +260,9 @@ Data side:
 
 - `local/work/<run_id>/rectification.mat`
 - `local/work/<run_id>/rectified_tif/`
+- `local/work/<run_id>/pivlab_setting*.mat`
+- `local/work/<run_id>/piv_manifest.csv`
+- `local/work/<run_id>/pivlab_proj/`
 
 ## Revision policy
 This protocol may be updated during the pilot stage. Once pilot testing is complete and the main preprocessing settings are fixed, changes should be documented explicitly in the project notes.

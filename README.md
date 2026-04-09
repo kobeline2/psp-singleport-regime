@@ -449,6 +449,10 @@ Under `local/raw/<run_id>/`:
 Under `local/work/<run_id>/`:
 
 - `rectification.mat`
+- `piv_manifest.csv`
+- `pivlab_setting_15fps.mat`
+- `pivlab_short.mat`
+- `pivlab_long.mat`
 - `pivlab_proj/`
 - `tmp_pivlab_long/` as needed
 
@@ -484,6 +488,45 @@ manifest = make_pivlab_sequence(srcDir, outDir, ...
 This creates a temporary renumbered sequence such as `img_1000.tif`, `img_1001.tif`, ... for PIVLab while keeping the rectified source TIFFs unchanged when `copy_mode = 'copy'`.
 
 Students should follow the layout described in [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md) when adding new experiment data.
+
+## PIVLab save policy
+
+In this project, PIVLab outputs should be managed with the minimum reproducibility layer needed for downstream analysis.
+
+- save the PIVLab setting actually used for a run with "Save current PIVlab settings"
+- store that setting file directly under `local/work/<run_id>/`
+- use a descriptive filename such as `pivlab_setting_15fps.mat`
+- PIVLab session files are optional and are only needed while tuning in the GUI
+- optional session files should be stored under `local/work/<run_id>/pivlab_proj/`
+- the important run outputs are the exported PIV result files under `local/work/<run_id>/`, for example `pivlab_short.mat` and `pivlab_long.mat`
+- for single-`\Delta t` processing, one exported PIV result file is also acceptable
+- each run should also keep `local/work/<run_id>/piv_manifest.csv`
+
+The run-level setting file is the authoritative record for the PIVLab GUI settings. It already stores items such as algorithm choice, interrogation window sizes, step sizes, and validation filter thresholds, so these do not need to be copied manually into the run manifest every time.
+
+`piv_manifest.csv` should therefore stay small and record only run-specific context that is not reliably preserved by the setting file itself.
+
+Recommended minimum fields in `piv_manifest.csv` are:
+
+- `run_id`
+- `source_video_fps_hz`
+- `export_step_frames`
+- `effective_sequence_fps_hz`
+- `pair_step_frames`
+- `dt_pair_s`
+- `setting_file`
+- `export_file`
+- `session_file`
+- `notes`
+
+If a run has both short- and long-`\Delta t` exports, store one row per exported result in the same `piv_manifest.csv`.
+
+In short, the project keeps:
+
+- run-level setting file: `local/work/<run_id>/pivlab_setting*.mat`
+- exported PIV result: `local/work/<run_id>/*.mat`
+- run-level manifest: `local/work/<run_id>/piv_manifest.csv`
+- optional GUI session: `local/work/<run_id>/pivlab_proj/*.mat`
 
 ## Project startup
 
