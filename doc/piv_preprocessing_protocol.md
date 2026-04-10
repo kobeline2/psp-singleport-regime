@@ -35,6 +35,8 @@ For each run, the current standard outputs are:
 - `local/work/<run_id>/rectification.mat`
 - `local/work/<run_id>/rectified_tif/img_00001.tif`, `img_00002.tif`, ...
 - `local/work/<run_id>/rectified_tif/frame_manifest.csv` or equivalent manifest written by the processing script
+- `local/work/<run_id>/PIVlab_raw.mat` after PIVLab export
+- `local/work/<run_id>/pivlab_single.mat` after canonical import
 
 No rectification preview PNG is required in the default workflow. The transform can be reproduced from `rectification.mat` when needed.
 
@@ -145,9 +147,20 @@ Optional GUI session:
 Required run outputs:
 
 - exported PIV result files should be stored directly under `local/work/<run_id>/`
-- typical names are `pivlab_short.mat` and `pivlab_long.mat`
-- for single-`\Delta t` operation, a single exported result file is acceptable
+- in the current workflow, store the raw PIVLab workspace dump as `PIVlab_raw.mat`
 - each run should also keep `local/work/<run_id>/piv_manifest.csv`
+
+For canonical import, MATLAB reads only the minimum variables needed below:
+
+- `x`
+- `y`
+- `u_filtered`
+- `v_filtered`
+- `typevector_filtered`
+- `calxy`
+- `calu`
+- `calv`
+- `units`
 
 The run-level setting file should be treated as the authoritative record for the PIVLab GUI settings. It already preserves items such as algorithm selection, interrogation window sizes, step sizes, and validation filter thresholds.
 
@@ -166,14 +179,25 @@ Recommended minimum columns in `piv_manifest.csv` are:
 - `session_file`
 - `notes`
 
-If one run produces multiple exported results, for example short- and long-`\Delta t` files, write one row per exported result in the same `piv_manifest.csv`.
+In the current workflow, one run corresponds to one `PIVlab_raw.mat` and one canonical `pivlab_single.mat`.
 
 The minimum reproducibility layer is therefore:
 
 - run-level setting file: `local/work/<run_id>/pivlab_setting*.mat`
-- exported PIV result: `local/work/<run_id>/*.mat`
+- raw PIVLab export: `local/work/<run_id>/PIVlab_raw.mat`
+- canonical imported result: `local/work/<run_id>/pivlab_single.mat`
 - run-level manifest: `local/work/<run_id>/piv_manifest.csv`
 - session file: optional
+
+### Step 7. Import to canonical MATLAB format
+After exporting `PIVlab_raw.mat`, run `scripts/s20_import_piv_results.m`.
+
+The script:
+
+- reads the required PIVLab variables from `PIVlab_raw.mat`
+- reads timing context from `piv_manifest.csv` when available
+- adds run-level meta fields such as fps, `dt_pair_s`, calibration, preset ID, VDP, and notes
+- writes a canonical struct such as `local/work/R0009/pivlab_single.mat`
 
 ## Current default preprocessing settings
 The current default settings are intentionally conservative.

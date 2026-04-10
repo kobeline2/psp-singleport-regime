@@ -11,13 +11,12 @@ init
 % User settings
 % -------------------------------------------------------------------------
 runID = "R0009";
-variant = "merged";   % preferred analysis input once dual-dt merging exists
 
-pivDir = fullfile(cfg.DERIVED_PIV_DIR, char(runID));
-pivMat = fullfile(pivDir, sprintf('piv_%s.mat', char(variant)));
+workRunDir = fullfile(cfg.WORK_DIR, char(runID));
+pivMat = fullfile(workRunDir, cfg.PIV_SINGLE_MAT);
 
 fprintf('[s30_compute_metrics] run_id  : %s\n', char(runID));
-fprintf('[s30_compute_metrics] variant : %s\n', char(variant));
+fprintf('[s30_compute_metrics] variant : single_dt\n');
 fprintf('[s30_compute_metrics] input   : %s\n', pivMat);
 fprintf('[s30_compute_metrics] outputs : %s\n', cfg.DERIVED_METRICS_DIR);
 

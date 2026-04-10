@@ -66,8 +66,9 @@ cfg.DEFAULT_WATERLEVEL_FILE      = 'waterlevel.csv';
 cfg.DEFAULT_RUNLOG_FILE          = 'runlog.md';
 
 % -------------------------------------------------------------------------
-% Canonical output filenames inside each derived/piv/<run_id>/ folder
+% Canonical PIV output filenames inside each work/<run_id>/ folder
 % -------------------------------------------------------------------------
+cfg.PIV_SINGLE_MAT = 'pivlab_single.mat';
 cfg.PIV_SHORT_MAT  = 'piv_short.mat';
 cfg.PIV_LONG_MAT   = 'piv_long.mat';
 cfg.PIV_MERGED_MAT = 'piv_merged.mat';

@@ -11,8 +11,8 @@
   生動画を読み込み、`rectification.mat` を作成または更新し、rectified TIFF を出力し、さらに PIVLab 用の一時連番画像列も作成します。
 
 - `s20_import_piv_results.m`
-  PIV 結果を canonical MATLAB 形式に取り込むための入口として予定しているスクリプトです。
-  注意: 現在はまだプレースホルダで、実装途中です。
+  `PIVlab_raw.mat` を canonical MATLAB 形式に取り込むスクリプトです。
+  現在は `local/work/<run_id>/pivlab_single.mat` を保存します。
 
 - `s25_preview_piv_movie.m`
   PIVLab の結果から確認用の動画を作る補助スクリプトです。
@@ -32,9 +32,10 @@
 
 1. `s10_prepare_frames.m`
 2. PIVLab または外部 PIV ソフトで速度場を計算
-3. その後の `s20`, `s30`, `s40` は、対応機能が実装されてから使う
+3. `s20_import_piv_results.m` で canonical PIV を保存
+4. その後の `s30`, `s40` は、対応機能が実装されてから使う
 
-つまり、現在の実運用入口は `s10_prepare_frames.m` です。
+つまり、現在の実運用入口は `s10_prepare_frames.m` と `s20_import_piv_results.m` です。
 
 ## 実行前の確認
 
@@ -101,6 +102,33 @@ git pull --ff-only
 - `local/work/R0009/rectified_tif/`
 - `local/work/R0009/tmp_pivlab_long/` などの variant 別一時フォルダ
 
+## `s20_import_piv_results.m` の使い方
+
+[s20_import_piv_results.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s20_import_piv_results.m) を開いて、主に次を確認してください。
+
+- `runID`
+  取り込み対象の run ID です。例: `"R0009"`
+
+- `export_file`
+  `local/work/<run_id>/` に置いた PIVLab MAT ファイル名です。
+  現在の運用では `PIVlab_raw.mat` を使います。
+  importer は最小限として
+  `x`, `y`, `u_filtered`, `v_filtered`, `typevector_filtered`,
+  `calxy`, `calu`, `calv`, `units`
+  を残してください。
+
+- `source_video_fps_hz`, `effective_sequence_fps_hz`, `export_step_frames`, `pair_step_frames`, `dt_pair_s`
+  時間情報です。`local/work/<run_id>/piv_manifest.csv` に `export_file` と一致する行があれば、通常は `NaN` のままで構いません。
+
+- `setting_file`, `session_file`, `preset_id`, `VDP`, `notes`
+  追加の provenance 情報です。manifest に十分な情報がないときだけ書いてください。
+
+### `s20_import_piv_results.m` で作られるもの
+
+たとえば `R0009` なら、single-dt 用の canonical MAT として次が作られます。
+
+- `local/work/R0009/pivlab_single.mat`
+
 ## Rectification の流れ
 
 `do_select_rectification = true` のときは、動画フレーム上で次の順に 4 点をクリックします。
@@ -116,7 +144,7 @@ git pull --ff-only
 
 - run フォルダ名は `metadata/runs.csv` の run ID と一致させてください。
 - 生動画や TIFF 群は、方針変更がない限り `local/` の外に置かないでください。
-- `s20`, `s30`, `s40` はまだ日常運用向けではありません。
+- `s30`, `s40` はまだ日常運用向けではありません。
 - エラーが出たときは、処理していた `runID` とエラーメッセージを保存して相談してください。
 
 ## 関連資料

@@ -128,6 +128,8 @@ local/
 │  ├─ R0001/
 │  │  ├─ rectification.mat
 │  │  ├─ rectified_tif/
+│  │  ├─ PIVlab_raw.mat
+│  │  ├─ pivlab_single.mat
 │  │  ├─ pivlab_proj/
 │  │  └─ tmp_pivlab_long/
 │  └─ ...
@@ -269,26 +271,36 @@ Nominal flow-rate levels.
 
 All PIV outputs should be converted to a common MATLAB structure, regardless of source.
 
-Suggested fields:
+Current minimal canonical fields for imported PIV are:
 
 ```matlab
-pivrun.run_id
-pivrun.source        % 'pivlab' or 'external'
-pivrun.variant       % 'short', 'long', or 'merged'
-pivrun.frame_idx
-pivrun.time_s
-pivrun.depth_m
-pivrun.h_over_a
-pivrun.band_id
-pivrun.x
-pivrun.y
-pivrun.u
-pivrun.v
-pivrun.mask
-pivrun.meta
+piv.run_id
+piv.source        % 'pivlab' or 'external'
+piv.variant       % 'single_dt', 'short', 'long', or 'merged'
+piv.x
+piv.y
+piv.u
+piv.v
+piv.typevector
+
+piv.meta.source_video_fps_hz
+piv.meta.effective_sequence_fps_hz
+piv.meta.export_step_frames
+piv.meta.pair_step_frames
+piv.meta.dt_pair_s
+piv.meta.calxy
+piv.meta.calu
+piv.meta.calv
+piv.meta.units
+piv.meta.preset_id
+piv.meta.VDP
+piv.meta.notes
 ```
 
-The rest of the pipeline should operate only on this canonical structure.
+In the current PIVLab importer, `x` and `y` are usually stored as static
+2-D grids, while `u`, `v`, and `typevector` are stacked along the 3rd
+dimension for frame index. The rest of the pipeline should operate only on
+this canonical structure.
 
 ## Standard outputs
 
@@ -326,8 +338,8 @@ Used for:
 A typical workflow is expected to follow these steps.
 
 1. Prepare rectified TIFF frames and optional PIVLab temporary sequences with `scripts/s10_prepare_frames.m`
-2. Import PIV results from PIVLab and/or external software with `scripts/s20_import_piv_results.m`
-3. Convert them into a canonical `.mat` structure and, when needed, merge short- and long-\(\Delta t\) velocity fields
+2. Save the PIVLab workspace dump as `PIVlab_raw.mat` under `local/work/<run_id>/`
+3. Import it into a canonical `.mat` structure with `scripts/s20_import_piv_results.m`
 4. Compute frame-wise and band-wise metrics with `scripts/s30_compute_metrics.m`
 5. Create paper figures with `scripts/s40_make_paper_figures.m`
 
@@ -451,8 +463,8 @@ Under `local/work/<run_id>/`:
 - `rectification.mat`
 - `piv_manifest.csv`
 - `pivlab_setting_15fps.mat`
-- `pivlab_short.mat`
-- `pivlab_long.mat`
+- `PIVlab_raw.mat`
+- `pivlab_single.mat`
 - `pivlab_proj/`
 - `tmp_pivlab_long/` as needed
 
@@ -498,13 +510,26 @@ In this project, PIVLab outputs should be managed with the minimum reproducibili
 - use a descriptive filename such as `pivlab_setting_15fps.mat`
 - PIVLab session files are optional and are only needed while tuning in the GUI
 - optional session files should be stored under `local/work/<run_id>/pivlab_proj/`
-- the important run outputs are the exported PIV result files under `local/work/<run_id>/`, for example `pivlab_short.mat` and `pivlab_long.mat`
-- for single-`\Delta t` processing, one exported PIV result file is also acceptable
+- the important run output is the raw workspace dump `PIVlab_raw.mat` under `local/work/<run_id>/`
 - each run should also keep `local/work/<run_id>/piv_manifest.csv`
 
 The run-level setting file is the authoritative record for the PIVLab GUI settings. It already stores items such as algorithm choice, interrogation window sizes, step sizes, and validation filter thresholds, so these do not need to be copied manually into the run manifest every time.
 
 `piv_manifest.csv` should therefore stay small and record only run-specific context that is not reliably preserved by the setting file itself.
+
+PIVLab should save the raw workspace dump as `PIVlab_raw.mat` under
+`local/work/<run_id>/`. The MATLAB-side importer reads only the minimum
+variables needed for canonical import:
+
+- `x`
+- `y`
+- `u_filtered`
+- `v_filtered`
+- `typevector_filtered`
+- `calxy`
+- `calu`
+- `calv`
+- `units`
 
 Recommended minimum fields in `piv_manifest.csv` are:
 
@@ -519,12 +544,13 @@ Recommended minimum fields in `piv_manifest.csv` are:
 - `session_file`
 - `notes`
 
-If a run has both short- and long-`\Delta t` exports, store one row per exported result in the same `piv_manifest.csv`.
+In the current workflow, one run corresponds to one `PIVlab_raw.mat` and one canonical `pivlab_single.mat`.
 
 In short, the project keeps:
 
 - run-level setting file: `local/work/<run_id>/pivlab_setting*.mat`
-- exported PIV result: `local/work/<run_id>/*.mat`
+- raw PIVLab export: `local/work/<run_id>/PIVlab_raw.mat`
+- canonical imported result: `local/work/<run_id>/pivlab_single.mat`
 - run-level manifest: `local/work/<run_id>/piv_manifest.csv`
 - optional GUI session: `local/work/<run_id>/pivlab_proj/*.mat`
 

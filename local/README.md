@@ -32,6 +32,8 @@ local/
 │  ├─ R0001/
 │  │  ├─ rectification.mat
 │  │  ├─ rectified_tif/
+│  │  ├─ PIVlab_raw.mat
+│  │  ├─ pivlab_single.mat
 │  │  ├─ pivlab_proj/
 │  │  └─ tmp_pivlab_long/
 │  └─ exports/
@@ -55,7 +57,7 @@ local/
    `piv.mp4`, `timelapse.mp4`, `waterlevel.csv`, `runlog.md`
 4. Run `scripts/s10_prepare_frames.m` to create `rectification.mat`, `rectified_tif/`, and optional temporary PIVLab sequences under `local/work/<run_id>/`.
 5. Keep tool-specific PIVLab project folders under `local/work/<run_id>/pivlab_proj/`.
-6. Keep imported canonical MATLAB outputs under `local/derived/piv/`, metric CSV outputs under `local/derived/metrics/`, and QC files under `local/derived/qc/`.
+6. Keep `PIVlab_raw.mat` and imported canonical outputs such as `pivlab_single.mat` under `local/work/<run_id>/`, metric CSV outputs under `local/derived/metrics/`, and QC files under `local/derived/qc/`.
 7. Save paper figures and tables under `local/results/`.
 
 ## Local Script Settings
