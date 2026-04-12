@@ -22,6 +22,16 @@ opts.low_speed_threshold_m_s = 0.02;
 % Progress log interval for long runs
 opts.log_every = 500;
 
+% Optional gitignored local override script.
+% Copy scripts/s30_compute_metrics_local.m.example to
+% scripts/s30_compute_metrics_local.m and set only the values you want to
+% change for the current run.
+settingsFile = fullfile(cfg.SCRIPTS_DIR, 's30_compute_metrics_local.m');
+if isfile(settingsFile)
+    fprintf('[s30_compute_metrics] Loading local settings: %s\n', settingsFile);
+    run(settingsFile);
+end
+
 workRunDir = fullfile(cfg.WORK_DIR, char(runID));
 pivMat = fullfile(workRunDir, cfg.PIV_SINGLE_MAT);
 outDir = fullfile(cfg.DERIVED_METRICS_DIR, char(runID));

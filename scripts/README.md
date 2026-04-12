@@ -48,9 +48,18 @@ In other words, the current routine path is `s10_prepare_frames.m` -> `s20_impor
 
 Most scripts call `init` internally, so you usually do not need to run `init` manually first.
 
-For `s10_prepare_frames.m`, daily-use settings can also be overridden in
-`local/settings/s10_prepare_frames_local.m` so that students do not need to
-edit the shared script every time.
+For scripts that you run often, prefer using the adjacent gitignored local
+override files in `scripts/` so that the shared script stays clean.
+For example:
+
+- `scripts/s10_prepare_frames_local.m`
+- `scripts/s20_import_piv_results_local.m`
+- `scripts/s25_preview_piv_movie_local.m`
+- `scripts/s30_compute_metrics_local.m`
+
+Each of these has a tracked `.example` file next to it. Copy the example,
+remove `.example` from the name, and edit only the values you want to
+change on your PC.
 
 ## How Students Should Update This Repository
 
@@ -67,7 +76,8 @@ Important:
 
 - stay on `main` unless the maintainer explicitly asks you to use another branch
 - do not commit code changes locally unless you were asked to edit the repository
-- remember that `local/` is machine-local; Git will not sync your raw data, TIFFs, or local settings from another PC
+- remember that `local/` is machine-local; Git will not sync your raw data or TIFFs from another PC
+- `scripts/*_local.m` files are also machine-local in practice because they are gitignored
 
 ## How To Use `s10_prepare_frames.m`
 
@@ -93,7 +103,8 @@ Open [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/s
   Controls the temporary PIVLab-ready image sequence, including frame thinning and output numbering.
 
 If you expect to change these values often, prefer creating
-`local/settings/s10_prepare_frames_local.m` and overriding only the needed
+`scripts/s10_prepare_frames_local.m` by copying
+`scripts/s10_prepare_frames_local.m.example` and overriding only the needed
 variables there.
 
 ### What `s10_prepare_frames.m` Produces
@@ -124,6 +135,9 @@ Open [s20_import_piv_results.m](/Users/koshiba/Documents/git/psp-singleport-regi
 - `setting_file`, `session_file`, `preset_id`, `VDP`, `notes`
   Optional provenance fields. Use them when the manifest does not already record the needed information.
 
+If you change `runID` often, prefer creating
+`scripts/s20_import_piv_results_local.m` from the adjacent `.example` file.
+
 ### What `s20_import_piv_results.m` Produces
 
 For a run such as `R0009`, the script writes the canonical single-dt file:
@@ -142,6 +156,9 @@ Open [s30_compute_metrics.m](/Users/koshiba/Documents/git/psp-singleport-regime/
 
 - `opts.log_every`
   Progress log interval for long runs.
+
+If you change `runID` or the threshold often, prefer creating
+`scripts/s30_compute_metrics_local.m` from the adjacent `.example` file.
 
 The current implementation computes only the frame-wise metrics that can be derived directly from `pivlab_single.mat`:
 

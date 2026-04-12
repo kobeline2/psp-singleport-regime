@@ -16,6 +16,16 @@ video_fps = 10;
 autoscale = 1.5;
 fig_pos = [100 100 720 480];
 
+% Optional gitignored local override script.
+% Copy scripts/s25_preview_piv_movie_local.m.example to
+% scripts/s25_preview_piv_movie_local.m and set only the values you want
+% to change for the current run.
+settingsFile = fullfile(cfg.SCRIPTS_DIR, 's25_preview_piv_movie_local.m');
+if isfile(settingsFile)
+    fprintf('[s25_preview_piv_movie] Loading local settings: %s\n', settingsFile);
+    run(settingsFile);
+end
+
 % -------------------------------------------------------------------------
 % Load canonical PIV data
 % -------------------------------------------------------------------------

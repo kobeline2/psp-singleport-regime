@@ -39,6 +39,16 @@ preset_id = "";
 VDP = "";
 notes = "";
 
+% Optional gitignored local override script.
+% Copy scripts/s20_import_piv_results_local.m.example to
+% scripts/s20_import_piv_results_local.m and set only the values you want
+% to change for the current run.
+settingsFile = fullfile(cfg.SCRIPTS_DIR, 's20_import_piv_results_local.m');
+if isfile(settingsFile)
+    fprintf('[s20_import_piv_results] Loading local settings: %s\n', settingsFile);
+    run(settingsFile);
+end
+
 % -------------------------------------------------------------------------
 % Resolve run metadata and paths
 % -------------------------------------------------------------------------

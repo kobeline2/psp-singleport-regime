@@ -1,0 +1,15 @@
+% Example local override file for scripts/s30_compute_metrics.m
+%
+% Usage:
+%   1. Copy this file to:
+%        scripts/s30_compute_metrics_local.m
+%   2. Edit only the values you want to change.
+%   3. Do not commit the copied local file.
+
+runID = "R0009";
+
+% Provisional threshold for phi_lv(t)
+opts.low_speed_threshold_m_s = 0.02;
+
+% Progress log interval for long runs
+opts.log_every = 500;

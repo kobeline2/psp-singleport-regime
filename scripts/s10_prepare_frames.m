@@ -7,7 +7,7 @@ clear; clc;
 % "prepare frames" entry points into one simple driver.
 %
 % Daily-use settings should usually be changed in:
-%   local/settings/s10_prepare_frames_local.m
+%   scripts/s10_prepare_frames_local.m
 % rather than by repeatedly editing this file.
 
 init
@@ -110,13 +110,14 @@ pivlab_opts.copy_mode = 'copy';
 pivlab_opts.write_manifest = true;
 
 % Optional gitignored local override script.
-% Create local/settings/s10_prepare_frames_local.m and set only the values
-% you want to change for the current run. For example:
+% Copy scripts/s10_prepare_frames_local.m.example to
+% scripts/s10_prepare_frames_local.m and set only the values you want to
+% change for the current run. For example:
 %   runID = "R0012";
 %   do_select_rectification = false;
 %   opts.frame_step = 6;
 %   pivlab_opts.frame_step = 5;
-settingsFile = fullfile(cfg.DATA_ROOT, 'settings', 's10_prepare_frames_local.m');
+settingsFile = fullfile(cfg.SCRIPTS_DIR, 's10_prepare_frames_local.m');
 if isfile(settingsFile)
     fprintf('[s10_prepare_frames] Loading local settings: %s\n', settingsFile);
     run(settingsFile);

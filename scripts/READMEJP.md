@@ -47,9 +47,15 @@
 
 多くのスクリプトは内部で `init` を呼ぶので、通常は事前に `init` を手で実行しなくても大丈夫です。
 
-`s10_prepare_frames.m` については、毎回変わる条件は
-`local/settings/s10_prepare_frames_local.m`
-で上書きできるようにしておくと、共有スクリプトを何度も編集せずに済みます。
+毎回変わる条件は、共有スクリプト本体を直接書き換えるより、
+`scripts/` に置く gitignored な local override ファイルで上書きする運用をおすすめします。
+
+- `scripts/s10_prepare_frames_local.m`
+- `scripts/s20_import_piv_results_local.m`
+- `scripts/s25_preview_piv_movie_local.m`
+- `scripts/s30_compute_metrics_local.m`
+
+それぞれ隣に `.example` ファイルがあるので、まずそれをコピーして `.example` を外した名前にしてから使ってください。
 
 ## 学生さんの更新方法
 
@@ -66,7 +72,8 @@ git pull --ff-only
 
 - 管理者から指示がない限り、`main` 以外のブランチは使わないでください。
 - 管理者から依頼されていない限り、リポジトリ内のコードは commit しないでください。
-- `local/` は PC ごとのローカル作業領域です。別の PC の `local/raw/`、`local/work/`、`local/settings/` は Git では同期されません。
+- `local/` は PC ごとのローカル作業領域です。別の PC の `local/raw/`、`local/work/` は Git では同期されません。
+- `scripts/*_local.m` も gitignored なので、実質的に PC ごとのローカル設定ファイルです。
 
 ## `s10_prepare_frames.m` の使い方
 
@@ -92,8 +99,8 @@ git pull --ff-only
   PIVLab 用一時画像列の設定です。何フレームおきに使うか、何番から連番を始めるかなどをここで変えます。
 
 これらを頻繁に変える場合は、共有スクリプト本体を毎回書き換えるより、
-`local/settings/s10_prepare_frames_local.m`
-を作って必要な変数だけ上書きする運用をおすすめします。
+`scripts/s10_prepare_frames_local.m.example`
+をコピーして `scripts/s10_prepare_frames_local.m` を作り、必要な変数だけ上書きする運用をおすすめします。
 
 ### `s10_prepare_frames.m` で作られるもの
 
@@ -124,6 +131,10 @@ git pull --ff-only
 - `setting_file`, `session_file`, `preset_id`, `VDP`, `notes`
   追加の provenance 情報です。manifest に十分な情報がないときだけ書いてください。
 
+`runID` を頻繁に変えるなら、
+`scripts/s20_import_piv_results_local.m.example`
+をコピーして `scripts/s20_import_piv_results_local.m` を作るのが便利です。
+
 ### `s20_import_piv_results.m` で作られるもの
 
 たとえば `R0009` なら、single-dt 用の canonical MAT として次が作られます。
@@ -142,6 +153,10 @@ git pull --ff-only
 
 - `opts.log_every`
   長い run の進捗表示間隔です。
+
+`runID` やしきい値を頻繁に変えるなら、
+`scripts/s30_compute_metrics_local.m.example`
+をコピーして `scripts/s30_compute_metrics_local.m` を作るのが便利です。
 
 現在の実装で計算するのは、`pivlab_single.mat` だけで求められる最小の frame-wise 指標です。
 

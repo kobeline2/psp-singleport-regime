@@ -1,0 +1,15 @@
+% Example local override file for scripts/s25_preview_piv_movie.m
+%
+% Usage:
+%   1. Copy this file to:
+%        scripts/s25_preview_piv_movie_local.m
+%   2. Edit only the values you want to change.
+%   3. Do not commit the copied local file.
+
+runID = "R0009";
+
+frame_step = 5;
+quiver_step = 3;
+video_fps = 10;
+autoscale = 1.5;
+fig_pos = [100 100 720 480];

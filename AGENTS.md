@@ -124,8 +124,9 @@ Coordinate convention:
 
 ## Local override policy
 
-- Daily-use settings for `scripts/s10_prepare_frames.m` should usually be overridden in `local/settings/s10_prepare_frames_local.m`.
-- Avoid repeatedly editing `scripts/s10_prepare_frames.m` just to change the current `runID`, frame step, or temporary PIVLab sequence settings.
+- Daily-use settings for driver scripts should usually be overridden in adjacent gitignored files such as `scripts/s10_prepare_frames_local.m`.
+- Keep the shared driver script and its local override file side by side under `scripts/` so users are less likely to edit the wrong file.
+- Avoid repeatedly editing shared driver scripts just to change the current `runID`, frame step, preview settings, or temporary PIVLab sequence settings.
 - If `scripts/s10_prepare_frames.m` is edited during local testing, treat those edits as suspicious until you confirm they are intended project-wide changes rather than run-specific tweaks.
 
 ## Metrics policy
