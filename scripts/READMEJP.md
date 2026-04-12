@@ -19,8 +19,8 @@
   主に流況の見た目確認用で、基本パイプラインの必須工程ではありません。
 
 - `s30_compute_metrics.m`
-  canonical PIV データから frame-wise / band-wise 指標を計算するための入口として予定しているスクリプトです。
-  注意: 現在はまだプレースホルダで、実装途中です。
+  `pivlab_single.mat` から、現在の最小 frame-wise 指標を計算するスクリプトです。
+  depth / band の対応づけは後段で追加する前提です。
 
 - `s40_make_paper_figures.m`
   論文用図を作るための入口として予定しているスクリプトです。
@@ -33,9 +33,10 @@
 1. `s10_prepare_frames.m`
 2. PIVLab または外部 PIV ソフトで速度場を計算
 3. `s20_import_piv_results.m` で canonical PIV を保存
-4. その後の `s30`, `s40` は、対応機能が実装されてから使う
+4. `s30_compute_metrics.m` で現在の basic frame-wise metrics を計算
+5. その後の figure 系は、対応機能が実装されてから使う
 
-つまり、現在の実運用入口は `s10_prepare_frames.m` と `s20_import_piv_results.m` です。
+つまり、現在の実運用入口は `s10_prepare_frames.m`、`s20_import_piv_results.m`、`s30_compute_metrics.m` です。
 
 ## 実行前の確認
 
@@ -129,6 +130,37 @@ git pull --ff-only
 
 - `local/work/R0009/pivlab_single.mat`
 
+## `s30_compute_metrics.m` の使い方
+
+[s30_compute_metrics.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s30_compute_metrics.m) では、主に次を確認してください。
+
+- `runID`
+  計算対象の run ID です。例: `"R0009"`
+
+- `opts.low_speed_threshold_m_s`
+  `phi_lv(t)` に使う暫定的な低流速しきい値です。
+
+- `opts.log_every`
+  長い run の進捗表示間隔です。
+
+現在の実装で計算するのは、`pivlab_single.mat` だけで求められる最小の frame-wise 指標です。
+
+- `valid_fraction`
+- `mean_speed`
+- `rms_speed`
+- `E`
+- `phi_lv`
+- `I_asym`
+
+また、将来の depth / band 対応づけを見越して、`depth_m`, `h_over_a`, `band_id` 列も空のまま持たせています。
+
+### `s30_compute_metrics.m` で作られるもの
+
+たとえば `R0009` なら、次が出力されます。
+
+- `local/derived/metrics/R0009/frame_metrics.csv`
+- `local/derived/metrics/R0009/frame_metrics.mat`
+
 ## Rectification の流れ
 
 `do_select_rectification = true` のときは、動画フレーム上で次の順に 4 点をクリックします。
@@ -144,7 +176,7 @@ git pull --ff-only
 
 - run フォルダ名は `metadata/runs.csv` の run ID と一致させてください。
 - 生動画や TIFF 群は、方針変更がない限り `local/` の外に置かないでください。
-- `s30`, `s40` はまだ日常運用向けではありません。
+- `s40` はまだ日常運用向けではありません。
 - エラーが出たときは、処理していた `runID` とエラーメッセージを保存して相談してください。
 
 ## 関連資料

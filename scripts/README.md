@@ -20,8 +20,8 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   This is mainly for checking flow fields visually and is not part of the core pipeline.
 
 - `s30_compute_metrics.m`
-  Planned entry point for computing frame-wise and band-wise metrics from canonical PIV outputs.
-  Important: this script is currently a placeholder and is not yet implemented.
+  Computes the current minimal frame-wise metrics from `pivlab_single.mat`.
+  Depth / band mapping is intentionally left for a later stage.
 
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
@@ -34,9 +34,10 @@ At the current project stage, most students should start with:
 1. `s10_prepare_frames.m`
 2. PIVLab or external PIV software outside this repository
 3. `s20_import_piv_results.m` to save canonical PIV data
-4. Later scripts after the corresponding metric and figure functions are implemented
+4. `s30_compute_metrics.m` for the current basic frame-wise metrics
+5. Later figure scripts after the corresponding functions are implemented
 
-In other words, the current routine path is `s10_prepare_frames.m` followed by `s20_import_piv_results.m`.
+In other words, the current routine path is `s10_prepare_frames.m` -> `s20_import_piv_results.m` -> `s30_compute_metrics.m`.
 
 ## Before Running Any Script
 
@@ -129,6 +130,37 @@ For a run such as `R0009`, the script writes the canonical single-dt file:
 
 - `local/work/R0009/pivlab_single.mat`
 
+## How To Use `s30_compute_metrics.m`
+
+Open [s30_compute_metrics.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s30_compute_metrics.m) and check:
+
+- `runID`
+  Run to process, for example `"R0009"`.
+
+- `opts.low_speed_threshold_m_s`
+  Provisional threshold used for `phi_lv(t)`.
+
+- `opts.log_every`
+  Progress log interval for long runs.
+
+The current implementation computes only the frame-wise metrics that can be derived directly from `pivlab_single.mat`:
+
+- `valid_fraction`
+- `mean_speed`
+- `rms_speed`
+- `E`
+- `phi_lv`
+- `I_asym`
+
+It also writes placeholder columns `depth_m`, `h_over_a`, and `band_id` so a later band-mapping step can reuse the same table schema.
+
+### What `s30_compute_metrics.m` Produces
+
+For a run such as `R0009`, the script writes:
+
+- `local/derived/metrics/R0009/frame_metrics.csv`
+- `local/derived/metrics/R0009/frame_metrics.mat`
+
 ## Rectification Workflow
 
 When `do_select_rectification = true`, the script opens the raw video frame and asks you to click:
@@ -144,7 +176,7 @@ After clicking the four points, the script shows a rectified preview. Accept it 
 
 - Do not rename run folders freely. Use the run IDs defined in `metadata/runs.csv`.
 - Do not store raw videos or TIFF sequences outside `local/` unless the supervisors explicitly change the policy.
-- `s30` and `s40` are not ready for routine student use yet.
+- `s40` is not ready for routine student use yet.
 - If a script fails, save the error message and report which `runID` you were processing.
 
 ## See Also
