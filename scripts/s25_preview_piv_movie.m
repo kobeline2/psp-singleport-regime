@@ -10,7 +10,7 @@ init
 runID = "R0009";
 
 % Output movie settings
-frame_step = 5;
+frame_step = 10;
 quiver_step = 3;
 video_fps = 10;
 autoscale = 1.5;

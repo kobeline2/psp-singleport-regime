@@ -19,7 +19,7 @@ R0017,17,20260405,,outflow,medium,5.0,0.50,1,0.10,0.03,R0017,piv.mp4,timelapse.m
 R0018,18,,,outflow,medium,5.0,0.50,2,0.10,0.03,R0018,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
 R0019,19,,,outflow,medium,5.0,0.50,3,0.10,0.03,R0019,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
 R0020,20,,,outflow,medium,5.0,0.50,4,0.10,0.03,R0020,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
-R0021,21,,,outflow,high,7.5,0.75,1,0.10,0.03,R0021,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
+R0021,21,20260331,,outflow,high,7.5,0.75,1,0.10,0.03,R0021,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
 R0022,22,,,outflow,high,7.5,0.75,2,0.10,0.03,R0022,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
 R0023,23,,,outflow,high,7.5,0.75,3,0.10,0.03,R0023,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false
 R0024,24,,,outflow,high,7.5,0.75,4,0.10,0.03,R0024,piv.mp4,timelapse.mp4,waterlevel.csv,runlog.md,pending,planned,,false

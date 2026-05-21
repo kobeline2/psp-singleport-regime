@@ -16,7 +16,7 @@ init
 % User settings
 % -------------------------------------------------------------------------
 % Run identifier defined in metadata/runs.csv
-runID = "R0009";
+runID = "R0012";
 
 % If true, open the interactive rectification tool and update the saved
 % corner points. If false, reuse the existing rectification.mat file.
@@ -30,7 +30,8 @@ make_pivlab_tmp = false;
 
 % Used only for naming the temporary PIVLab folder, for example
 % tmp_pivlab_long or tmp_pivlab_short.
-pivlab_variant = "5fps";
+% R0001:5, R0005:10 R0009:15
+pivlab_variant = "15fps";
 
 % Options passed to prepare_piv_frames().
 % These settings control how the main rectified TIFF sequence is generated.
@@ -42,8 +43,9 @@ opts.start_frame = 1;
 % Last raw-video frame to export. Use Inf to process until the end.
 opts.end_frame = Inf;
 
-% Export every nth frame from the raw video.
-opts.frame_step = 6;
+% Export every nth frame from the raw video. 
+% R0001:6, R0005:3, R0009:2
+opts.frame_step = 2;
 
 % Prefix used for output TIFF names such as img_00001.tif.
 opts.file_prefix = 'img_';

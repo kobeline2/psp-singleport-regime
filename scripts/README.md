@@ -23,6 +23,10 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   Computes the current minimal frame-wise metrics from `pivlab_single.mat`.
   Depth / band mapping is intentionally left for a later stage.
 
+- `s35_plot_run_metrics_overview.m`
+  Makes a quick-look figure for one run from `frame_metrics.mat`.
+  This is for exploratory inspection, not for final paper figures.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.
@@ -35,9 +39,10 @@ At the current project stage, most students should start with:
 2. PIVLab or external PIV software outside this repository
 3. `s20_import_piv_results.m` to save canonical PIV data
 4. `s30_compute_metrics.m` for the current basic frame-wise metrics
-5. Later figure scripts after the corresponding functions are implemented
+5. `s35_plot_run_metrics_overview.m` when you want a quick visual summary of one case
+6. Later paper-figure scripts after the corresponding functions are implemented
 
-In other words, the current routine path is `s10_prepare_frames.m` -> `s20_import_piv_results.m` -> `s30_compute_metrics.m`.
+In other words, the current routine path is `s10_prepare_frames.m` -> `s20_import_piv_results.m` -> `s30_compute_metrics.m`, with `s35_plot_run_metrics_overview.m` as an optional quick-look step.
 
 ## Before Running Any Script
 
@@ -56,6 +61,7 @@ For example:
 - `scripts/s20_import_piv_results_local.m`
 - `scripts/s25_preview_piv_movie_local.m`
 - `scripts/s30_compute_metrics_local.m`
+- `scripts/s35_plot_run_metrics_overview_local.m`
 
 Each of these has a tracked `.example` file next to it. Copy the example,
 remove `.example` from the name, and edit only the values you want to
@@ -177,6 +183,39 @@ For a run such as `R0009`, the script writes:
 
 - `local/derived/metrics/R0009/frame_metrics.csv`
 - `local/derived/metrics/R0009/frame_metrics.mat`
+
+## How To Use `s35_plot_run_metrics_overview.m`
+
+Open [s35_plot_run_metrics_overview.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s35_plot_run_metrics_overview.m) and check:
+
+- `runID`
+  Run to visualize, for example `"R0009"`.
+
+- `smooth_span_frames`
+  Moving-average span used for the bold trend line.
+
+- `save_png`, `save_fig`, `show_figure`
+  Controls how the overview figure is saved and whether it stays open.
+
+This script reads `frame_metrics.mat` first and falls back to `frame_metrics.csv` if needed.
+It currently summarizes:
+
+- `E(t)`
+- `phi_lv(t)`
+- `mean_speed`
+- `rms_speed`
+- `I_asym(t)`
+- `valid_fraction`
+
+### What `s35_plot_run_metrics_overview.m` Produces
+
+For a run such as `R0009`, the script writes:
+
+- `local/results/figures/R0009_frame_metrics_overview.png`
+
+If `save_fig = true`, it also writes:
+
+- `local/results/figures/R0009_frame_metrics_overview.fig`
 
 ## Rectification Workflow
 

@@ -22,6 +22,10 @@
   `pivlab_single.mat` から、現在の最小 frame-wise 指標を計算するスクリプトです。
   depth / band の対応づけは後段で追加する前提です。
 
+- `s35_plot_run_metrics_overview.m`
+  `frame_metrics.mat` から 1 run の quick-look 図を作るスクリプトです。
+  論文図ではなく、まず傾向をざっと把握するための補助入口です。
+
 - `s40_make_paper_figures.m`
   論文用図を作るための入口として予定しているスクリプトです。
   注意: 現在はまだプレースホルダで、実装途中です。
@@ -34,9 +38,10 @@
 2. PIVLab または外部 PIV ソフトで速度場を計算
 3. `s20_import_piv_results.m` で canonical PIV を保存
 4. `s30_compute_metrics.m` で現在の basic frame-wise metrics を計算
-5. その後の figure 系は、対応機能が実装されてから使う
+5. 1ケースをざっと見るときは `s35_plot_run_metrics_overview.m`
+6. その後の paper figure 系は、対応機能が実装されてから使う
 
-つまり、現在の実運用入口は `s10_prepare_frames.m`、`s20_import_piv_results.m`、`s30_compute_metrics.m` です。
+つまり、現在の実運用入口は `s10_prepare_frames.m`、`s20_import_piv_results.m`、`s30_compute_metrics.m` で、`s35_plot_run_metrics_overview.m` は任意の quick-look 用です。
 
 ## 実行前の確認
 
@@ -54,6 +59,7 @@
 - `scripts/s20_import_piv_results_local.m`
 - `scripts/s25_preview_piv_movie_local.m`
 - `scripts/s30_compute_metrics_local.m`
+- `scripts/s35_plot_run_metrics_overview_local.m`
 
 それぞれ隣に `.example` ファイルがあるので、まずそれをコピーして `.example` を外した名前にしてから使ってください。
 
@@ -175,6 +181,39 @@ git pull --ff-only
 
 - `local/derived/metrics/R0009/frame_metrics.csv`
 - `local/derived/metrics/R0009/frame_metrics.mat`
+
+## `s35_plot_run_metrics_overview.m` の使い方
+
+[s35_plot_run_metrics_overview.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s35_plot_run_metrics_overview.m) では、主に次を確認してください。
+
+- `runID`
+  図を作りたい run ID です。例: `"R0009"`
+
+- `smooth_span_frames`
+  太線のトレンド表示に使う移動平均幅です。
+
+- `save_png`, `save_fig`, `show_figure`
+  PNG 保存、`.fig` 保存、画面表示の有無を切り替えます。
+
+このスクリプトは、まず `frame_metrics.mat` を読み、なければ `frame_metrics.csv` を読みます。
+現在まとめて見るのは次の量です。
+
+- `E(t)`
+- `phi_lv(t)`
+- `mean_speed`
+- `rms_speed`
+- `I_asym(t)`
+- `valid_fraction`
+
+### `s35_plot_run_metrics_overview.m` で作られるもの
+
+たとえば `R0009` なら、次が出力されます。
+
+- `local/results/figures/R0009_frame_metrics_overview.png`
+
+`save_fig = true` のときは、あわせて次も出ます。
+
+- `local/results/figures/R0009_frame_metrics_overview.fig`
 
 ## Rectification の流れ
 
