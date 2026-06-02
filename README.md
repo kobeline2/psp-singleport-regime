@@ -46,21 +46,31 @@ The analysis is built around a unified pipeline.
 
 The downstream analysis should not depend on whether the velocity field came from PIVLab or an external package. All inputs are normalized into a common MATLAB structure before metric computation.
 
-The project also supports a dual-\(\Delta t\) strategy.
+The project keeps the option of a dual-\(\Delta t\) strategy, but the
+current routine workflow is **single-dt**.
 
 - A short frame interval is used to stabilize high-velocity regions.
 - A long frame interval is used to improve sensitivity in low-velocity regions.
 - The final merged field is used for both figures and metrics.
 
+If short/long frame-pair strategies are introduced later, they should be
+kept explicit in `piv_manifest.csv` and imported into canonical MATLAB
+outputs before downstream metrics are computed.
+
 ## Primary metrics
 
-The current primary metrics are:
+The scientific target metrics are:
 
 - \(E(t)\): basin-scale motion intensity
 - \(\phi_{\mathrm{lv}}(t)\): low-velocity area fraction
 - \(I_{\mathrm{asym}}(t)\): left-right asymmetry index
 - \(I_{\mathrm{circ}}(t)\): circulation index
 - \(I_{\mathrm{unst}}(B_k)\): band-wise unsteadiness index
+
+The current `s30_compute_metrics.m` implementation computes the frame-wise
+metrics available directly from `pivlab_single.mat`: `E(t)`,
+`\phi_lv(t)`, and `I_asym(t)`, along with supporting speed and validity
+columns. `I_circ(t)` and `I_unst(B_k)` are planned next-stage metrics.
 
 Secondary metrics such as vortex-core location, dominant frequency, and supplementary vorticity maps may be used only when they provide reproducible physical insight.
 
@@ -87,7 +97,7 @@ The following are **not** stored in GitHub and should remain under the gitignore
 psp-singleport-regime/
 ├─ README.md
 ├─ .gitignore
-├─ startup.m
+├─ init.m
 ├─ config/
 │  ├─ project_config_template.m
 │  ├─ constants.m
@@ -105,10 +115,11 @@ psp-singleport-regime/
 ├─ scripts/
 │  ├─ s10_prepare_frames.m
 │  ├─ s20_import_piv_results.m
+│  ├─ s25_preview_piv_movie.m
 │  ├─ s30_compute_metrics.m
+│  ├─ s35_plot_run_metrics_overview.m
 │  └─ s40_make_paper_figures.m
-├─ doc/
-└─ tests/
+└─ doc/
 ```
 
 ## Local Data Layout
@@ -128,6 +139,8 @@ local/
 │  ├─ R0001/
 │  │  ├─ rectification.mat
 │  │  ├─ rectified_tif/
+│  │  ├─ piv_manifest.csv
+│  │  ├─ PIVlab_setting.mat
 │  │  ├─ PIVlab_raw.mat
 │  │  ├─ pivlab_single.mat
 │  │  ├─ pivlab_proj/
@@ -226,7 +239,11 @@ git pull --ff-only
 
 Each PC has its own machine-local `local/` directory. Git keeps only the README files and placeholder `.gitkeep` files there.
 
-Raw videos, TIFF sequences, PIVLab projects, temporary outputs, and local MATLAB override files are not synchronized by Git. If two PCs both need the same experiment data, copy or sync those files outside Git using the lab's preferred storage method.
+Raw videos, TIFF sequences, PIVLab projects, temporary outputs, and local
+MATLAB override files are not synchronized by Git. Local script overrides
+live as gitignored `scripts/*_local.m` files. If two PCs both need the same
+experiment data, copy or sync those files outside Git using the lab's
+preferred storage method.
 
 ## Metadata tables
 
@@ -236,6 +253,7 @@ Each row corresponds to one run.
 Recommended columns:
 
 - `run_id`
+- `planned_order`
 - `date`
 - `operator`
 - `mode`
@@ -246,7 +264,12 @@ Recommended columns:
 - `start_depth_m`
 - `end_depth_m`
 - `raw_subdir`
+- `piv_video_file`
+- `timelapse_video_file`
+- `waterlevel_file`
+- `runlog_file`
 - `piv_source`
+- `run_status`
 - `notes`
 - `exclude_flag`
 
@@ -295,6 +318,10 @@ piv.meta.units
 piv.meta.preset_id
 piv.meta.VDP
 piv.meta.notes
+piv.meta.setting_file
+piv.meta.export_file
+piv.meta.session_file
+piv.meta.frame_count
 ```
 
 In the current PIVLab importer, `x` and `y` are usually stored as static
@@ -302,12 +329,17 @@ In the current PIVLab importer, `x` and `y` are usually stored as static
 dimension for frame index. The rest of the pipeline should operate only on
 this canonical structure.
 
+At the moment, routine PIVLab processing uses `variant = "single_dt"` and
+writes `local/work/<run_id>/pivlab_single.mat`.
+
 ## Standard outputs
 
-The project should generate three main CSV products.
+The current implemented derived product is `frame_metrics.csv`. Run-level
+and band-wise outputs are planned for later stages once water-level mapping
+and depth-band assignment are added.
 
 ### 1. `run_summary.csv`
-One row per run.
+Planned product. One row per run.
 
 Used for:
 
@@ -316,7 +348,7 @@ Used for:
 - QC flags
 
 ### 2. `band_metrics.csv`
-One row per run × depth band.
+Planned product. One row per run × depth band.
 
 Used for:
 
@@ -325,7 +357,7 @@ Used for:
 - compact paper tables
 
 ### 3. `frame_metrics.csv`
-One row per frame pair.
+Implemented product. One row per frame pair.
 
 Used for:
 
@@ -340,8 +372,10 @@ A typical workflow is expected to follow these steps.
 1. Prepare rectified TIFF frames and optional PIVLab temporary sequences with `scripts/s10_prepare_frames.m`
 2. Save the PIVLab workspace dump as `PIVlab_raw.mat` under `local/work/<run_id>/`
 3. Import it into a canonical `.mat` structure with `scripts/s20_import_piv_results.m`
-4. Compute frame-wise and band-wise metrics with `scripts/s30_compute_metrics.m`
-5. Create paper figures with `scripts/s40_make_paper_figures.m`
+4. Optionally make a preview movie with `scripts/s25_preview_piv_movie.m`
+5. Compute the current frame-wise metrics with `scripts/s30_compute_metrics.m`
+6. Optionally make a quick-look metrics figure with `scripts/s35_plot_run_metrics_overview.m`
+7. Create paper figures with `scripts/s40_make_paper_figures.m` after that stage is implemented
 
 ## Coding style
 
@@ -349,11 +383,12 @@ A typical workflow is expected to follow these steps.
 - Driver scripts live in `scripts/`.
 - Reusable functions live in `src/`.
 - Path-specific settings belong in a local config file and should not be committed.
+- Daily script settings should usually be kept in gitignored `scripts/*_local.m` files.
 - Raw data and large derived files remain outside the Git repository.
 
 ## Current project status
 
-The project is currently in the pre-production phase.
+The project is currently in the pilot-processing phase.
 
 Completed or mostly fixed:
 
@@ -363,16 +398,20 @@ Completed or mostly fixed:
 - methods section backbone
 - primary metrics definition
 - repository architecture concept
+- local data-root layout under `local/`
+- PIVLab raw-to-canonical import for `PIVlab_raw.mat -> pivlab_single.mat`
+- basic frame-wise metrics for `E(t)`, `phi_lv(t)`, and `I_asym(t)`
+- quick-look preview movies and frame-metrics overview figures
 
 Next steps:
 
-1. create repository structure
-2. prepare metadata templates
-3. run a pilot subset of experiments
-4. verify that primary metrics are stable
-5. freeze the analysis pipeline
-6. process the remaining runs
-7. complete Introduction, Results, and Discussion
+1. continue pilot processing for inflow and outflow cases
+2. verify frame-step choices and PIVLab settings across modes
+3. add water-level / depth mapping for `depth_m`, `h_over_a`, and `band_id`
+4. implement band-wise metrics such as `I_unst(B_k)`
+5. add circulation-related metrics such as `I_circ(t)`
+6. freeze the analysis pipeline after pilot review
+7. complete Results and Discussion around the finalized metrics
 
 ## Notes
 
@@ -384,7 +423,9 @@ This project is intended to stay usable by a very small team over a multi-year p
 
 - `s10_prepare_frames.m`
 - `s20_import_piv_results.m`
+- `s25_preview_piv_movie.m`
 - `s30_compute_metrics.m`
+- `s35_plot_run_metrics_overview.m`
 - `s40_make_paper_figures.m`
 
 Detailed logic should live in reusable functions under `src/`, while the scripts remain short driver entry points.
@@ -453,7 +494,7 @@ This separation keeps the repository lightweight while preserving reproducibilit
 
 Under `local/raw/<run_id>/`:
 
-- `piv.mp4`
+- `piv.mp4` or the filename recorded in `metadata/runs.csv`
 - `timelapse.mp4`
 - `waterlevel.csv`
 - `runlog.md`
@@ -462,11 +503,11 @@ Under `local/work/<run_id>/`:
 
 - `rectification.mat`
 - `piv_manifest.csv`
-- `pivlab_setting_15fps.mat`
+- `PIVlab_setting.mat` or another clearly named PIVLab settings file
 - `PIVlab_raw.mat`
 - `pivlab_single.mat`
 - `pivlab_proj/`
-- `tmp_pivlab_long/` as needed
+- `tmp_pivlab_<variant>/` as needed
 
 Under `local/work/<run_id>/rectified_tif/`:
 
@@ -507,7 +548,7 @@ In this project, PIVLab outputs should be managed with the minimum reproducibili
 
 - save the PIVLab setting actually used for a run with "Save current PIVlab settings"
 - store that setting file directly under `local/work/<run_id>/`
-- use a descriptive filename such as `pivlab_setting_15fps.mat`
+- use a descriptive filename such as `PIVlab_setting.mat` or `PIVlab_setting_10fps.mat`
 - PIVLab session files are optional and are only needed while tuning in the GUI
 - optional session files should be stored under `local/work/<run_id>/pivlab_proj/`
 - the important run output is the raw workspace dump `PIVlab_raw.mat` under `local/work/<run_id>/`
@@ -548,11 +589,18 @@ In the current workflow, one run corresponds to one `PIVlab_raw.mat` and one can
 
 In short, the project keeps:
 
-- run-level setting file: `local/work/<run_id>/pivlab_setting*.mat`
+- run-level setting file: `local/work/<run_id>/PIVlab_setting*.mat`
 - raw PIVLab export: `local/work/<run_id>/PIVlab_raw.mat`
 - canonical imported result: `local/work/<run_id>/pivlab_single.mat`
 - run-level manifest: `local/work/<run_id>/piv_manifest.csv`
 - optional GUI session: `local/work/<run_id>/pivlab_proj/*.mat`
+
+For routine processing, script-specific settings such as the current
+`runID`, preview frame step, or temporary PIVLab sequence options should be
+placed in adjacent gitignored override files under `scripts/`, for example
+`scripts/s10_prepare_frames_local.m` or
+`scripts/s25_preview_piv_movie_local.m`. Tracked `.example` files are kept
+next to the shared scripts.
 
 ## Project startup
 
@@ -584,4 +632,8 @@ The project is organized around the following principles:
 - `config/project_config_template.m`
 - `local/README.md`
 - `scripts/s10_prepare_frames.m`
+- `scripts/s20_import_piv_results.m`
+- `scripts/s25_preview_piv_movie.m`
+- `scripts/s30_compute_metrics.m`
+- `scripts/s35_plot_run_metrics_overview.m`
 - `src/io/make_pivlab_sequence.m`
