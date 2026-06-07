@@ -46,7 +46,7 @@
 ## 実行前の確認
 
 1. MATLAB はリポジトリのルートで開いてください。
-2. 実験データは [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md) に従って `local/` に置いてください。
+2. 実験データは [local/README.md](local/README.md) に従って `local/` に置いてください。
 3. 対象の `runID` が `metadata/runs.csv` にあることを確認してください。
 4. 実行前に、スクリプト冒頭の user settings を必ず見てください。
 
@@ -83,7 +83,7 @@ git pull --ff-only
 
 ## `s10_prepare_frames.m` の使い方
 
-[s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) を開いて、冒頭の設定を必要に応じて変更してください。
+[s10_prepare_frames.m](scripts/s10_prepare_frames.m) を開いて、冒頭の設定を必要に応じて変更してください。
 
 - `runID`
   処理対象の run を指定します。例: `"R0009"`
@@ -118,7 +118,7 @@ git pull --ff-only
 
 ## `s20_import_piv_results.m` の使い方
 
-[s20_import_piv_results.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s20_import_piv_results.m) を開いて、主に次を確認してください。
+[s20_import_piv_results.m](scripts/s20_import_piv_results.m) を開いて、主に次を確認してください。
 
 - `runID`
   取り込み対象の run ID です。例: `"R0009"`
@@ -149,7 +149,7 @@ git pull --ff-only
 
 ## `s30_compute_metrics.m` の使い方
 
-[s30_compute_metrics.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s30_compute_metrics.m) では、主に次を確認してください。
+[s30_compute_metrics.m](scripts/s30_compute_metrics.m) では、主に次を確認してください。
 
 - `runID`
   計算対象の run ID です。例: `"R0009"`
@@ -184,7 +184,7 @@ git pull --ff-only
 
 ## `s35_plot_run_metrics_overview.m` の使い方
 
-[s35_plot_run_metrics_overview.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s35_plot_run_metrics_overview.m) では、主に次を確認してください。
+[s35_plot_run_metrics_overview.m](scripts/s35_plot_run_metrics_overview.m) では、主に次を確認してください。
 
 - `runID`
   図を作りたい run ID です。例: `"R0009"`
@@ -235,6 +235,6 @@ git pull --ff-only
 
 ## 関連資料
 
-- [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md)
-- [README.md](/Users/koshiba/Documents/git/psp-singleport-regime/README.md)
-- [piv_preprocessing_protocol.md](/Users/koshiba/Documents/git/psp-singleport-regime/doc/piv_preprocessing_protocol.md)
+- [local/README.md](local/README.md)
+- [README.md](README.md)
+- [piv_preprocessing_protocol.md](doc/piv_preprocessing_protocol.md)

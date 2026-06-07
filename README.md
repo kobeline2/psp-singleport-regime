@@ -540,7 +540,7 @@ manifest = make_pivlab_sequence(srcDir, outDir, ...
 
 This creates a temporary renumbered sequence such as `img_1000.tif`, `img_1001.tif`, ... for PIVLab while keeping the rectified source TIFFs unchanged when `copy_mode = 'copy'`.
 
-Students should follow the layout described in [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md) when adding new experiment data.
+Students should follow the layout described in [local/README.md](local/README.md) when adding new experiment data.
 
 ## PIVLab save policy
 

@@ -47,7 +47,7 @@ In other words, the current routine path is `s10_prepare_frames.m` -> `s20_impor
 ## Before Running Any Script
 
 1. Open MATLAB in the repository root.
-2. Make sure your experiment files are placed under `local/` as described in [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md).
+2. Make sure your experiment files are placed under `local/` as described in [local/README.md](local/README.md).
 3. Confirm that the target `runID` exists in `metadata/runs.csv`.
 4. Read the user settings at the top of the script before pressing Run.
 
@@ -87,7 +87,7 @@ Important:
 
 ## How To Use `s10_prepare_frames.m`
 
-Open [s10_prepare_frames.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s10_prepare_frames.m) and update the user settings near the top:
+Open [s10_prepare_frames.m](scripts/s10_prepare_frames.m) and update the user settings near the top:
 
 - `runID`
   Set this to the run you want to process, for example `"R0009"`.
@@ -123,7 +123,7 @@ For a run such as `R0009`, the script writes files under:
 
 ## How To Use `s20_import_piv_results.m`
 
-Open [s20_import_piv_results.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s20_import_piv_results.m) and check these settings:
+Open [s20_import_piv_results.m](scripts/s20_import_piv_results.m) and check these settings:
 
 - `runID`
   Run to import, for example `"R0009"`.
@@ -152,7 +152,7 @@ For a run such as `R0009`, the script writes the canonical single-dt file:
 
 ## How To Use `s30_compute_metrics.m`
 
-Open [s30_compute_metrics.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s30_compute_metrics.m) and check:
+Open [s30_compute_metrics.m](scripts/s30_compute_metrics.m) and check:
 
 - `runID`
   Run to process, for example `"R0009"`.
@@ -186,7 +186,7 @@ For a run such as `R0009`, the script writes:
 
 ## How To Use `s35_plot_run_metrics_overview.m`
 
-Open [s35_plot_run_metrics_overview.m](/Users/koshiba/Documents/git/psp-singleport-regime/scripts/s35_plot_run_metrics_overview.m) and check:
+Open [s35_plot_run_metrics_overview.m](scripts/s35_plot_run_metrics_overview.m) and check:
 
 - `runID`
   Run to visualize, for example `"R0009"`.
@@ -237,6 +237,6 @@ After clicking the four points, the script shows a rectified preview. Accept it 
 
 ## See Also
 
-- [local/README.md](/Users/koshiba/Documents/git/psp-singleport-regime/local/README.md)
-- [README.md](/Users/koshiba/Documents/git/psp-singleport-regime/README.md)
-- [piv_preprocessing_protocol.md](/Users/koshiba/Documents/git/psp-singleport-regime/doc/piv_preprocessing_protocol.md)
+- [local/README.md](local/README.md)
+- [README.md](README.md)
+- [piv_preprocessing_protocol.md](doc/piv_preprocessing_protocol.md)
