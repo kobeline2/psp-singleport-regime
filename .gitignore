@@ -105,6 +105,7 @@ codegen/
 # 4) 大容量データ（研究用中間生成物を誤コミットしない）
 # ---------------------------------------
 # *.csv
+*.pdf
 *.h5
 *.hdf5
 *.nc
@@ -116,6 +117,9 @@ codegen/
 *.png
 *.mp4
 *.mov
+# paper/ 内の図ファイルは追跡する
+!paper/**/*.png
+!paper/**/*.pdf
 
 # ---------------------------------------
 # 5) Mac 特有のゴミ
@@ -130,12 +134,31 @@ Icon?
 ._*
 
 # ---------------------------------------
+# 6a) LaTeX 中間生成物
+# ---------------------------------------
+*.synctex.gz
+*.aux
+*.out
+*.bcf
+*.run.xml
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+*.toc
+*.lof
+*.lot
+*.dvi
+
+# ---------------------------------------
 # 6) システム/エディタごとのファイル
 # ---------------------------------------
 # VSCode
 .vscode/
 !paper/review/.vscode/
 !paper/review/.vscode/settings.json
+!paper/2026_journal_Shonai/.vscode/
+!paper/2026_journal_Shonai/.vscode/settings.json
 
 # PyCharm / JetBrains
 .idea/

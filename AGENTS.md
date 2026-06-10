@@ -157,6 +157,31 @@ Rules:
   2. outflow regimes
   3. comparative regime transition and mode asymmetry
 
+## Literature management
+
+Files:
+- `literature/review_master.tex` — 知見の母体ドキュメント。人間が確認した情報だけが本文に入る。
+- `literature/refs/*.bib` — Zotero からの export。書誌情報の正本は Zotero 側。
+- `literature/tables/evidence_table.csv` — 必要時に生成する出力。手動で維持しない。
+
+コメント規約:
+- `==== AI-DRAFT: citekey ====` で始まる `%` コメントブロック = AI 要約。未確認。
+- コメント解除・修正済みの本文 = 人間が原典で確認済み（末尾に確認ページを記す）。
+
+status の判定（手動管理不要）:
+- `candidate` = `.bib` にあるが review_master.tex に本文記述がない
+- `checked`   = review_master.tex の本文にメモがある（AI-DRAFT ブロックは対象外）
+- `used`      = `paper/` 内の原稿で `\cite` されている
+
+1本あたりの運用ループ:
+1. AI と相談して読む候補を決める
+2. 人間が大学経由で PDF を DL し Zotero に登録（`topic:` タグを付ける）
+3. Better BibTeX が `literature/refs/` の `.bib` を自動更新
+4. AI が PDF を読んで AI-DRAFT ブロックを review_master.tex に追記（Zotero の `file` パスから直接読む）
+5. 人間が原典と照合し、確認済み部分だけコメント解除・修正して本文に昇格
+
+原稿執筆時は review_master.tex の本文（確認済みのみ）を素材に、AI が Introduction 用に圧縮抽出する。
+
 ## Writing conventions for this repo
 
 When editing manuscript-related files:
