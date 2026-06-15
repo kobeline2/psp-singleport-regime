@@ -173,6 +173,8 @@ status の判定（手動管理不要）:
 - `checked`   = review_master.tex の本文にメモがある（AI-DRAFT ブロックは対象外）
 - `used`      = `paper/` 内の原稿で `\cite` されている
 
+Zotero の `status:` タグは運用しない。status は上記のとおりファイルから導出する。Zotero のタグは `topic:` のみ運用する。
+
 1本あたりの運用ループ:
 1. AI と相談して読む候補を決める
 2. 人間が大学経由で PDF を DL し Zotero に登録（`topic:` タグを付ける）
