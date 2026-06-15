@@ -16,7 +16,7 @@ init
 % User settings
 % -------------------------------------------------------------------------
 % Run identifier defined in metadata/runs.csv
-runID = "R0012";
+runID = "R0021";
 
 % If true, open the interactive rectification tool and update the saved
 % corner points. If false, reuse the existing rectification.mat file.
@@ -30,8 +30,8 @@ make_pivlab_tmp = false;
 
 % Used only for naming the temporary PIVLab folder, for example
 % tmp_pivlab_long or tmp_pivlab_short.
-% R0001:5, R0005:10 R0009:15
-pivlab_variant = "15fps";
+% R0001:5, R0005:10 R0009:15 R0013:10, R0013:24:3
+pivlab_variant = "3fps";
 
 % Options passed to prepare_piv_frames().
 % These settings control how the main rectified TIFF sequence is generated.
@@ -44,8 +44,8 @@ opts.start_frame = 1;
 opts.end_frame = Inf;
 
 % Export every nth frame from the raw video. 
-% R0001:6, R0005:3, R0009:2
-opts.frame_step = 2;
+% R0001:6, R0005:3, R0009:2, R0013:24:10
+opts.frame_step = 10;
 
 % Prefix used for output TIFF names such as img_00001.tif.
 opts.file_prefix = 'img_';
@@ -110,6 +110,21 @@ pivlab_opts.copy_mode = 'copy';
 
 % If true, write pivlab_sequence_manifest.csv in the temporary folder.
 pivlab_opts.write_manifest = true;
+
+% % =========================================================================
+% runID = "R0021";
+% do_select_rectification = true;
+% 
+% cfg.RECTIFIED_TIF_DIR = 'rectified_tif_tailtest_step2';
+% 
+% opts.start_frame = 1;   % last 2 min start for R0021
+% opts.end_frame = 3600;
+% opts.frame_step = 10;
+% 
+% make_pivlab_tmp = true;
+% pivlab_variant = "tailtest_step2";
+% pivlab_opts.frame_step = 1;
+% % =========================================================================
 
 % Optional gitignored local override script.
 % Copy scripts/s10_prepare_frames_local.m.example to
