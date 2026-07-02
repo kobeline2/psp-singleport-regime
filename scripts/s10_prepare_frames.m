@@ -6,10 +6,12 @@ clear; clc;
 % This script intentionally combines the old "prepare assets" and
 % "prepare frames" entry points into one simple driver.
 %
-% Daily-use settings should usually be changed in:
-%   scripts/s10_prepare_frames_local.m
-% rather than by repeatedly editing this file.
+% For daily/per-run use, copy this whole file into the gitignored tmp/
+% folder and edit the copy there instead of editing this shared script.
+% See scripts/README.md for the tmp/ workflow.
 
+repoRoot = fileparts(fileparts(mfilename('fullpath')));
+addpath(repoRoot);
 init
 
 %% ------------------------------------------ -------------------------------
@@ -110,35 +112,6 @@ pivlab_opts.copy_mode = 'copy';
 
 % If true, write pivlab_sequence_manifest.csv in the temporary folder.
 pivlab_opts.write_manifest = true;
-
-% % =========================================================================
-% runID = "R0021";
-% do_select_rectification = true;
-% 
-% cfg.RECTIFIED_TIF_DIR = 'rectified_tif_tailtest_step2';
-% 
-% opts.start_frame = 1;   % last 2 min start for R0021
-% opts.end_frame = 3600;
-% opts.frame_step = 10;
-% 
-% make_pivlab_tmp = true;
-% pivlab_variant = "tailtest_step2";
-% pivlab_opts.frame_step = 1;
-% % =========================================================================
-
-% Optional gitignored local override script.
-% Copy scripts/s10_prepare_frames_local.m.example to
-% scripts/s10_prepare_frames_local.m and set only the values you want to
-% change for the current run. For example:
-%   runID = "R0012";
-%   do_select_rectification = false;
-%   opts.frame_step = 6;
-%   pivlab_opts.frame_step = 5;
-settingsFile = fullfile(cfg.SCRIPTS_DIR, 's10_prepare_frames_local.m');
-if isfile(settingsFile)
-    fprintf('[s10_prepare_frames] Loading local settings: %s\n', settingsFile);
-    run(settingsFile);
-end
 
 % -------------------------------------------------------------------------
 % Resolve run metadata and paths

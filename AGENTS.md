@@ -124,10 +124,10 @@ Coordinate convention:
 
 ## Local override policy
 
-- Daily-use settings for driver scripts should usually be overridden in adjacent gitignored files such as `scripts/s10_prepare_frames_local.m`.
-- Keep the shared driver script and its local override file side by side under `scripts/` so users are less likely to edit the wrong file.
-- Avoid repeatedly editing shared driver scripts just to change the current `runID`, frame step, preview settings, or temporary PIVLab sequence settings.
-- If `scripts/s10_prepare_frames.m` is edited during local testing, treat those edits as suspicious until you confirm they are intended project-wide changes rather than run-specific tweaks.
+- Driver scripts under `scripts/` are shared templates and should stay clean. Do not edit them just to change the current `runID`, frame step, preview settings, or temporary PIVLab sequence settings.
+- For daily/per-run use, copy the driver script into the gitignored `tmp/` folder (e.g. `scripts/s10_prepare_frames.m` -> `tmp/s10_R0012.m`), edit the copy, and run the copy directly. `tmp/` is fully gitignored, so these copies never show up as diffs.
+- Each driver script bootstraps its own path with `repoRoot = fileparts(fileparts(mfilename('fullpath'))); addpath(repoRoot); init` at the top. This works unchanged whether the file lives in `scripts/` or in a `tmp/` copy, so do not replace it with a bare `init` call.
+- If a shared driver script under `scripts/` shows up as modified in `git status`, treat that as suspicious until you confirm it is an intended project-wide change rather than a leftover per-run tweak.
 
 ## Metrics policy
 

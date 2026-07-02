@@ -240,10 +240,11 @@ git pull --ff-only
 Each PC has its own machine-local `local/` directory. Git keeps only the README files and placeholder `.gitkeep` files there.
 
 Raw videos, TIFF sequences, PIVLab projects, temporary outputs, and local
-MATLAB override files are not synchronized by Git. Local script overrides
-live as gitignored `scripts/*_local.m` files. If two PCs both need the same
-experiment data, copy or sync those files outside Git using the lab's
-preferred storage method.
+MATLAB override files are not synchronized by Git. Daily/per-run script
+settings live as disposable copies under the gitignored `tmp/` folder
+(copy a script from `scripts/`, edit the copy, and run it from there). If
+two PCs both need the same experiment data, copy or sync those files
+outside Git using the lab's preferred storage method.
 
 ## Metadata tables
 
@@ -383,7 +384,7 @@ A typical workflow is expected to follow these steps.
 - Driver scripts live in `scripts/`.
 - Reusable functions live in `src/`.
 - Path-specific settings belong in a local config file and should not be committed.
-- Daily script settings should usually be kept in gitignored `scripts/*_local.m` files.
+- Daily script settings should usually be kept in disposable copies under the gitignored `tmp/` folder.
 - Raw data and large derived files remain outside the Git repository.
 
 ## Current project status
@@ -597,10 +598,10 @@ In short, the project keeps:
 
 For routine processing, script-specific settings such as the current
 `runID`, preview frame step, or temporary PIVLab sequence options should be
-placed in adjacent gitignored override files under `scripts/`, for example
-`scripts/s10_prepare_frames_local.m` or
-`scripts/s25_preview_piv_movie_local.m`. Tracked `.example` files are kept
-next to the shared scripts.
+set in a disposable copy of the driver script placed under the gitignored
+`tmp/` folder, for example `tmp/s10_R0012.m` copied from
+`scripts/s10_prepare_frames.m`. Run the copy directly; the shared script
+under `scripts/` stays untouched.
 
 ## Project startup
 

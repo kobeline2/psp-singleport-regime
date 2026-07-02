@@ -51,21 +51,25 @@ In other words, the current routine path is `s10_prepare_frames.m` -> `s20_impor
 3. Confirm that the target `runID` exists in `metadata/runs.csv`.
 4. Read the user settings at the top of the script before pressing Run.
 
-Most scripts call `init` internally, so you usually do not need to run `init` manually first.
+Every script calls `init` internally via a small path-bootstrap line at the
+top, so you usually do not need to run `init` manually first, and it works
+the same whether the script lives in `scripts/` or in a `tmp/` copy (see
+below).
 
-For scripts that you run often, prefer using the adjacent gitignored local
-override files in `scripts/` so that the shared script stays clean.
-For example:
+For scripts that you run often, do not edit the shared script under
+`scripts/` directly — that causes noisy diffs every time you change a
+`runID` or a threshold. Instead, copy the whole script into the gitignored
+`tmp/` folder and edit the copy there. For example:
 
-- `scripts/s10_prepare_frames_local.m`
-- `scripts/s20_import_piv_results_local.m`
-- `scripts/s25_preview_piv_movie_local.m`
-- `scripts/s30_compute_metrics_local.m`
-- `scripts/s35_plot_run_metrics_overview_local.m`
+```sh
+cp scripts/s10_prepare_frames.m tmp/s10_R0012.m
+# edit tmp/s10_R0012.m: set runID, opts.frame_step, etc.
+```
 
-Each of these has a tracked `.example` file next to it. Copy the example,
-remove `.example` from the name, and edit only the values you want to
-change on your PC.
+Then run `tmp/s10_R0012.m` instead of the shared script. `tmp/` is fully
+gitignored, so these run-specific copies never show up in `git status` or
+`git diff`. Delete a copy once you no longer need it, or leave it as a
+record of exactly what you ran for that case.
 
 ## How Students Should Update This Repository
 
@@ -83,7 +87,7 @@ Important:
 - stay on `main` unless the maintainer explicitly asks you to use another branch
 - do not commit code changes locally unless you were asked to edit the repository
 - remember that `local/` is machine-local; Git will not sync your raw data or TIFFs from another PC
-- `scripts/*_local.m` files are also machine-local in practice because they are gitignored
+- `tmp/` is also machine-local in practice because it is gitignored
 
 ## How To Use `s10_prepare_frames.m`
 
@@ -108,10 +112,8 @@ Open [s10_prepare_frames.m](scripts/s10_prepare_frames.m) and update the user se
 - `pivlab_opts`
   Controls the temporary PIVLab-ready image sequence, including frame thinning and output numbering.
 
-If you expect to change these values often, prefer creating
-`scripts/s10_prepare_frames_local.m` by copying
-`scripts/s10_prepare_frames_local.m.example` and overriding only the needed
-variables there.
+If you expect to change these values often, copy this file into `tmp/`
+(e.g. `tmp/s10_R0012.m`) and edit the copy instead.
 
 ### What `s10_prepare_frames.m` Produces
 
@@ -141,8 +143,7 @@ Open [s20_import_piv_results.m](scripts/s20_import_piv_results.m) and check thes
 - `setting_file`, `session_file`, `preset_id`, `VDP`, `notes`
   Optional provenance fields. Use them when the manifest does not already record the needed information.
 
-If you change `runID` often, prefer creating
-`scripts/s20_import_piv_results_local.m` from the adjacent `.example` file.
+If you change `runID` often, copy this file into `tmp/` and edit the copy.
 
 ### What `s20_import_piv_results.m` Produces
 
@@ -163,8 +164,8 @@ Open [s30_compute_metrics.m](scripts/s30_compute_metrics.m) and check:
 - `opts.log_every`
   Progress log interval for long runs.
 
-If you change `runID` or the threshold often, prefer creating
-`scripts/s30_compute_metrics_local.m` from the adjacent `.example` file.
+If you change `runID` or the threshold often, copy this file into `tmp/`
+and edit the copy.
 
 The current implementation computes only the frame-wise metrics that can be derived directly from `pivlab_single.mat`:
 

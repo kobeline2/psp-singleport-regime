@@ -25,5 +25,6 @@ and follow it for all code, metadata, Git, and writing tasks.
 - Analysis is **tool-agnostic after import**: PIVLab/external PIV are normalized
   into the canonical `piv` struct before any metric computation.
 - `local/` is a gitignored, machine-local data root and is **not** synced by Git.
-  Daily per-run settings go in adjacent gitignored `scripts/*_local.m` overrides.
+  Daily per-run settings go in disposable copies under the gitignored `tmp/`
+  folder (copy a script from `scripts/`, edit the copy, run it from there).
 - `main` is sync-only; do substantial work on a topic branch.
