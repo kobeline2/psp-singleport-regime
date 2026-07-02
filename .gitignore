@@ -19,6 +19,7 @@ memo.txt
 # ---------------------------------------
 # 説明用 README と空ディレクトリ用 .gitkeep だけ残し、
 # 実データ本体は Git 管理しない
+/local/share/
 /local/raw/**
 !/local/raw/
 !/local/raw/R0001/

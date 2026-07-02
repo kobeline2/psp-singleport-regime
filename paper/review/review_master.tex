@@ -1,0 +1,268 @@
+% !TeX program = lualatex
+% Review-master workspace for literature mapping and later Introduction drafting.
+% Keep this file long and source-oriented; move only checked points into
+% manuscript-ready notes.
+% Build in VS Code with latexmk + lualatex + BibTeX.
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{iftex}
+\usepackage[defaultsups]{newtxtext}
+\usepackage[varg]{newtxmath}
+\usepackage[superscript]{cite}
+\ifLuaTeX
+\usepackage[luatex,pdfencoding=auto]{hyperref}
+\else
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\fi
+
+\hypersetup{hidelinks}
+
+\title{Review Master}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+This document is a working review master for literature mapping, field understanding, and later Introduction drafting. Keep source-oriented notes here first, and move only checked points into the manuscript-ready notes at the end of each section.
+
+\section{Pumped-storage and upper reservoir operation}
+% Track why upper-reservoir hydraulics matter, what operating constraints shape
+% the problem, and how reversible operation is framed in prior work.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Organize this section around questions that may later become Introduction
+% paragraphs.
+%
+% Suggested block:
+% - question:
+% - current consensus:
+% - disagreement or unresolved point:
+% - papers to revisit:
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Compare common assumptions, differences in reservoir geometry or operating
+% context, and any gap between hydropower operation studies and basin-scale flow
+% observations.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+%
+% After the point is verified, restate it in prose and cite it with \cite{...}.
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% What from this section should move into the present paper's Introduction?
+% Keep only points that are checked and useful.
+%
+% Suggested block:
+% - working claim:
+% - supporting citations:
+% - why it matters for this paper:
+% - what to leave out from the final Introduction:
+
+\section{Shallow basin / reservoir flow patterns}
+% Track reported basin-scale circulation patterns, recirculation cells, stagnant
+% zones, depth dependence, and regime-transition language used in related work.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Use this subsection to group papers by hydraulic question rather than by paper.
+%
+% Suggested question types:
+% - What flow patterns recur in shallow basins or shallow reservoirs?
+% - How do geometry, depth, or discharge change those patterns?
+% - Which patterns are steady, transitional, or intermittent?
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Summarize common patterns, contradictory observations, and missing comparisons
+% that matter for the present shallow single-port basin problem.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% Distill the few points that should later support the Introduction narrative on
+% shallow-basin flow regimes and why a regime-oriented description is needed.
+
+\section{Reversible inflow-outflow and mode asymmetry}
+% Track studies that distinguish inflow from outflow, reversible use of the same
+% port or structure, and mechanisms that create directional asymmetry.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Suggested question types:
+% - When do inflow and outflow produce qualitatively different basin responses?
+% - What mechanisms are proposed for asymmetry under the same geometry?
+% - Which comparisons are direct, and which are only inferred?
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Summarize where the literature already treats mode asymmetry explicitly and
+% where the present study may fill a comparison gap.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% Draft concise claims that may later become the asymmetry part of the
+% Introduction. Keep them short enough that they can be compressed further.
+
+\section{Surface PIV and physical modeling}
+% Track how surface-flow measurements are obtained, what physical-model choices
+% are reported, and what quality limits are stated for surface PIV.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Suggested question types:
+% - What can surface PIV resolve reliably in shallow free-surface experiments?
+% - How are rectification, frame spacing, and surface tracers handled?
+% - What uncertainty or interpretation limits are emphasized?
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Compare measurement setups, preprocessing choices, and reporting practices.
+% Note where methods are transferable to this project and where they are not.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% Keep only the measurement points that are worth carrying into the final
+% Introduction or brief Methods motivation.
+
+\section{Scaling and similitude}
+% Track which similarity arguments are used, which scale effects are acknowledged,
+% and how strongly each paper claims prototype relevance.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Suggested question types:
+% - Which nondimensional controls are treated as primary?
+% - Where do authors explicitly relax strict similitude?
+% - What limitations are reported for shallow free-surface scaling?
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Compare stronger and weaker similitude claims, note disagreements, and record
+% language that can help frame this study as prototype-informed rather than as a
+% strict full-similitude model.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% Write short, careful notes on how much scaling justification the final paper
+% actually needs and what cautionary wording should remain.
+
+\section{Sedimentation / CFD linkage}
+% Track how flow-regime observations are linked to sedimentation or CFD, and keep
+% clear boundaries between present evidence and future-study implications.
+
+\subsection{Question-oriented notes}
+Use this subsection to group notes by question so that later Introduction paragraphs can be drafted from themes rather than from individual papers.
+% Suggested question types:
+% - How do prior studies connect surface-flow patterns to sediment behavior?
+% - How are laboratory observations used to motivate or validate CFD?
+% - Which claims are direct results and which are only hypotheses?
+
+\subsection{Cross-paper synthesis}
+Record consensus, disagreement, and the remaining gap across multiple papers before deciding what belongs in the manuscript.
+% Record transferable links, weak links, and future-facing gaps. Keep this
+% subsection especially strict about status so that unchecked ideas do not slip
+% into the manuscript narrative.
+
+\subsection{Paper notes}
+Use this subsection for source-by-source notes after checking the original paper directly.
+% Duplicate the block below for each paper that belongs in this section.
+%
+% \subsubsection*{Short paper label}
+% bibkey:
+% status: candidate / checked / used
+% question:
+% method:
+% main findings:
+% relevance to this paper:
+% caveat:
+
+\subsection{Manuscript-ready notes}
+Distill only checked points that are worth carrying into the eventual Introduction.
+% Note only the minimal bridge needed for the present paper. Separate what is
+% supported now from what belongs to future sedimentation or CFD studies.
+
+\bibliographystyle{unsrt}
+\bibliography{review_refs}
+
+% Usage:
+% 1. Add only verified bibliography entries to review_refs.bib.
+% 2. Use status = candidate until the original paper is checked directly.
+% 3. Move a note to status = used only after deciding it belongs in the paper.
+% 4. Keep paper-specific detail in "Paper notes" and cross-paper logic above it.
+% 5. Distill only checked points into each "Manuscript-ready notes" subsection.
+% 6. When drafting the actual Introduction, copy from manuscript-ready notes
+%    first, then shorten and merge across sections.
+% 7. If a claim is still indirect or uncertain, leave it out of manuscript prose.
+
+\end{document}
