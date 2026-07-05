@@ -80,6 +80,16 @@ function piv = import_pivlab_result(exportMatPath, varargin)
     piv.meta.calu = double(S.calu);
     piv.meta.calv = double(S.calv);
     piv.meta.units = string(strtrim(string(S.units)));
+
+    % Downstream metrics assume u/v are in m/s. An uncalibrated PIVLab
+    % session exports px/frame with units '[px] respectively [px/frame]',
+    % which would silently break every threshold-based metric.
+    if ~contains(piv.meta.units, "m/s")
+        error('import_pivlab_result:NotCalibrated', ...
+            ['PIVLab export appears uncalibrated (units = "%s"): %s\n' ...
+             'Calibrate in the PIVLab GUI before exporting; u/v must be in m/s.'], ...
+            piv.meta.units, char(exportMatPath));
+    end
     piv.meta.preset_id = string(prm.preset_id);
     piv.meta.VDP = string(prm.VDP);
     piv.meta.notes = string(prm.notes);

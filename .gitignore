@@ -7,10 +7,10 @@
 # ---------------------------------------
 # Dropbox 側に置いたデータ置き場（シンボリックリンク）
 # GitHub にデータを絶対に入れないため必須
-raw/
-derived/
-piv_exports/
-results/
+/raw/
+/derived/
+/piv_exports/
+/results/
 config/project_config_local.m
 memo.txt
 
@@ -156,8 +156,6 @@ Icon?
 # ---------------------------------------
 # VSCode
 .vscode/
-!paper/review/.vscode/
-!paper/review/.vscode/settings.json
 !paper/2026_journal_Shonai/.vscode/
 !paper/2026_journal_Shonai/.vscode/settings.json
 
@@ -174,8 +172,7 @@ tmp/
 temp/
 scratch/
 logs/
-results/
-figures/
+/figures/
 paper/**/out/
 
 # ---------------------------------------

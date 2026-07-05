@@ -128,11 +128,6 @@ function row = iReadMatchingManifestRow(csvPath, exportFile)
 
     if sum(match) == 1
         row = M(match, :);
-    elseif height(M) == 1
-        row = M(1, :);
-        warning('s20_import_piv_results:ManifestFallback', ...
-            ['piv_manifest.csv has one row but export_file did not match "%s". ' ...
-             'Using the single manifest row.'], char(exportFile));
     elseif any(match)
         row = M(find(match, 1, 'first'), :); %#ok<FNDSB>
         warning('s20_import_piv_results:ManifestDuplicate', ...
