@@ -5,6 +5,8 @@ clear; clc;
 % This script is intended for exploratory inspection of a single case. It
 % is not the paper-figure pipeline.
 
+repoRoot = fileparts(fileparts(mfilename('fullpath')));
+addpath(repoRoot);
 init
 
 % -------------------------------------------------------------------------
@@ -20,16 +22,6 @@ show_figure = true;
 
 % Optional title note appended to the figure title.
 title_suffix = "";
-
-% Optional gitignored local override script.
-% Copy scripts/s35_plot_run_metrics_overview_local.m.example to
-% scripts/s35_plot_run_metrics_overview_local.m and set only the values you
-% want to change for the current run.
-settingsFile = fullfile(cfg.SCRIPTS_DIR, 's35_plot_run_metrics_overview_local.m');
-if isfile(settingsFile)
-    fprintf('[s35_plot_run_metrics_overview] Loading local settings: %s\n', settingsFile);
-    run(settingsFile);
-end
 
 % -------------------------------------------------------------------------
 % Resolve input / output paths

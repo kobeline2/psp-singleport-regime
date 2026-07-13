@@ -15,6 +15,11 @@ function T = compute_frame_metrics_basic(piv, varargin)
 % Notes:
 %   - This function intentionally computes only frame-wise metrics that can
 %     be derived directly from pivlab_single.mat.
+%   - I_asym splits the field about the basin's geometric symmetry plane
+%     y = Ly/2 (the port sits at the center of the short side wall, so the
+%     mirror plane runs along x). E_left is the half with smaller piv.y
+%     values (upper image half), E_right the other; the metric
+%     |E_left - E_right| / (E_left + E_right) is invariant to that labeling.
 %   - depth_m, h_over_a, and band_id are included as placeholders so that a
 %     later band-mapping step can extend the same table schema.
 
@@ -102,12 +107,12 @@ function T = compute_frame_metrics_basic(piv, varargin)
                 phi_lv(k) = mean(speed < prm.low_speed_threshold_m_s);
             end
 
-            X = iResolveFrameX(piv, k, nFrames, size(sampleU));
-            xFinite = X(isfinite(X));
-            if ~isempty(xFinite)
-                xMid = 0.5 * (min(xFinite) + max(xFinite));
-                leftMask = X < xMid;
-                rightMask = X >= xMid;
+            Y = iResolveFrameY(piv, k, nFrames, size(sampleU));
+            yFinite = Y(isfinite(Y));
+            if ~isempty(yFinite)
+                yMid = 0.5 * (min(yFinite) + max(yFinite));
+                leftMask = Y < yMid;
+                rightMask = Y >= yMid;
 
                 leftValid = valid & leftMask;
                 rightValid = valid & rightMask;
@@ -204,16 +209,16 @@ function A = iFrameSlice(data, k, nFrames, varName, allowStatic2D)
     end
 end
 
-function X = iResolveFrameX(piv, k, nFrames, fieldSize)
-    if isfield(piv, 'x') && ~isempty(piv.x)
-        X = iFrameSlice(piv.x, k, nFrames, 'piv.x', true);
-        assert(isequal(size(X), fieldSize), ...
+function Y = iResolveFrameY(piv, k, nFrames, fieldSize)
+    if isfield(piv, 'y') && ~isempty(piv.y)
+        Y = iFrameSlice(piv.y, k, nFrames, 'piv.y', true);
+        assert(isequal(size(Y), fieldSize), ...
             'compute_frame_metrics_basic:GridSizeMismatch', ...
-            'piv.x frame %d must match piv.u.', k);
+            'piv.y frame %d must match piv.u.', k);
         return;
     end
 
-    Nx = fieldSize(2);
-    x = 1:Nx;
-    X = repmat(x, fieldSize(1), 1);
+    Ny = fieldSize(1);
+    y = (1:Ny).';
+    Y = repmat(y, 1, fieldSize(2));
 end

@@ -50,18 +50,20 @@
 3. 対象の `runID` が `metadata/runs.csv` にあることを確認してください。
 4. 実行前に、スクリプト冒頭の user settings を必ず見てください。
 
-多くのスクリプトは内部で `init` を呼ぶので、通常は事前に `init` を手で実行しなくても大丈夫です。
+どのスクリプトも冒頭のパス設定ブロックを通じて内部で `init` を呼ぶので、通常は事前に `init` を手で実行しなくても大丈夫です。このブロックは `scripts/` に置いても `tmp/` にコピーしても同じように動きます（下記参照）。
 
-毎回変わる条件は、共有スクリプト本体を直接書き換えるより、
-`scripts/` に置く gitignored な local override ファイルで上書きする運用をおすすめします。
+毎回変わる条件（`runID` やしきい値など）は、共有スクリプト本体を直接書き換えると
+`git status` に毎回差分が出て煩雑になります。代わりに、スクリプト全体を
+gitignored な `tmp/` フォルダにコピーし、コピーの方を編集・実行してください。
 
-- `scripts/s10_prepare_frames_local.m`
-- `scripts/s20_import_piv_results_local.m`
-- `scripts/s25_preview_piv_movie_local.m`
-- `scripts/s30_compute_metrics_local.m`
-- `scripts/s35_plot_run_metrics_overview_local.m`
+```sh
+cp scripts/s10_prepare_frames.m tmp/s10_R0012.m
+# tmp/s10_R0012.m を開いて runID や opts.frame_step などを編集
+```
 
-それぞれ隣に `.example` ファイルがあるので、まずそれをコピーして `.example` を外した名前にしてから使ってください。
+`tmp/` は完全に gitignored なので、これらのコピーは `git status` / `git diff`
+に一切出てきません。使い終わったコピーは削除してもよいですし、
+「その run で実際に何を実行したか」の記録として残しておいても構いません。
 
 ## 学生さんの更新方法
 
@@ -79,7 +81,7 @@ git pull --ff-only
 - 管理者から指示がない限り、`main` 以外のブランチは使わないでください。
 - 管理者から依頼されていない限り、リポジトリ内のコードは commit しないでください。
 - `local/` は PC ごとのローカル作業領域です。別の PC の `local/raw/`、`local/work/` は Git では同期されません。
-- `scripts/*_local.m` も gitignored なので、実質的に PC ごとのローカル設定ファイルです。
+- `tmp/` も gitignored なので、実質的に PC ごとのローカル作業領域です。
 
 ## `s10_prepare_frames.m` の使い方
 
@@ -105,8 +107,7 @@ git pull --ff-only
   PIVLab 用一時画像列の設定です。何フレームおきに使うか、何番から連番を始めるかなどをここで変えます。
 
 これらを頻繁に変える場合は、共有スクリプト本体を毎回書き換えるより、
-`scripts/s10_prepare_frames_local.m.example`
-をコピーして `scripts/s10_prepare_frames_local.m` を作り、必要な変数だけ上書きする運用をおすすめします。
+このファイルを `tmp/`（例: `tmp/s10_R0012.m`）にコピーして、コピーの方を編集してください。
 
 ### `s10_prepare_frames.m` で作られるもの
 
@@ -137,9 +138,7 @@ git pull --ff-only
 - `setting_file`, `session_file`, `preset_id`, `VDP`, `notes`
   追加の provenance 情報です。manifest に十分な情報がないときだけ書いてください。
 
-`runID` を頻繁に変えるなら、
-`scripts/s20_import_piv_results_local.m.example`
-をコピーして `scripts/s20_import_piv_results_local.m` を作るのが便利です。
+`runID` を頻繁に変えるなら、このファイルを `tmp/` にコピーして編集してください。
 
 ### `s20_import_piv_results.m` で作られるもの
 
@@ -160,9 +159,7 @@ git pull --ff-only
 - `opts.log_every`
   長い run の進捗表示間隔です。
 
-`runID` やしきい値を頻繁に変えるなら、
-`scripts/s30_compute_metrics_local.m.example`
-をコピーして `scripts/s30_compute_metrics_local.m` を作るのが便利です。
+`runID` やしきい値を頻繁に変えるなら、このファイルを `tmp/` にコピーして編集してください。
 
 現在の実装で計算するのは、`pivlab_single.mat` だけで求められる最小の frame-wise 指標です。
 

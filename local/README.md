@@ -4,9 +4,9 @@ This directory is the default data root for local experiment files.
 
 Everything under `local/` is intended for machine-local working data. The repository keeps only this README and a few `.gitkeep` placeholder files. Raw videos, intermediate TIFF sequences, PIV projects, and result files should stay here and should not be committed.
 
-Daily-use MATLAB script overrides are no longer stored under `local/`. They
-now live next to the shared driver scripts under `scripts/` as gitignored
-files such as `scripts/s10_prepare_frames_local.m`.
+Daily-use MATLAB script overrides are not stored under `local/`. Copy a
+shared driver script from `scripts/` into the gitignored `tmp/` folder at
+the repository root and edit the copy there instead.
 
 ## Two-PC note
 

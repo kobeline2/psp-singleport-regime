@@ -7,6 +7,8 @@ clear; clc;
 %   - reads run timing info from piv_manifest.csv when available
 %   - saves canonical output under local/work/<run_id>/
 
+repoRoot = fileparts(fileparts(mfilename('fullpath')));
+addpath(repoRoot);
 init
 
 % -------------------------------------------------------------------------
@@ -38,16 +40,6 @@ session_file = "";
 preset_id = "";
 VDP = "";
 notes = "";
-
-% Optional gitignored local override script.
-% Copy scripts/s20_import_piv_results_local.m.example to
-% scripts/s20_import_piv_results_local.m and set only the values you want
-% to change for the current run.
-settingsFile = fullfile(cfg.SCRIPTS_DIR, 's20_import_piv_results_local.m');
-if isfile(settingsFile)
-    fprintf('[s20_import_piv_results] Loading local settings: %s\n', settingsFile);
-    run(settingsFile);
-end
 
 % -------------------------------------------------------------------------
 % Resolve run metadata and paths
@@ -136,11 +128,6 @@ function row = iReadMatchingManifestRow(csvPath, exportFile)
 
     if sum(match) == 1
         row = M(match, :);
-    elseif height(M) == 1
-        row = M(1, :);
-        warning('s20_import_piv_results:ManifestFallback', ...
-            ['piv_manifest.csv has one row but export_file did not match "%s". ' ...
-             'Using the single manifest row.'], char(exportFile));
     elseif any(match)
         row = M(find(match, 1, 'first'), :); %#ok<FNDSB>
         warning('s20_import_piv_results:ManifestDuplicate', ...
