@@ -12,6 +12,8 @@ init
 % -------------------------------------------------------------------------
 runID = "R0009";
 smooth_span_frames = 31;
+ncols = 2;          % overview grid columns; rows auto-size from panel count
+show_summary = true; % include the text summary tile
 save_png = true;
 save_fig = false;
 show_figure = true;
@@ -70,6 +72,8 @@ assert(istable(frameMetrics) && height(frameMetrics) >= 1, ...
 % -------------------------------------------------------------------------
 fig = plot_frame_metrics_overview(frameMetrics, ...
     'smooth_span_frames', smooth_span_frames, ...
+    'ncols', ncols, ...
+    'show_summary', show_summary, ...
     'title_suffix', title_suffix);
 
 if save_png

@@ -180,11 +180,11 @@ status の判定（手動管理不要）:
 - `checked`   = review_master.tex の本文にメモがある（AI-DRAFT ブロックは対象外）
 - `used`      = `paper/` 内の原稿で `\cite` されている
 
-Zotero の `status:` タグは運用しない。status は上記のとおりファイルから導出する。Zotero のタグは `topic:` のみ運用する。
+Zotero の `status:` タグは運用しない。status は上記のとおりファイルから導出する。`topic:` タグは任意（付ければ Zotero 内での主題フィルタに便利だが、主題分類は review_master.tex のセクションが担うため必須ではない。付けなくても運用に支障はなく、必要になれば後から一括付与できる）。
 
 1本あたりの運用ループ:
 1. AI と相談して読む候補を決める
-2. 人間が大学経由で PDF を DL し Zotero に登録（`topic:` タグを付ける）
+2. 人間が大学経由で PDF を DL し Zotero に登録（`topic:` タグは任意）
 3. Better BibTeX が `literature/refs/` の `.bib` を自動更新
 4. AI が PDF を読んで AI-DRAFT ブロックを review_master.tex に追記（Zotero の `file` パスから直接読む）
 5. 人間が原典と照合し、確認済み部分だけコメント解除・修正して本文に昇格

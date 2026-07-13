@@ -1,0 +1,29 @@
+{
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.outDir": "%DIR%/out",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (xelatex)",
+      "tools": [
+        "latexmk_xelatex"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk_xelatex",
+      "command": "latexmk",
+      "args": [
+        "-xelatex",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ]
+    }
+  ]
+}

@@ -26,6 +26,16 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
 - `s35_plot_run_metrics_overview.m`
   Makes a quick-look figure for one run from `frame_metrics.mat`.
   This is for exploratory inspection, not for final paper figures.
+  The panel layout is data-driven and auto-sizes its grid, so it adapts as
+  metrics are added.
+
+- `s36_plot_divergence_field.m`
+  Computes the surface horizontal divergence field `D = du/dx + dv/dy`
+  (a secondary, exploratory metric) from `pivlab_single.mat`, saves the
+  field to `local/derived/fields/<run_id>/divergence.mat`, and plots the
+  time-mean divergence map. `D > 0` indicates divergence/upwelling and
+  `D < 0` convergence/downwelling. The companion frame-wise scalar
+  `D_rms(t)` is produced by `s30` and shown in the `s35` overview.
 
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
@@ -62,6 +72,7 @@ For example:
 - `scripts/s25_preview_piv_movie_local.m`
 - `scripts/s30_compute_metrics_local.m`
 - `scripts/s35_plot_run_metrics_overview_local.m`
+- `scripts/s36_plot_divergence_field_local.m`
 
 Each of these has a tracked `.example` file next to it. Copy the example,
 remove `.example` from the name, and edit only the values you want to

@@ -1,0 +1,47 @@
+% !TeX program = xelatex
+\documentclass[ja=standard, xelatex]{bxjsarticle}
+\usepackage{hyperref}
+% --- 日本語組版環境の整備 ---
+\usepackage{graphicx}
+\usepackage{zxjatype}         % 日本語組版を整える（禁則など）
+\usepackage[ipaex]{zxjafont}  % IPAexフォント設定（明朝/ゴシック）
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{siunitx}
+\usepackage{bm}
+\sisetup{input-digits = 0123456789\pi}
+
+% --- biblatex の設定 ---
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=ynt
+]{biblatex}
+
+\newcommand{\bunken}[1]{\subsection*{\cite{#1}}}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\sirange}[3]{\qtyrange[range-phrase={--}]{#1}{#2}{#3}}
+\newcommand{\silist}[2]{\qtylist[list-final-separator = {, }]{#1}{#2}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\addbibresource{refs.bib}
+\numberwithin{equation}{section}
+
+\title{Flow patterns in the upper reservoir of a pump storage}
+\author{Takahiro Koshiba, Yuna Shonai, Wenker Daniel, Kenji Kawaike, Auel Christian}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\input{sections/introduction}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusions}
+
+\printbibliography
+\end{document}

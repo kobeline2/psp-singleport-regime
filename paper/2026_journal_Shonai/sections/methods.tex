@@ -1,0 +1,232 @@
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Facility and operating conditions}
+\label{sec:methods_facility}
+
+実験は, 平面寸法 \SI{3}{m} $\times$ \SI{2}{m}, 深さ \SI{0.33}{m} の矩形水槽で実施した. 水槽平面積は \SI{6}{m^2} である. 座標系は, 水槽長手方向を $x$, 短手方向を $y$, 鉛直上向きを $z$ として定義した. 水槽短辺の中央には単一の開口部(port)を設け, 同一portを通じて inflow と outflow を切り替える構成とした. port の幅と高さはそれぞれ \SI{0.11}{m}, \SI{0.05}{m} であり, port 下端は水槽底面と一致する.
+
+本研究では, inflow と outflow を独立した実験系列として扱った. 各系列では 3 水準の流量条件を設定し, 各条件について 4 回の反復実験を行った. したがって, 総 run 数は inflow 12 runs, outflow 12 runs の計 24 runs である. 流量の調整はバルブ開度によって行ったが, 本論文では条件の一般化のため, 流量は L/s で整理した. 各流量水準の代表値は Table~\ref{tab:run_conditions} に示す.
+
+各 run では, basin 内の水深変化を連続的に追跡した. inflow では水深 \SI{0.03}{m} に達した時点で撮影を開始し, \SI{0.10}{m} に達した時点で撮影を停止した. outflow では \SI{0.10}{m} から撮影を開始し, \SI{0.03}{m} に達した時点で停止した. したがって, 水深は独立の run 因子ではなく, 各 run 内で連続的に掃かれる解析軸として扱った. 本研究では, とくに port 高さ $a=\SI{0.055}{m}$ に対する相対水深 $h/a$ に着目し, basin-scale の表面流レジームを整理した.
+
+実験条件の整理は, run-level conditions と analysis-level conditions を分けて行った. 前者は mode, flow-rate level, repetition により定義し, 後者は代表水深帯ごとの可視化および比較のために定義した. 可視化用の代表水深帯は Table~\ref{tab:depth_bands} に示す. 本研究では, $h/a \approx 1$ 近傍の遷移をより明瞭に捉えるため, \SIrange{0.045}{0.055}{m} を独立した帯として扱った.
+
+各 run の流量水準は, 水位変化率 \SIlist{2.5;5.0;7.5}{mm/min} に対応する名目流量
+$Q_1=\SI{0.25}{L/s}$, $Q_2=\SI{0.50}{L/s}$, $Q_3=\SI{0.75}{L/s}$ として設定した.
+ただし, 実際の流量は水深および開口の没水状態に応じて名目値からずれるため, 各 run の実流量は水位計で記録した水深時系列と水槽平面積に基づく体積収支から評価し, 解析に用いた.
+
+各 run は静水状態から開始した. 実験間には十分な待機時間を設け, 長時間撮影画像から表面流の残留が十分小さいことを確認した後に次の run を開始した. この判定には, 後述する面平均指標 $E(t)$ を用い, 停止後に $E(t)$ が停止直前値の \SI{5}{\percent} 未満となり, その状態が \SI{5}{min} 以上継続することを基準とした.
+
+\begin{table}[tb]
+\centering
+\caption{Run-level experimental conditions.}
+\label{tab:run_conditions}
+\small
+\begin{tabular}{lllll}
+\hline
+Mode & Flow-rate level & Nominal discharge$^\dagger$ & Repetitions & Water-depth range during recording \\
+\hline
+Inflow  & Low    & \SI{0.25}{L/s} & 4 & \SIrange{0.03}{0.10}{m} \\
+Inflow  & Medium & \SI{0.50}{L/s} & 4 & \SIrange{0.03}{0.10}{m} \\
+Inflow  & High   & \SI{0.75}{L/s} & 4 & \SIrange{0.03}{0.10}{m} \\
+Outflow & Low    & \SI{0.25}{L/s} & 4 & \SIrange{0.10}{0.03}{m} \\
+Outflow & Medium & \SI{0.50}{L/s} & 4 & \SIrange{0.10}{0.03}{m} \\
+Outflow & High   & \SI{0.75}{L/s} & 4 & \SIrange{0.10}{0.03}{m} \\
+\hline
+\end{tabular}
+
+\vspace{1mm}
+\parbox{0.96\linewidth}{\footnotesize
+$^\dagger$ Nominal discharge corresponding to target water-level change rates of
+\SIlist{2.5;5.0;7.5}{mm/min}. In both inflow and outflow, the actual discharge
+could deviate from the nominal value depending on water depth and the degree of
+port submergence. This deviation became more pronounced under shallow,
+partially free-surface conditions. Therefore, the actual discharge in each run
+was evaluated from the recorded water-level time series and referred to in the
+analysis.
+}
+\end{table}
+
+
+\begin{table}[tb]
+\centering
+\caption{Representative depth bands used for visualization and regime comparison.}
+\label{tab:depth_bands}
+\small
+\begin{tabular}{llll}
+\hline
+Band & Water-depth range & Relative submergence & Intended interpretation \\
+\hline
+B1 & \SIrange{0.03}{0.05}{m}   & $0.55 \le h/a < 0.91$ & shallow, $h<a$ \\
+B2 & \SIrange{0.05}{0.06}{m}   & $0.91 \le h/a < 1.09$ & transition around $h/a \approx 1$ \\
+B3 & \SIrange{0.06}{0.075}{m}  & $1.09 \le h/a < 1.36$ & moderately submerged \\
+B4 & \SIrange{0.075}{0.10}{m}  & $1.36 \le h/a \le 1.82$ & clearly submerged \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Prototype motivation and scaling considerations}
+\label{sec:methods_scaling}
+
+本研究の模型実験は, 揚水発電上池における可逆取放水運転を念頭に設計した. ただし, 本研究の目的は特定の上池をそのまま縮尺再現することではなく, 実在する上池の寸法および流量のオーダーを参照しつつ, 単一の可逆開口を有する浅い basin における basin-scale の表面流レジームを抽出することである. したがって, 本研究は厳密な実機縮尺模型ではなく, 実機条件を参照して条件設定を行った prototype-informed laboratory experiment と位置付けられる.
+
+実験条件の設定にあたっては, 実在する揚水発電上池を参考に, basin の代表長さ, 平均水深, および運転流量のオーダーを整理した. その上で, 模型 basin が矩形であることを踏まえ, basin と開口部の幾何関係, とくに開口高さ $a$ に対する相対水深 $h/a$ を主要な整理変数として重視した. 本研究では $a=\SI{0.055}{m}$ に対して, 水深範囲を \SIrange{0.03}{0.10}{m} に設定した. これは, 低水深側では表面張力や画像計測上の不安定性を避けつつ, $h/a \approx 1$ 近傍を十分に含むように定めたものである.
+
+また, 自由水面流れとしての重力効果を考慮し, port 断面平均速度
+\begin{equation}
+U_p=\frac{Q}{ab}
+\label{eq:Up}
+\end{equation}
+に基づく Froude 数
+\begin{equation}
+Fr=\frac{U_p}{\sqrt{gh}}
+\label{eq:Fr}
+\end{equation}
+を参照しながら流量条件を設定した. 一方で, 実験施設の寸法, 利用可能流量, および計測条件の制約から, Reynolds 数を含む全ての無次元量を実機と同時に一致させることは意図していない. したがって, 本研究の知見は個々の実機値への直接的な定量外挿を目的とするものではなく, 可逆単一開口を有する浅い basin における表面流レジーム遷移, inflow/outflow の非対称性, および outflow 側の非定常性といった機構の抽出を主眼とする.
+
+以上より, 本研究では実在上池を参照して条件設定の妥当性を確保しつつ, 完全相似ではなく, 幾何学的関係, 相対水深 $h/a$, および自由水面流れとしての代表的な Froude 数を主要な設計指標として採用した.
+
+\subsection{Surface PIV and processing}
+\label{sec:methods_piv}
+
+表面流速は, basin 全体を含む上方固定カメラ画像に対する表面PIVにより算出した. 撮影条件はフレームレート \SI{000}{Hz}, 解像度 000 $\times$ 000 pixel を基本とし, 射影変換により幾何補正を行って画像を平面直交座標系に変換した. 撮影条件, PIV 解析条件, および前処理条件を Table~\ref{tab:piv_settings} に示す.
+
+トレーサには水面に追従する浮遊粒子を用いた. 照明条件, 背景条件, およびカメラ設置条件は, run 間の比較可能性を確保するため原則として一定とした. 静水開始条件の確認には別途タイムラプス撮影を行い, 実験間における表面流の残留の有無を確認した.
+
+PIV解析には multi-pass 相互相関法を用い, interrogation window は 000 pixel から 000 pixel へ段階的に縮小し, overlap は 000\%, 画像対間隔は \SI{000}{s} とした. 得られた速度ベクトル場に対しては, 局所的な外れ値判定により明らかな誤ベクトルを除去し, 必要最小限の補間を行った. また, port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下する可能性があるため, 指標計算には当該領域を除外した解析領域 $\Omega$ を用いた. マスク範囲は全条件で共通とし, basin 内の大域的な流動構造の比較に主眼を置いた.
+
+流速の空間ダイナミックレンジが広いため, 各動画は 2 種類の画像対間隔 $\Delta t_s$ および $\Delta t_l$ で独立に PIV 解析した.
+長い画像対間隔の解析結果を基本解とし, そのベクトルが validation で棄却された場合, または対応する粒子像変位が許容範囲を超える場合に限って, 短い画像対間隔の結果で置き換えた.
+これにより, 低速域に対する感度と高速域における相関の安定性を両立させた.
+$\Delta t_s$, $\Delta t_l$, および統合条件は pilot 解析に基づき決定し, 全ケースで共通とした.
+
+本研究では, 瞬時速度場 $\mathbf{u}(x,y,t)=(u,v)$ に加えて, 代表水深帯ごとの時間平均速度場および time-resolved なスカラー指標を用いて流況を整理した. とくに outflow では, 時間平均場のみでは把握しにくい変動性を捉えるため, 各指標を水深帯ごとに評価した.
+
+\begin{table}[tb]
+\centering
+\caption{Surface PIV settings.}
+\label{tab:piv_settings}
+\small
+\begin{tabular}{lll}
+\hline
+Category & Item & Value \\
+\hline
+Imaging & Frame rate & \SI{000}{Hz} \\
+Imaging & Image resolution & 000 $\times$ 000 pixel \\
+Imaging & Field of view & \SI{000}{m} $\times$ \SI{000}{m} \\
+Imaging & Geometric correction & Projective transform \\
+Tracer & Particle type & 000 \\
+Tracer & Representative particle size & \SI{000}{mm} \\
+PIV & Interrogation window & 000 $\rightarrow$ 000 pixel \\
+PIV & Window overlap & 000\% \\
+PIV & Image pair interval & \SI{000}{s} \\
+PIV & Vector validation & 000 \\
+Preprocessing & Port-near masking & \SI{000}{m} from port \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Metrics and regime classification}
+\label{sec:methods_metrics}
+
+表面流レジームの整理には, basin-scale の運動強度, 低流速域の広がり, 左右非対称性, 大域循環, および非定常性を表す primary metrics を用いた. 本研究で用いた primary metrics の一覧を Table~\ref{tab:metrics_primary} に示す.
+
+まず, basin 全体の運動強度を表す指標として, 面平均速度二乗
+\begin{equation}
+E(t)=\left\langle |\mathbf{u}(x,y,t)|^2 \right\rangle_{\Omega}
+\label{eq:E}
+\end{equation}
+を定義した. ここで, $\mathbf{u}(x,y,t)=(u,v)$ は表面速度ベクトル, $\Omega$ は解析対象領域, $\langle \cdot \rangle_{\Omega}$ はその面平均を表す.
+
+次に, 低流速域面積率
+\begin{equation}
+\phi_{\mathrm{lv}}(t)=
+\frac{\mathrm{Area}\left(|\mathbf{u}|<u_{\mathrm{th}}\right)}
+{\mathrm{Area}(\Omega)}
+\label{eq:phi_lv}
+\end{equation}
+を導入した. 閾値速度 $u_{\mathrm{th}}$ は, 開口部断面平均速度 $U_p$ に基づき
+\begin{equation}
+u_{\mathrm{th}}=\alpha U_p
+\label{eq:uth}
+\end{equation}
+と定義した. ここで, $\alpha$ は無次元係数であり, その最終値は pilot 解析に基づき決定した.
+
+inflow/outflow 間の basin-scale な偏りを定量化するため, basin を中央線で左右に分割した領域 $\Omega_L$ および $\Omega_R$ を定義し, 左右非対称指標
+\begin{equation}
+I_{\mathrm{asym}}(t)=
+\frac{E_R(t)-E_L(t)}{E_R(t)+E_L(t)}
+\label{eq:Iasym}
+\end{equation}
+を用いた. ここで,
+\begin{equation}
+E_{L,R}(t)=\left\langle |\mathbf{u}(x,y,t)|^2 \right\rangle_{\Omega_{L,R}}
+\label{eq:ELR}
+\end{equation}
+である.
+
+また, 大域循環を評価するため, 速度場から 2 次元渦度
+\begin{equation}
+\omega(x,y,t)=\frac{\partial v}{\partial x}-\frac{\partial u}{\partial y}
+\label{eq:vorticity}
+\end{equation}
+を算出し, 循環指標
+\begin{equation}
+I_{\mathrm{circ}}(t)=
+\left\langle \frac{a}{U_p}\,\omega(x,y,t) \right\rangle_{\Omega}
+\label{eq:Icirc}
+\end{equation}
+を定義した. 渦度の算出に必要な数値微分および平滑化条件は, 全条件で共通の手順を用いた.
+
+各 run では水深が連続的に変化するため, 非定常性は run 全体ではなく, 代表水深帯 $B_k$ ごとに評価した. 具体的には, 各帯に対して
+\begin{equation}
+I_{\mathrm{unst}}(B_k)=
+\frac{\mathrm{std}\left\{E(t)\mid h(t)\in B_k\right\}}
+{\mathrm{mean}\left\{E(t)\mid h(t)\in B_k\right\}}
+\label{eq:Iunst}
+\end{equation}
+を定義した. ここで, $h(t)$ は時刻 $t$ における水深であり, $B_k$ は Table~\ref{tab:depth_bands} に示した代表水深帯である.
+
+レジーム判定では, 代表水深帯ごとの時間平均ベクトル場および streamlines に加え, $E(t)$, $\phi_{\mathrm{lv}}(t)$, $I_{\mathrm{asym}}(t)$, $I_{\mathrm{circ}}(t)$, および $I_{\mathrm{unst}}(B_k)$ を総合的に参照した. 本研究では, (i) 偏向ジェットと二循環構造が卓越する状態, (ii) basin 全体を占める単一循環が卓越する状態, (iii) それらの間の遷移的または不安定な状態, を基本的なレジームとして整理した.
+
+補助的な解析量として, 渦中心位置, 卓越周波数, 渦度分布, および代表的な streamlines / vector maps も必要に応じて算出したが, これらは secondary metrics と位置付け, 再現性のある示唆が得られた場合に限って補足的に用いた.
+
+\begin{table}[tb]
+\centering
+\caption{Primary metrics used for regime characterization.}
+\label{tab:metrics_primary}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{1.7cm}p{1.8cm}p{2.4cm}p{6.0cm}}
+\hline
+Category & Symbol & Definition & Physical meaning / role \\
+\hline
+Primary &
+$E(t)$ &
+Eq.~\eqref{eq:E} &
+Basin-scale motion intensity. Used to characterize overall flow strength, temporal evolution, and residual-motion checks. \\
+
+Primary &
+$\phi_{\mathrm{lv}}(t)$ &
+Eq.~\eqref{eq:phi_lv} &
+Low-velocity area fraction. Used to quantify the spatial extent of quiescent or weak-flow regions. \\
+
+Primary &
+$I_{\mathrm{asym}}(t)$ &
+Eq.~\eqref{eq:Iasym} &
+Asymmetry index. Used to quantify left-right imbalance of basin-scale motion intensity. \\
+
+Primary &
+$I_{\mathrm{circ}}(t)$ &
+Eq.~\eqref{eq:Icirc} &
+Circulation index. Used to characterize the sign and strength of the dominant basin-scale circulation. \\
+
+Primary &
+$I_{\mathrm{unst}}(B_k)$ &
+Eq.~\eqref{eq:Iunst} &
+Band-wise unsteadiness index. Used to quantify temporal variability within a given depth band. \\
+
+\hline
+\end{tabular}
+\end{table}

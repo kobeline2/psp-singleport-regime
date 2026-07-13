@@ -13,3 +13,11 @@ opts.low_speed_threshold_m_s = 0.02;
 
 % Progress log interval for long runs
 opts.log_every = 500;
+
+% Gaussian pre-smoothing sigma [grid cells] for I_circ.
+% 0 = no smoothing (default). Fix after pilot analysis.
+% opts.smooth_sigma_circ = 0;
+
+% Gaussian pre-smoothing sigma [grid cells] for surface-divergence D_rms.
+% Smoothing is essential for divergence; default 1.5.
+% opts.smooth_sigma_div = 1.5;

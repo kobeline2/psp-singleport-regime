@@ -1,0 +1,115 @@
+\usepackage{cleveref} 
+% % ******************************** added by Koshiba **********************************
+% % ************************************************************************************
+
+\usepackage{threeparttable}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{amsthm}
+\usepackage{here}
+\usepackage{algorithm,algorithmic}
+
+% add pages to references
+\usepackage[hyperpageref]{backref}
+% Setup to show (pages 4 and 9) sort of thing in the bibliography - DD
+%\def\foo{\hspace{\fill}\mbox{}\linebreak[0]\hspace*{\fill}}
+%\def\foo{\parbox{3cm}{\hfill}
+%\def\foo{\parbox{3cm}{\hfill}
+%\newcommand\foo[1]{{\raggedleft{\hfill{\mbox{\hfill{#1}}}}}}
+\newcommand{\comfyfill}[1]{% = Thorsten Donig's \signed
+  \unskip\hspace*{0.1em plus 1fill}
+  \nolinebreak[3]%
+  \hspace*{\fill}\mbox{#1}
+  \parfillskip0pt\par
+}
+\newcommand\foo[1]{{\comfyfill{\mbox{#1}}}}
+%\newcommand\foo[1]{{\mbox{#1}}}
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+\ifcase #1 %
+%
+\or
+\foo{(page #2)}%
+\else
+\foo{(pages #2)}%
+\fi
+}
+
+% add colors for linsk 
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,
+    citecolor=[rgb]{0, 0, 0.6},
+    linkcolor=red,
+    urlcolor=[rgb]{0, 0, 0.6},
+}
+
+% Proof stuff
+\theoremstyle{plain}
+\newtheorem{definition}[]{Definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{proposition}{Proposition}
+\newtheorem*{cor}{Corollary}
+
+% abbreviated words
+\newcommand{\ds}{$D_s$\ }
+\newcommand{\cm}{m$^3$}
+\newcommand{\fr}{\mathrm{Fr}}
+\newcommand{\ips}[1]{I_{ps}^{#1}}
+\newcommand{\Ker}[2]{\mathrm{Ker}(#1;\,#2)}
+\newcommand{\vips}{\boldsymbol{I_{ps}}}
+
+
+% for math
+\newcommand{\pr}{{\mathrm{Pr}}}
+\newcommand{\vA}{\mathbf{A}}
+\newcommand{\vI}{\mathbf{I}}
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vK}{\mathbf{K}}
+\newcommand{\vLambda}{\mathbf{\Lambda}}
+\newcommand{\vmu}{{\boldsymbol{\mu}}}
+\newcommand{\vphi}{{\boldsymbol{\phi}}}
+\newcommand{\vPhi}{\mathbf{\Phi}}
+\newcommand{\vsigma}{{\boldsymbol{\sigma}}}
+\newcommand{\vSigma}{\mathbf{\Sigma}}
+\newcommand{\vtheta}{{\boldsymbol{\theta}}}
+\newcommand{\vTheta}{\mathbf{\Theta}}
+\newcommand{\vW}{\mathbf{W}}
+\newcommand{\vw}{\mathbf{w}}
+\newcommand{\vX}{\mathbf{X}}
+\newcommand{\vx}{\mathbf{x}}
+\newcommand{\vY}{\mathbf{Y}}
+\newcommand{\vy}{\mathbf{y}}
+\newcommand{\vzero}{\boldsymbol{0}}
+\newcommand{\vZ}{\mathbf{Z}}
+\newcommand{\vz}{\mathbf{z}}
+
+\newcommand{\Normal}{\mathcal{N}}
+\newcommand{\tra}{^{\mathsf{T}}}
+\newcommand{\inv}{^{{\mathsmaller{-1}}}}
+\newcommand{\expect}{\mathbb{E}}
+\newcommand{\expectargs}[2]{\mathbb{E}_{#1} \left[ {#2} \right]}
+\newcommand{\var}{\mathbb{V}}
+\newcommand{\varianceargs}[2]{\mathbb{V}_{#1} \left[ {#2} \right]}
+\newcommand{\gpcal}{\mathcal{GP}}
+%%%% others
+% \newcommand{\figwid}{0.47}
+\newcommand{\figwid}{7.2cm}
+\newcommand{\cs}[1]{\texttt{#1}}
+
+% for tabular photos
+\newcommand{\ttwop}[1]{\includegraphics[width=7.2 cm]{#1}}
+\newcommand{\tthrp}[1]{\includegraphics[width=4.8 cm]{#1}}
+\newcommand{\tfoup}[1]{\includegraphics[width=\figwid]{#1}}
+
+% % FOR TABLES
+% for multi-row table elements
+\newcommand{\onerow}[1]{\begin{tabular}{l}#1\end{tabular}}
+\newcommand{\tworow}[2]{\begin{tabular}{l}#1\\#2\end{tabular}}
+\newcommand{\trirow}[3]{\begin{tabular}{l}#1\\#2\\#3\end{tabular}}
+% for footnotes
+\newcommand{\f}{\tnote{*}}
+\newcommand{\ff}{\tnote{**}}
+\newcommand{\fff}{\tnote{***}}

@@ -182,3 +182,16 @@ paper/**/out/
 # 8) 自分だけのローカル設定を置く場所
 # ---------------------------------------
 config_local/
+
+# ===== baseline (cleanup) =====
+.DS_Store
+.dropboxignore
+*conflicted copy*
+*Conflicted Copy*
+untitled*.m
+*.asv
+matlab_workspace.mat
+__pycache__/
+*.pyc
+.venv/
+*.dSYM/

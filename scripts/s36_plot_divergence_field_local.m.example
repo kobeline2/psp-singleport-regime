@@ -1,0 +1,19 @@
+% Example local override file for scripts/s36_plot_divergence_field.m
+%
+% Usage:
+%   1. Copy this file to:
+%        scripts/s36_plot_divergence_field_local.m
+%   2. Edit only the values you want to change.
+%   3. Do not commit the copied local file.
+
+runID = "R0009";
+
+% Gaussian pre-smoothing sigma [grid cells] for divergence (essential).
+% opts.smooth_sigma_div = 1.5;
+
+save_field = true;
+save_png   = true;
+save_fig   = false;
+show_figure = true;
+clim_percentile = 98;
+title_suffix = "";

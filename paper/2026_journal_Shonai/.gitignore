@@ -1,0 +1,16 @@
+out/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bcf
+*.run.xml
+*.dvi
+*.blg
+*.bbl
+main.pdf
