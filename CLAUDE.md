@@ -28,3 +28,9 @@ and follow it for all code, metadata, Git, and writing tasks.
   Daily per-run settings go in disposable copies under the gitignored `tmp/`
   folder (copy a script from `scripts/`, edit the copy, run it from there).
 - `main` is sync-only; do substantial work on a topic branch.
+
+## 2台運用の同期ルール（重要）
+このリポジトリは2台のPC（WS=ラボ, LT=ノート）で共有している。
+- ユーザーが「pushして」「離れる」等と言ったら: `git add -A` で作業中のファイルも含めて全てcommit（WIPコミットで可）し、`git push` する。中途半端な変更を勝手に除外しない。
+- ユーザーが「pullして」「始める」等と言ったら: 最初に `git pull` し、コンフリクトがあれば止めて報告する。
+- 大容量データ（tiff等）や環境固有の設定（ローカルパス）はコミットしない。
