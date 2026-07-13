@@ -15,52 +15,14 @@ config/project_config_local.m
 memo.txt
 
 # ---------------------------------------
+# ---------------------------------------
 # 1a) リポジトリ内 local/ データルート
 # ---------------------------------------
-# 説明用 README と空ディレクトリ用 .gitkeep だけ残し、
-# 実データ本体は Git 管理しない
-/local/share/
-/local/raw/**
-!/local/raw/
-!/local/raw/R0001/
-!/local/raw/.gitkeep
-!/local/raw/R0001/.gitkeep
-
-/local/work/**
-!/local/work/
-!/local/work/R0001/
-!/local/work/R0001/rectified_tif/
-!/local/work/R0001/pivlab_proj/
-!/local/work/exports/
-!/local/work/.gitkeep
-!/local/work/R0001/.gitkeep
-!/local/work/R0001/rectified_tif/.gitkeep
-!/local/work/R0001/pivlab_proj/.gitkeep
-!/local/work/exports/.gitkeep
-
-/local/derived/**
-!/local/derived/
-!/local/derived/piv/
-!/local/derived/metrics/
-!/local/derived/qc/
-!/local/derived/.gitkeep
-!/local/derived/piv/.gitkeep
-!/local/derived/metrics/.gitkeep
-!/local/derived/qc/.gitkeep
-
-/local/results/**
-!/local/results/
-!/local/results/figures/
-!/local/results/tables/
-!/local/results/drafts/
-!/local/results/.gitkeep
-!/local/results/figures/.gitkeep
-!/local/results/tables/.gitkeep
-!/local/results/drafts/.gitkeep
-
-/local/settings/
-
+# local/ は実データ置き場。中身は全てGit管理外。
+# フォルダ構造はスクリプトの mkdir が実行時に自動生成する。
+/local/
 !/local/README.md
+
 
 # ---------------------------------------
 # 1b) scripts/ 隣接ローカル override
