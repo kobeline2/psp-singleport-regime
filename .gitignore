@@ -120,6 +120,8 @@ Icon?
 .vscode/
 !paper/2026_journal_Shonai/.vscode/
 !paper/2026_journal_Shonai/.vscode/settings.json
+!literature/.vscode/
+!literature/.vscode/settings.json
 
 # PyCharm / JetBrains
 .idea/

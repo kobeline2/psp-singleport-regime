@@ -1,0 +1,34 @@
+{
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.outDir": "%DIR%/out",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (uplatex)",
+      "tools": [
+        "latexmk_uplatex"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk_uplatex",
+      "command": "latexmk",
+      "args": [
+        "-e", "$latex=q/uplatex %O %S/",
+        "-e", "$bibtex=q/upbibtex %O %B/",
+        "-e", "$biber=q/biber --bblencoding=utf8 -u -U --output_safechars %O %S/",
+        "-e", "$dvipdf=q/dvipdfmx %O -o %D %S/",
+        "-e", "$makeindex=q/upmendex %O -o %D %S/",
+        "-pdfdvi",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ]
+    }
+  ]
+}
