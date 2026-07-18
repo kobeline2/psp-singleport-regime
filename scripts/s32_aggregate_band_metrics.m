@@ -20,10 +20,11 @@ init
 % Settings
 % -------------------------------------------------------------------------
 % Metrics averaged per band. Each gets a _mean column; those in
-% stdMetrics also get a _std column.
-meanMetrics = ["E","phi_lv","I_asym","mean_speed","rms_speed", ...
+% stdMetrics also get a _std column. I_circ is included when s30 has
+% written it (see s30_compute_metrics.m).
+meanMetrics = ["E","phi_lv","I_asym","I_circ","mean_speed","rms_speed", ...
                "valid_fraction","depth_m","h_over_a","q_actual_Lps"];
-stdMetrics  = ["E","phi_lv","I_asym"];
+stdMetrics  = ["E","phi_lv","I_asym","I_circ"];
 
 % -------------------------------------------------------------------------
 % Resolve runs and bands
@@ -88,6 +89,15 @@ for i = 1:height(T)
                     r.(char(name + "_std")) = NaN;
                 end
             end
+        end
+
+        % Band-wise unsteadiness index (Methods Eq. Iunst):
+        %   I_unst(B_k) = std{E(t) | h in B_k} / mean{E(t) | h in B_k}
+        % i.e. the coefficient of variation of E within the band.
+        if isfinite(r.E_mean) && r.E_mean ~= 0
+            r.I_unst = r.E_std / r.E_mean;
+        else
+            r.I_unst = NaN;
         end
 
         rows = [rows; r]; %#ok<AGROW>
