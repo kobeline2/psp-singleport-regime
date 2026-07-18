@@ -80,6 +80,17 @@ function manifest = make_pivlab_sequence(srcDir, outDir, varargin)
     srcIdx = iStart:iStep:iEnd;
     nOut = numel(srcIdx);
 
+    maxOutIndex = prm.start_index + nOut - 1;
+    maxRepresentable = 10^prm.digits - 1;
+    if maxOutIndex > maxRepresentable
+        error('make_pivlab_sequence:DigitOverflow', ...
+            ['Output index %d exceeds what %d digits can represent (max %d). ' ...
+             'Lexicographic filename sorting would break (e.g. "...10000" < "...9999"), ' ...
+             'silently scrambling frame order for PIVLab. Increase ''digits'' or lower ' ...
+             '''start_index''/the number of output frames.'], ...
+            maxOutIndex, prm.digits, maxRepresentable);
+    end
+
     if isfolder(outDir)
         if prm.delete_existing
             rmdir(outDir, 's');

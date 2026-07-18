@@ -69,9 +69,25 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
 
     tStart = tic;
 
+    % nTotal is an estimate (floor(Duration*FrameRate)); for constant-frame-
+    % rate video this matches the true frame count, but some containers can
+    % disagree by a frame or two. Rather than pay for the exact count via
+    % v.NumFrames (a full-file scan costing ~20s on a 10 GB video, on every
+    % call), tolerate a read() failure near the end: stop, keep whatever
+    % frames were already written, and still emit a manifest for them
+    % instead of losing the entire run's output after a multi-hour job.
+    kDone = 0;
     for k = 1:nOut
         idx = frameIdx(k);
-        I = read(v, idx);
+        try
+            I = read(v, idx);
+        catch readErr
+            warning('prepare_piv_frames:ReadFailed', ...
+                ['Failed to read source frame %d (output %d/%d): %s\n' ...
+                 'Stopping early; keeping the %d frame(s) already written.'], ...
+                idx, k, nOut, readErr.message, kDone);
+            break;
+        end
 
         if opts.rectify_first
             I = imwarp(I, rect.tform, 'OutputView', outputRef);
@@ -87,6 +103,7 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
         source_frame_idx(k) = idx;
         time_s(k) = (idx - 1) / v.FrameRate;
         file_name(k) = fname;
+        kDone = k;
 
         if k == 1 || k == nOut || mod(k, logEvery) == 0
             elapsed_s = toc(tStart);
@@ -95,6 +112,11 @@ function manifest = prepare_piv_frames(videoPath, outDir, rectArg, opts)
                 k, nOut, 100 * k / nOut, idx, elapsed_s, eta_s);
         end
     end
+
+    seq_idx = seq_idx(1:kDone);
+    source_frame_idx = source_frame_idx(1:kDone);
+    time_s = time_s(1:kDone);
+    file_name = file_name(1:kDone);
 
     manifest = table(seq_idx, source_frame_idx, time_s, file_name);
 

@@ -38,6 +38,14 @@ For each run, the current standard outputs are:
 - `local/work/<run_id>/PIVlab_raw.mat` after PIVLab export
 - `local/work/<run_id>/pivlab_single.mat` after canonical import
 
+The folder name `rectified_tif/` is the default (`cfg.RECTIFIED_TIF_DIR`).
+Some early runs (e.g. R0001, R0005, R0009) instead used an fps-suffixed
+name such as `rectified_tif_5fps/` to record the effective export frame
+rate in the folder name. This is a valid per-run override of
+`cfg.RECTIFIED_TIF_DIR`, not a separate convention — pick one folder name
+per run and keep reusing it so that reprocessing overwrites the same
+sequence instead of creating a second, diverging one.
+
 No rectification preview PNG is required in the default workflow. The transform can be reproduced from `rectification.mat` when needed.
 
 ## Standard workflow

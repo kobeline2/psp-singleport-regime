@@ -46,16 +46,20 @@ The analysis is built around a unified pipeline.
 
 The downstream analysis should not depend on whether the velocity field came from PIVLab or an external package. All inputs are normalized into a common MATLAB structure before metric computation.
 
-The project keeps the option of a dual-\(\Delta t\) strategy, but the
-current routine workflow is **single-dt**.
+The project keeps the option of a dual-\(\Delta t\) strategy for later use,
+but the current routine workflow is **single-dt**: every run so far uses one
+fixed frame interval end to end, and `piv.variant = "single_dt"` in the
+canonical struct.
 
-- A short frame interval is used to stabilize high-velocity regions.
-- A long frame interval is used to improve sensitivity in low-velocity regions.
-- The final merged field is used for both figures and metrics.
+If a dual-\(\Delta t\) strategy is introduced later, the intended design is:
 
-If short/long frame-pair strategies are introduced later, they should be
-kept explicit in `piv_manifest.csv` and imported into canonical MATLAB
-outputs before downstream metrics are computed.
+- A short frame interval to stabilize high-velocity regions.
+- A long frame interval to improve sensitivity in low-velocity regions.
+- A merged field, combining both, used for figures and metrics.
+
+Such short/long frame-pair strategies should be kept explicit in
+`piv_manifest.csv` and imported into canonical MATLAB outputs before
+downstream metrics are computed.
 
 ## Primary metrics
 

@@ -32,7 +32,6 @@ make_pivlab_tmp = false;
 
 % Used only for naming the temporary PIVLab folder, for example
 % tmp_pivlab_long or tmp_pivlab_short.
-% R0001:5, R0005:10 R0009:15 R0013:10, R0013:24:3
 pivlab_variant = "3fps";
 
 % Options passed to prepare_piv_frames().
@@ -45,8 +44,7 @@ opts.start_frame = 1;
 % Last raw-video frame to export. Use Inf to process until the end.
 opts.end_frame = Inf;
 
-% Export every nth frame from the raw video. 
-% R0001:6, R0005:3, R0009:2, R0013:24:10
+% Export every nth frame from the raw video.
 opts.frame_step = 10;
 
 % Prefix used for output TIFF names such as img_00001.tif.

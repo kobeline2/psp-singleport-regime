@@ -4,6 +4,8 @@ clear; clc;
 %
 % This script is the single top-level entry point for figure production.
 
+repoRoot = fileparts(fileparts(mfilename('fullpath')));
+addpath(repoRoot);
 init
 
 figureDir = cfg.RESULTS_FIG_DIR;
