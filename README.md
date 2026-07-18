@@ -339,9 +339,9 @@ writes `local/work/<run_id>/pivlab_single.mat`.
 
 ## Standard outputs
 
-The current implemented derived product is `frame_metrics.csv`. Run-level
-and band-wise outputs are planned for later stages once water-level mapping
-and depth-band assignment are added.
+The implemented derived products are `frame_metrics.csv` (per frame) and
+`band_metrics.csv` (per run × depth band). `run_summary.csv` is still
+planned.
 
 ### 1. `run_summary.csv`
 Planned product. One row per run.
@@ -353,7 +353,12 @@ Used for:
 - QC flags
 
 ### 2. `band_metrics.csv`
-Planned product. One row per run × depth band.
+Implemented product. One row per run × depth band (`s32_aggregate_band_metrics.m`).
+
+Each run's frames are grouped into the four depth bands from
+`metadata/depth_bands.csv` and the frame-wise metrics are averaged within
+each band. Repetitions are kept as separate runs; pool by condition at
+figure time.
 
 Used for:
 
@@ -363,6 +368,11 @@ Used for:
 
 ### 3. `frame_metrics.csv`
 Implemented product. One row per frame pair.
+
+`s30_compute_metrics.m` writes the PIV-derived columns; `s31_map_waterlevel.m`
+then fills `depth_m`, `h_over_a`, `band_id`, and `q_actual_Lps` by aligning
+the run's `waterlevel.csv` to the PIV frame times (the recordings are
+co-extensive, so the two series are matched by normalized time).
 
 Used for:
 
@@ -406,15 +416,17 @@ Completed or mostly fixed:
 - local data-root layout under `local/`
 - PIVLab raw-to-canonical import for `PIVlab_raw.mat -> pivlab_single.mat`
 - basic frame-wise metrics for `E(t)`, `phi_lv(t)`, and `I_asym(t)`
+- water-level / depth mapping for `depth_m`, `h_over_a`, `band_id`, and
+  `q_actual_Lps` (`s31_map_waterlevel.m`)
+- run × depth-band aggregation into `band_metrics.csv` (`s32_aggregate_band_metrics.m`)
 - quick-look preview movies and frame-metrics overview figures
 
 Next steps:
 
 1. continue pilot processing for inflow and outflow cases
 2. verify frame-step choices and PIVLab settings across modes
-3. add water-level / depth mapping for `depth_m`, `h_over_a`, and `band_id`
-4. implement band-wise metrics such as `I_unst(B_k)`
-5. add circulation-related metrics such as `I_circ(t)`
+3. implement band-wise metrics such as `I_unst(B_k)`
+4. add circulation-related metrics such as `I_circ(t)`
 6. freeze the analysis pipeline after pilot review
 7. complete Results and Discussion around the finalized metrics
 
