@@ -1,7 +1,38 @@
+% ============================================================
+% NOTE (draft status, 2026-07): レポート調ドラフト. Results と同じく
+% zotero citekey を使用. 数値は band_metrics.csv (2026-07) に基づく.
+% ============================================================
+
 \section{Discussion}
+\label{sec:discussion}
 
 \subsection{Physical interpretation}
+\label{sec:discussion_physical}
+
+\paragraph{モード非対称の力学的起源.}
+観察された inflow/outflow の非対称は, 同一開口を通る流れであっても, 流入が「運動量をもつ平面ジェットの注入」であるのに対し, 流出が「圧力駆動の分布した吸込み」であるという, 力学的に別種の境界条件であることの帰結として整合的に説明できる. inflow では, port を出たジェットが保持する運動量が側壁との相互作用(Coanda 型の付着・偏向)を通じて basin スケールの循環に変換され, 強い回転運動($I_{\mathrm{rot}} = 0.06$--$0.12$)と左右不均衡($I_{\mathrm{asym}} \approx 0.26$)を生む. これは浅い矩形貯水池の非対称流レジームの標準的な描像 \cite{dufresneClassificationFlowPatterns2010,dewalsExperimentalNumericalAnalysis2008} と一致する. 一方 outflow では, 吸込みが誘起する流れはポテンシャル流のシンクに近く, 渦度の供給源をもたない. 観察された「回転をもたない対称収束流」($I_{\mathrm{rot}} = 0.002$--$0.007$)はこの描像そのものである.
+
+この非対称は先行研究でも報告されているが, 程度の差が大きい. M\"uller らの深い貯水池模型($h/B \approx 0.58$)では, outflow の運動エネルギーは inflow の 13--29\% であった \cite{mullerInfluenceOutflowSequences2012}. 本研究の浅い basin($h/W = 0.015$--$0.05$)では, outflow の $E$ は inflow の約 0.1\%(3 桁差)であり, 非対称の程度が約 2 桁増幅されている. この差は水深に帰着できる可能性が高い. 深い系では吸込みが誘起する流れが鉛直方向にも展開し表面まで到達しうるが, 浅い系では吸込み流の断面積(port 開口)に対して自由表面が広大であり($A_{\mathrm{plan}}/(ab) \approx 10^3$), 連続の式から吸込み誘起速度は表面で $10^{-3} U_p$ のオーダーまで希釈される. 実測の表面流速中央値($0.3$--$1.5\% \times U_p$)はこのオーダー評価と整合する. すなわち, 浅い可逆 basin では「outflow は表面をほとんど駆動しない」ことが幾何的に保証されており, これが本研究のモード非対称の核心である.
+
+\paragraph{$h/a \approx 1$ 転換帯の性格.}
+$h/a$ によるレジーム遷移は, 当初の仮説(流況トポロジーの切り替え)とは異なる形で現れた. トポロジーは各 mode で全水深帯を通じて保存され, 切り替わったのは (i) inflow の非定常性($I_{\mathrm{unst}}$ が $h/a \approx 1$ で約 1 桁減少), (ii) ジェットの表面影響度($\phi_{\mathrm{lv}}$, $E$, $I_{\mathrm{rot}}$ の系統変化)である. 物理的には, $h < a$ では port 開口の一部が自由表面と直接連結しており, ジェットは表面に「露出」した状態で射出される. このときジェットの変動(蛇行・振動)は直接表面に現れ, $I_{\mathrm{unst}}$ を押し上げる. 潜没が完了する $h > a$ では, ジェットは水面下に沈み込み, 表面には減衰・平滑化された運動のみが伝わるため, 表面流は定常化し, 静穏域($\phi_{\mathrm{lv}}$)が拡大する. この解釈は, 浅水ジェットの蛇行不安定が水深(摩擦数)に強く支配されるという知見 \cite{peltierExperimentalInvestigationMeandering2014}, および噴流の鉛直位置が流況を規定するという報告 \cite{chagdaliFlowPatternsShallow2025} と整合する.
+
+\paragraph{outflow の非定常性.}
+解像された唯一の outflow 帯(high, $B_1$)で $I_{\mathrm{unst}} = 0.76$ と, inflow 最大値の約 2 倍の相対変動が得られた. 「時間平均が小さく相対変動が大きい」という outflow の性格は, 取放水構造物近傍の点計測で瞬時流速が時間平均の 3 倍超に達すると報告した Zhu ら \cite{zhuExperimentalInvestigationUnsteady2023} と整合し, これを basin スケールの表面場に拡張した位置づけになる. ただし本研究の枠組みでは, outflow の非定常性の大部分が分解能限界の帯に隠れており, その定量化は今後の課題である(Sec.~\ref{sec:discussion_limitations}). 変動の「大きさ」($I_{\mathrm{unst}}$)に加えて, 流向反転の「頻度」を測る逆流係数型の指標 \cite{guoCharacteristicsFlowStructure2024} や, POD による coherent 構造の抽出 \cite{peltierExperimentalInvestigationMeandering2014,valeroUnsteadyShallowMeandering2022} が有望な拡張である.
+
+\paragraph{予備観察との差: 履歴効果.}
+Introduction で言及した予備観察(outflow での basin 全域の単一循環)は, 静水開始の本計測では再現されなかった. 最も自然な説明は履歴効果である. M\"uller らは, inflow が形成した大規模循環セルが流れの反転後も長時間持続し, outflow の流況が先行 inflow に強く影響されること, その散逸に流量に応じて $0.2$--$0.8\,t_P$ を要することを報告している \cite{mullerInfluenceOutflowSequences2012}. 予備観察は inflow 直後に outflow を行う連続運転で実施されたため, 観察された循環は outflow 固有の構造ではなく, 先行 inflow の残留循環が吸込みの下でゆっくり減衰していたものと解釈できる. この解釈が正しければ, 実運用(交互運転)の上池では「outflow の表面流況は直前の inflow 履歴に支配される」ことになり, 静水開始で得た本研究の結果はその基底状態(履歴のない outflow)を与える. 履歴あり条件の系統的検証は今後の重要課題である.
 
 \subsection{Implications for pumped-storage reservoirs}
+\label{sec:discussion_implications}
+
+第一に, 堆砂・濁質管理の観点からは, inflow と outflow で「効く」プロセスが異なることが示唆される. inflow は強い運動($E$ 大)により混合・再懸濁・輸送を駆動し, その空間パターンは偏向ジェットの側に強く偏る($I_{\mathrm{asym}} \approx 0.26$). 一方 outflow の表面はほぼ静穏であり, 沈降が卓越する時間帯として機能すると考えられる. これは「懸濁維持は inflow 系列のジェットエネルギーが主因」とする M\"uller らの結論 \cite{mullerExperimentsEffectInflow2017} と整合する. ただし, 表面 PIV の $\phi_{\mathrm{lv}}$ を堆積域の代理指標として用いる際は, 表面の streamline と底面のせん断応力場が一般に一致しない点に注意が必要である \cite{constantinescuNumericalModelSimulation1998}. 本研究の系は浅く($h/W \le 0.05$)流れの 2 次元性が強いため対応は比較的良いと期待されるが, 鉛直構造の直接検証は今後の課題である.
+
+第二に, 数値解析の検証データとしての含意がある. outflow の表面流速は $U_p$ の 1\% 未満であり, 表面場を検証対象とする場合, 計測にも計算にも極めて高い分解能が要求される. 逆に言えば, outflow の検証は表面速度の絶対値よりも, (i) 収束流のトポロジー, (ii) $I_{\mathrm{unst}}$ 型の変動統計, を対象とするのが現実的である. また inflow 側では, 偏向方向の双安定性(run 平均 $I_{\mathrm{asym}}$ が 0.16--0.37 に分布)が対称形状の RANS 解で再現されない可能性 \cite{kantoushFLOWSHALLOWRECTANGULAR2008,dufresneNumericalInvestigationFlow2011} に留意すべきである.
+
+第三に, 運用面では, $h/a \approx 1$ を跨ぐ水位運用が inflow の非定常性を規定するという知見が得られた. 上池の常用水位を port 高さに対して十分高く保てば inflow の表面流は定常的な循環にとどまり, 水位が port 高さに近づく低水位運用では強い非定常変動(表面の乱れ・波状変動)を伴う. 取放水口周辺の保護工や濁質の巻き上げを検討する際の一つの目安になる.
 
 \subsection{Limitations}
+\label{sec:discussion_limitations}
+
+本研究の限界を明示する. (1) 表面 PIV の分解能: outflow の low/medium はほぼ全帯で noise floor($E_{\mathrm{noise}} \approx \SI{2e-7}{m^2/s^2}$)近傍にあり, スカラー指標は定性的参考にとどまる. outflow の非定常性の定量化には, より長い画像対間隔, 高解像度撮影, または長時間平均を前提とした計測設計が必要である. (2) $U_p$ の定義: 正規化と閾値には名目流量に基づく $U_p$ を用いた. 実流量は水深に依存して名目値から最大 $\pm 30\%$ 程度変動するため, 厳密には帯ごとの実流量に基づく $U_p(h)$ を用いる余地がある(指標の序列・結論は変わらない). (3) $I_{\mathrm{asym}}$ の符号: 本 pilot では大きさのみを報告しており, 偏向方向の統計(どちら側に何回倒れたか, 反転の有無)は未解析である. (4) 表面計測のみ: 鉛直構造(とくに outflow の吸込み流の鉛直分布と, inflow ジェットの沈み込み深さ)は計測していない. (5) 単一幾何: basin 形状, port 位置・寸法は 1 通りであり, 形状パラメータ依存性 \cite{dufresneClassificationFlowPatterns2010,ferraraFlowFieldShallow2018} は本研究の範囲外である. (6) Reynolds 数: 実機より 2--3 桁小さく, 乱流状態の直接外挿はできない(prototype-informed の立場, Methods 参照). (7) 履歴効果: 全 run 静水開始であり, 実運用の交互運転で支配的になりうる履歴あり条件は扱っていない.

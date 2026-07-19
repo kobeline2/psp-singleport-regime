@@ -10,7 +10,7 @@
 
 各 run では, basin 内の水深変化を連続的に追跡した. inflow では水深 \SI{0.03}{m} に達した時点で撮影を開始し, \SI{0.10}{m} に達した時点で撮影を停止した. outflow では \SI{0.10}{m} から撮影を開始し, \SI{0.03}{m} に達した時点で停止した. したがって, 水深は独立の run 因子ではなく, 各 run 内で連続的に掃かれる解析軸として扱った. 本研究では, とくに port 高さ $a=\SI{0.055}{m}$ に対する相対水深 $h/a$ に着目し, basin-scale の表面流レジームを整理した.
 
-実験条件の整理は, run-level conditions と analysis-level conditions を分けて行った. 前者は mode, flow-rate level, repetition により定義し, 後者は代表水深帯ごとの可視化および比較のために定義した. 可視化用の代表水深帯は Table~\ref{tab:depth_bands} に示す. 本研究では, $h/a \approx 1$ 近傍の遷移をより明瞭に捉えるため, \SIrange{0.045}{0.055}{m} を独立した帯として扱った.
+実験条件の整理は, run-level conditions と analysis-level conditions を分けて行った. 前者は mode, flow-rate level, repetition により定義し, 後者は代表水深帯ごとの可視化および比較のために定義した. 可視化用の代表水深帯は Table~\ref{tab:depth_bands} に示す. 本研究では, $h/a \approx 1$ 近傍の遷移をより明瞭に捉えるため, \SIrange{0.05}{0.06}{m}（$0.91 \le h/a < 1.09$）を独立した帯 B2 として扱った.
 
 各 run の流量水準は, 水位変化率 \SIlist{2.5;5.0;7.5}{mm/min} に対応する名目流量
 $Q_1=\SI{0.25}{L/s}$, $Q_2=\SI{0.50}{L/s}$, $Q_3=\SI{0.75}{L/s}$ として設定した.
@@ -90,16 +90,13 @@ Fr=\frac{U_p}{\sqrt{gh}}
 \subsection{Surface PIV and processing}
 \label{sec:methods_piv}
 
-表面流速は, basin 全体を含む上方固定カメラ画像に対する表面PIVにより算出した. 撮影条件はフレームレート \SI{000}{Hz}, 解像度 000 $\times$ 000 pixel を基本とし, 射影変換により幾何補正を行って画像を平面直交座標系に変換した. 撮影条件, PIV 解析条件, および前処理条件を Table~\ref{tab:piv_settings} に示す.
+表面流速は, basin 全体を含む上方固定カメラ画像に対する表面PIVにより算出した. 元動画のフレームレートは \SI{29.97}{Hz} であり, 射影変換により幾何補正を行って basin 内水面を \SI{2}{mm/pixel}(補正後 1501 $\times$ 1001 pixel, $\SI{3.0}{m} \times \SI{2.0}{m}$)の平面直交座標系に変換した. 撮影条件, PIV 解析条件, および前処理条件を Table~\ref{tab:piv_settings} に示す.
 
 トレーサには水面に追従する浮遊粒子を用いた. 照明条件, 背景条件, およびカメラ設置条件は, run 間の比較可能性を確保するため原則として一定とした. 静水開始条件の確認には別途タイムラプス撮影を行い, 実験間における表面流の残留の有無を確認した.
 
 PIV解析には multi-pass 相互相関法を用い, interrogation window は 000 pixel から 000 pixel へ段階的に縮小し, overlap は 000\%, 画像対間隔は \SI{000}{s} とした. 得られた速度ベクトル場に対しては, 局所的な外れ値判定により明らかな誤ベクトルを除去し, 必要最小限の補間を行った. また, port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下する可能性があるため, 指標計算には当該領域を除外した解析領域 $\Omega$ を用いた. マスク範囲は全条件で共通とし, basin 内の大域的な流動構造の比較に主眼を置いた.
 
-流速の空間ダイナミックレンジが広いため, 各動画は 2 種類の画像対間隔 $\Delta t_s$ および $\Delta t_l$ で独立に PIV 解析した.
-長い画像対間隔の解析結果を基本解とし, そのベクトルが validation で棄却された場合, または対応する粒子像変位が許容範囲を超える場合に限って, 短い画像対間隔の結果で置き換えた.
-これにより, 低速域に対する感度と高速域における相関の安定性を両立させた.
-$\Delta t_s$, $\Delta t_l$, および統合条件は pilot 解析に基づき決定し, 全ケースで共通とした.
+表面流速の大きさは流量水準および mode により大きく異なるため, 画像対間隔 $\Delta t$ は流量水準ごとに pilot 解析に基づき選定し, 各動画は単一の $\Delta t$ で time-resolved に PIV 解析した(single-$\Delta t$). 具体的には, inflow の low/medium/high に対してそれぞれ $\Delta t = $ \SIlist{0.200;0.100;0.067}{s}(実効 \SIlist{5;10;15}{Hz}), outflow は全水準で $\Delta t = \SI{0.334}{s}$(実効 \SI{3}{Hz})とした. これは, 各条件の代表的な粒子像変位を相関解析に適した範囲に保つための選定である. 同一水準内の全 run で $\Delta t$ は共通とした.
 
 本研究では, 瞬時速度場 $\mathbf{u}(x,y,t)=(u,v)$ に加えて, 代表水深帯ごとの時間平均速度場および time-resolved なスカラー指標を用いて流況を整理した. とくに outflow では, 時間平均場のみでは把握しにくい変動性を捉えるため, 各指標を水深帯ごとに評価した.
 
@@ -112,17 +109,19 @@ $\Delta t_s$, $\Delta t_l$, および統合条件は pilot 解析に基づき決
 \hline
 Category & Item & Value \\
 \hline
-Imaging & Frame rate & \SI{000}{Hz} \\
-Imaging & Image resolution & 000 $\times$ 000 pixel \\
-Imaging & Field of view & \SI{000}{m} $\times$ \SI{000}{m} \\
-Imaging & Geometric correction & Projective transform \\
-Tracer & Particle type & 000 \\
-Tracer & Representative particle size & \SI{000}{mm} \\
-PIV & Interrogation window & 000 $\rightarrow$ 000 pixel \\
-PIV & Window overlap & 000\% \\
-PIV & Image pair interval & \SI{000}{s} \\
-PIV & Vector validation & 000 \\
-Preprocessing & Port-near masking & \SI{000}{m} from port \\
+Imaging & Source frame rate & \SI{29.97}{Hz} \\
+Imaging & Rectified resolution & 1501 $\times$ 1001 pixel (\SI{2}{mm/pixel}) \\
+Imaging & Field of view & \SI{3.0}{m} $\times$ \SI{2.0}{m} (full basin) \\
+Imaging & Geometric correction & Projective transform (4 inner corners) \\
+Tracer & Particle type & 000 \\ % TODO: トレーサ粒子の種類
+Tracer & Representative particle size & \SI{000}{mm} \\ % TODO
+PIV & Software & PIVlab (multi-pass cross-correlation) \\
+PIV & Interrogation window & 000 $\rightarrow$ 000 pixel \\ % TODO: PIVlab_setting.mat 参照
+PIV & Window overlap & 000\% \\ % TODO
+PIV & Vector grid & 92 $\times$ 61 (spacing $\approx$ \SI{33}{mm}) \\
+PIV & Image pair interval $\Delta t$ & \SIlist{0.200;0.100;0.067}{s} (inflow L/M/H), \SI{0.334}{s} (outflow) \\
+PIV & Vector validation & PIVlab standard filters + NaN masking \\
+Preprocessing & Flat-field / contrast & divide flat-field ($\sigma=\SI{30}{px}$), 1--99\% clip, invert \\
 \hline
 \end{tabular}
 \end{table}
@@ -151,7 +150,7 @@ E(t)=\left\langle |\mathbf{u}(x,y,t)|^2 \right\rangle_{\Omega}
 u_{\mathrm{th}}=\alpha U_p
 \label{eq:uth}
 \end{equation}
-と定義した. ここで, $\alpha$ は無次元係数であり, その最終値は pilot 解析に基づき決定した.
+と定義した. ここで, $\alpha$ は無次元係数であり, pilot 解析に基づき $\alpha=0.2$ に固定して全条件で共通に用いた. この値は, inflow 側で $\phi_{\mathrm{lv}}$ が飽和せず $h/a$ 依存性を分解できることを基準に選定した. なお, 後述するように outflow では表面流速がほぼ全域で $u_{\mathrm{th}}$ を下回り $\phi_{\mathrm{lv}} \approx 1$ に飽和するが, これは指標の不具合ではなく, 「outflow では port の駆動が自由表面までほとんど届かない」という物理的な所見として扱う(Sec.~\ref{sec:results_outflow}).
 
 inflow/outflow 間の basin-scale な偏りを定量化するため, basin を中央線で左右に分割した領域 $\Omega_L$ および $\Omega_R$ を定義し, 左右非対称指標
 \begin{equation}
@@ -177,7 +176,13 @@ I_{\mathrm{circ}}(t)=
 \left\langle \frac{a}{U_p}\,\omega(x,y,t) \right\rangle_{\Omega}
 \label{eq:Icirc}
 \end{equation}
-を定義した. 渦度の算出に必要な数値微分および平滑化条件は, 全条件で共通の手順を用いた.
+を定義した. $I_{\mathrm{circ}}$ は符号付きの面平均であるため, 閉じた basin では強い循環セルが複数存在して互いに相殺する場合と, そもそも回転運動が存在しない場合のいずれでも 0 に近づき, この 2 状態を区別できない. そこで補完指標として, 渦度の絶対値に基づく回転活動度
+\begin{equation}
+I_{\mathrm{rot}}(t)=
+\left\langle \frac{a}{U_p}\,\left|\omega(x,y,t)\right| \right\rangle_{\Omega}
+\label{eq:Irot}
+\end{equation}
+を併用した. $I_{\mathrm{rot}}$ は回転運動が実在するときにのみ大きな値を取り, 「相殺による正味 0」と「無回転による 0」を分離する. 渦度の算出に必要な数値微分および平滑化条件は, 全条件で共通の手順を用いた.
 
 各 run では水深が連続的に変化するため, 非定常性は run 全体ではなく, 代表水深帯 $B_k$ ごとに評価した. 具体的には, 各帯に対して
 \begin{equation}
@@ -188,7 +193,9 @@ I_{\mathrm{unst}}(B_k)=
 \end{equation}
 を定義した. ここで, $h(t)$ は時刻 $t$ における水深であり, $B_k$ は Table~\ref{tab:depth_bands} に示した代表水深帯である.
 
-レジーム判定では, 代表水深帯ごとの時間平均ベクトル場および streamlines に加え, $E(t)$, $\phi_{\mathrm{lv}}(t)$, $I_{\mathrm{asym}}(t)$, $I_{\mathrm{circ}}(t)$, および $I_{\mathrm{unst}}(B_k)$ を総合的に参照した. 本研究では, (i) 偏向ジェットと二循環構造が卓越する状態, (ii) basin 全体を占める単一循環が卓越する状態, (iii) それらの間の遷移的または不安定な状態, を基本的なレジームとして整理した.
+指標の解釈にあたっては, 表面 PIV の計測分解能を明示的に考慮した. pilot 解析の結果, 本計測系における $E$ の noise floor は $E_{\mathrm{noise}} \approx \SI{2e-7}{m^2/s^2}$(粒子像変位に換算して 1 画像対あたり約 0.06 pixel)と評価された. そこで, 各水深帯の帯平均 $\overline{E}(B_k)$ に対して $\mathrm{SNR} = \overline{E}/E_{\mathrm{noise}}$ を算出し, $\mathrm{SNR} < 3$ の帯を「分解能限界(resolution-limited)」として区別した. 分解能限界の帯では, $E$ に基づくスカラー指標($E$, $I_{\mathrm{circ}}$, $I_{\mathrm{rot}}$, $I_{\mathrm{unst}}$)は定量的には解釈せず, 定性的な参考値として扱う. 一方, 時間平均ベクトル場はランダム誤差が平均化により約 $1/\sqrt{N}$ に抑制されるため, 瞬時場が noise floor 近傍にある条件でも, 帯内の数百フレームを平均することで coherent な平均構造の判読が可能である. この点は outflow の流況判読において特に重要となる.
+
+レジーム判定では, 代表水深帯ごとの時間平均ベクトル場および streamlines に加え, $E(t)$, $\phi_{\mathrm{lv}}(t)$, $I_{\mathrm{asym}}(t)$, $I_{\mathrm{circ}}(t)$, $I_{\mathrm{rot}}(t)$, および $I_{\mathrm{unst}}(B_k)$ を総合的に参照した. 本研究では, (i) 偏向ジェットと循環構造が卓越する状態, (ii) port へ向かう収束流が卓越する状態, (iii) それらの間の遷移的または不安定な状態, を基本的なレジームとして整理した.
 
 補助的な解析量として, 渦中心位置, 卓越周波数, 渦度分布, および代表的な streamlines / vector maps も必要に応じて算出したが, これらは secondary metrics と位置付け, 再現性のある示唆が得られた場合に限って補足的に用いた.
 
@@ -220,7 +227,12 @@ Asymmetry index. Used to quantify left-right imbalance of basin-scale motion int
 Primary &
 $I_{\mathrm{circ}}(t)$ &
 Eq.~\eqref{eq:Icirc} &
-Circulation index. Used to characterize the sign and strength of the dominant basin-scale circulation. \\
+Signed circulation index. Characterizes the sign and strength of the net basin-scale rotation; near zero both for cancelling counter-rotating cells and for irrotational flow. \\
+
+Primary &
+$I_{\mathrm{rot}}(t)$ &
+Eq.~\eqref{eq:Irot} &
+Rotation-activity index. Unsigned counterpart of $I_{\mathrm{circ}}$; separates cancelling circulation cells (large $I_{\mathrm{rot}}$) from genuinely irrotational flow (small $I_{\mathrm{rot}}$). \\
 
 Primary &
 $I_{\mathrm{unst}}(B_k)$ &

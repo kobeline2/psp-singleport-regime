@@ -1,78 +1,104 @@
+% ============================================================
+% NOTE (draft status, 2026-07):
+% - 本節は pilot batch (R0001--R0024, 24 runs) の解析結果に基づく
+%   レポート調のドラフトである. 冗長を許容し, 数値は
+%   local/derived/metrics/band_metrics.csv から転記した.
+% - 引用キーは literature/refs/zotero_export.bib の citekey を用いた.
+%   refs.bib への統合(または intro のプレースホルダキーとの統一)が
+%   別途必要である.
+% - 図は fig/ 以下にコピー済み: fig_regime_comparison.png,
+%   R0001_band_mean_field.png, R0013_band_mean_field.png,
+%   R0021_band_mean_field.png
+% ============================================================
+
 \section{Results}
 \label{sec:results}
 
 \subsection{Overview of experimental runs and data consistency}
 \label{sec:results_overview}
-% 役割は2つだけです.
-% 	•	24 runs が予定通り取得できたこと
-% 	•	静水開始条件や流量条件が概ね揃っていたこと
-% ここでやることは最小限で十分です.
-% 	•	実施できた run 数
-% 	•	実際の代表流量 Q_1,Q_2,Q_3
-% 	•	全 run が静水開始条件を満たした, もしくは除外 run があればその扱い
-% 図は, あっても 1枚までです. Appendix に回しても成立します.
-% 率直に言うと, ここは本文 1 段落 + 小さな Table でも足ります.
+% 役割: 24 runs 取得済み・条件が揃っていたこと・分解能の宣言.
+
+計画した 24 run(mode 2 水準 $\times$ 流量 3 水準 $\times$ 反復 4)は全て取得し, 全 run を共通のパイプライン(幾何補正, 表面 PIV, 正準形式への変換, 指標計算)で処理した. 全 run で水位計測と PIV 動画は同一時間区間をカバーしており, 水位時系列を正規化時間で PIV フレームに内挿することで, 各フレームに水深 $h$, 相対水深 $h/a$, および水深帯 $B_1$--$B_4$ を割り当てた. 全フレームがいずれかの水深帯に割り当てられ, 帯外のフレームは生じなかった.
+
+実流量は, 水位時系列から体積保存 $Q = A_{\mathrm{plan}} \left| \mathrm{d}h/\mathrm{d}t \right|$ により評価した. 帯平均した実流量は名目流量 $Q_1$--$Q_3$ と同程度の大きさを示したが, run 内では水深依存の系統的変動があり, 浅い帯(port が部分的に自由表面と繋がる条件)では名目値より小さく, 深い帯では大きい傾向が見られた. たとえば inflow high では帯平均実流量が $B_1$ の \SI{0.51}{L/s} から $B_4$ の \SI{0.86}{L/s} まで単調に増加した(名目 \SI{0.75}{L/s}). この傾向は inflow/outflow で共通であり, port の潜没度が実効的な流量特性に影響することを示す. 以降のレジーム比較は水深帯ごとに行うため, この run 内変動が帯間比較を汚染することはない.
+
+計測分解能について, Methods に述べた noise floor 評価($E_{\mathrm{noise}} \approx \SI{2e-7}{m^2/s^2}$, 粒子像変位 $\approx$ 0.06 pixel/pair)に基づき, 各 run $\times$ 帯の $\mathrm{SNR} = \overline{E}/E_{\mathrm{noise}}$ を算出した. inflow は全帯で $\mathrm{SNR} > 450$ であり十分に解像されている. 一方 outflow は, low/medium のほぼ全帯で $\mathrm{SNR} \approx 1$--$3$ と noise floor 近傍にあり, 分解能限界と判定された. outflow で明確に解像されたのは high の $B_1$($\mathrm{SNR} \approx 37$)のみであり, high の $B_4$($\mathrm{SNR} \approx 6$)がこれに次ぐ. したがって, outflow のスカラー指標は原則として定性的参考値であり, 定量的な議論は解像された帯と, ランダム誤差が平均化により $1/\sqrt{N}$ に抑制される時間平均ベクトル場に基づいて行う.
 
 \subsection{Inflow flow regimes}
 \label{sec:results_inflow}
-% ここでは, inflow のレジームをまず単独で整理します.
+% 主役: 平均場トポロジー, phi_lv, I_asym, I_rot. I_unst の h/a 遷移が最重要.
 
-% 順番としては
-% 	1.	代表ベクトル図 / streamline
-% 	2.	primary metrics の h/a 依存
-% 	3.	流量依存の整理
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{fig/R0001_band_mean_field.png}
+\caption{Band-mean surface velocity fields for a representative inflow run
+(R0001, low flow rate). One panel per depth band $B_1$--$B_4$ (shallow to
+deep). Color: time-mean speed; vectors: mean velocity (auto-scaled per
+panel). The port is at the center of the left short wall ($x=0$,
+$y=\SI{1.0}{m}$).}
+\label{fig:inflow_mean_field}
+\end{figure}
 
-% が自然です.
+inflow の代表的な帯平均表面速度場を Fig.~\ref{fig:inflow_mean_field} に示す. 全ての水深帯において, port から流入したジェットは port 軸($y = \SI{1.0}{m}$)に沿って直進せず, 片側(この run では $y$ 小側)の側壁へ明瞭に偏向し, 側壁に沿って加速したのち basin 全体を巡る大規模な非対称循環を形成した. 偏向側と反対側には低速の再循環域が広がる. この「偏向ジェット + 非対称循環」構造は 4 帯すべてで維持され, 水深帯によるトポロジーの切り替わりは認められなかった. この構造は, 浅い矩形貯水池で知られる非対称流レジーム \cite{dufresneClassificationFlowPatterns2010,camnasioExperimentalStudyVelocity2011}, および先行する可逆 port 実験の inflow 流況 \cite{mullerInfluenceOutflowSequences2012} と整合する.
 
-% 出したいもの
-% 	•	代表水深帯 B1--B4 の平均ベクトル図 or streamline 図
-% 	•	E, \phi_{\mathrm{lv}}, I_{\mathrm{asym}}, I_{\mathrm{circ}} の h/a に対する変化
-% 	•	必要なら low / medium / high の比較
+スカラー指標の水深帯依存を条件横断で整理する(Fig.~\ref{fig:regime_comparison} も参照). まず運動強度 $E$ は, いずれの流量水準でも最浅帯 $B_1$ で最大となり, 潜没が進むにつれ単調に減少した(low: $2.5 \times 10^{-4} \to 9.3 \times 10^{-5}$~\si{m^2.s^{-2}}, high: $4.8 \times 10^{-3} \to 1.1 \times 10^{-3}$~\si{m^2.s^{-2}}). 同一流量で $B_1$ は $B_4$ の約 2.6--4.4 倍であり, 浅いほどジェットの運動量が表面近傍に集中することを反映する.
 
-% この小節で主張すること
-% 	•	inflow では偏向ジェットと二循環構造がどう現れるか
-% 	•	h/a \approx 1 付近で何が変わるか
-% 	•	流量を上げるとその傾向がどう変化するか
+低流速域率 $\phi_{\mathrm{lv}}$($u_{\mathrm{th}} = 0.2\,U_p$)は逆に $h/a$ とともに単調増加した(low: $0.38 \to 0.58$, medium: $0.37 \to 0.58$, high: $0.22 \to 0.46$). すなわち, 潜没が進むほどジェットの表面影響域は狭まり, 静穏域が basin の過半を占めるようになる. 流量水準間では同一帯で high が最小の $\phi_{\mathrm{lv}}$ を示し, 相対閾値($u_{\mathrm{th}} \propto U_p$)にもかかわらず高流量ほどジェット影響域が相対的に広い.
 
-% ここでは I_{\mathrm{unst}} は脇役でよいです.
-% 主役は
-% 	•	I_{\mathrm{asym}}
-% 	•	I_{\mathrm{circ}}
-% 	•	\phi_{\mathrm{lv}}
-% です.
+左右非対称指標 $I_{\mathrm{asym}}$ は全帯・全流量で 0.22--0.30 の範囲にあり, $h/a$ にも流量にも系統的な依存を示さなかった. すなわち, 偏向ジェットに起因する左右不均衡は, 本実験の水深範囲では潜没度によらず頑健に存在する. 一方で run 間のばらつきは大きく, run 平均の $I_{\mathrm{asym}}$ は 0.16--0.37 に分布した. 同一条件の反復でも偏向の強さに幅があることは, 浅水池の非対称流に知られる双安定性・初期条件依存性 \cite{kantoushFLOWSHALLOWRECTANGULAR2008,dewalsExperimentalNumericalAnalysis2008} と整合的である. なお実装上の注記として, 本 pilot 解析で報告する $I_{\mathrm{asym}}$ は偏向の向きを畳んだ大きさ $|E_L - E_R|/(E_L + E_R)$ である(Methods の符号付き定義の絶対値). 偏向方向の run 間分布(左右どちらに倒れるか)は今後の解析課題である.
+
+回転活動度 $I_{\mathrm{rot}}$ は $B_1$ で最大(0.10--0.12)となり, 潜没とともに約 0.06 へ減少した. $U_p$ で正規化しているため流量水準間でよく重なり($B_1$: low 0.102, medium 0.095, high 0.123), 正規化がスケーリングとして機能している. 一方, 符号付き循環指標 $I_{\mathrm{circ}}$ は全条件で $-0.003$ 程度と 0 近傍にとどまった. 平均場(Fig.~\ref{fig:inflow_mean_field})が示すとおり inflow には強い回転運動が存在するから, この $I_{\mathrm{circ}} \approx 0$ は回転の不在ではなく, 偏向ジェットの主循環と反対側の再循環が符号付き面平均でほぼ相殺した結果である. $I_{\mathrm{rot}} \gg |I_{\mathrm{circ}}|$ という組は「相殺する複数循環」の指標的シグネチャである.
+
+非定常指標 $I_{\mathrm{unst}}(B_k)$ には, スカラー指標の中で最も明瞭な $h/a$ 遷移が現れた. $B_1$($h < a$)では 0.35--0.40 と大きな変動を示すのに対し, $B_2$($h/a \approx 1$)で 0.08--0.13 へ急減し, $B_3$, $B_4$($h/a > 1.09$)では 0.03--0.05 とほぼ定常となった. すなわち inflow の表面流は, port が自由表面と繋がる $h < a$ でのみ強い時間変動を伴い, 潜没の完了とともに急速に定常化する. この遷移は 3 流量水準すべてで同じ位置($B_1 \to B_2$)に現れ, $h/a \approx 1$ がレジームの転換帯であることを, 流況トポロジーではなく非定常性の観点から示す.
 
 \subsection{Outflow flow regimes}
 \label{sec:results_outflow}
-% ここは inflow と対称な構成に見せつつ, 非定常性を前景化します.
+% 非定常性を前景化しつつ, 分解能限界を明示する.
 
-% 出したいもの
-% 	•	代表水深帯 B1--B4 の平均ベクトル図
-% 	•	可能なら代表的な瞬時場 1〜2 枚
-% 	•	E, \phi_{\mathrm{lv}}, I_{\mathrm{asym}}, I_{\mathrm{circ}} の h/a 依存
-% 	•	I_{\mathrm{unst}}(B_k) の整理
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{fig/R0021_band_mean_field.png}\\[2pt]
+\includegraphics[width=\linewidth]{fig/R0013_band_mean_field.png}
+\caption{Band-mean surface velocity fields for representative outflow runs.
+Top: high flow rate (R0021). Bottom: low flow rate (R0013). Note the color
+scales, two to three orders of magnitude smaller than in
+Fig.~\ref{fig:inflow_mean_field}. Deep bands of the low-flow case
+($B_2$--$B_4$, bottom) are below the PIV noise floor and show no coherent
+mean structure.}
+\label{fig:outflow_mean_field}
+\end{figure}
 
-% この小節で主張すること
-% 	•	outflow では basin 全体を占める単一循環がどう現れるか
-% 	•	inflow より平均場だけでは捉えにくい変動性が強いこと
-% 	•	h/a によって非定常性がどう変わるか
+outflow の代表的な帯平均表面速度場を Fig.~\ref{fig:outflow_mean_field} に示す. 十分に解像された条件(high の $B_1$ など)では, 表面流は basin 全域から port へ向かって収束する, 左右対称に近い「収束シンク」構造を示した. ベクトルは全域で port(左短辺中央)を向き, inflow に見られた偏向・再循環・卓越回転は認められない. 深い帯では平均構造そのものが微弱であり, low の $B_2$--$B_4$ では帯平均後もコヒーレントな構造を判読できなかった. これは前節の SNR 評価と整合し, outflow の深い条件では表面流速そのものが計測分解能以下であることを意味する.
 
-% ここでは逆に, I_{\mathrm{unst}} を前面に出してよいです.
-% この論文の「平均場だけで終わらない」部分がここです.
+ここで強調すべきは, 予備観察に基づき Introduction で言及した「outflow では basin 全体を占める単一循環」が, 静水から開始した本計測では確認されなかったことである. 静水開始の全 run において, outflow の表面流は(解像された範囲で)回転をもたない収束流であった. 指標でみても, outflow の $I_{\mathrm{rot}}$ は 0.002--0.007 と inflow(0.06--0.12)の約 1/20 にとどまり, $I_{\mathrm{circ}} \approx 0$ と併せて「相殺による正味 0」ではなく「回転の不在による 0」であることが裏づけられる. 予備観察で見られた単一循環は, 先行する inflow の残留循環に起因していた可能性が高い(Sec.~\ref{sec:discussion}).
+
+低流速域率は全 outflow 条件で $\phi_{\mathrm{lv}} = 1.000$ に飽和した. すなわち表面の全域で流速が $0.2\,U_p$ を下回る. これは閾値の選択の問題ではなく(表面流速の中央値は $U_p$ の 0.3--1.5\% であり, いかなる合理的な $\alpha$ でも飽和する), 「outflow では port の吸込みが自由表面の運動をほとんど駆動しない」という物理的所見である. 運動強度でみると, outflow の $E$ は同一流量の inflow より約 3 桁小さい.
+
+非定常性は, 分解能の制約を踏まえ解像された帯に限って述べる. 唯一十分に解像された outflow high の $B_1$($\mathrm{SNR} \approx 37$)では $I_{\mathrm{unst}} = 0.76$ と, inflow の最大値($B_1$ の 0.35--0.40)の約 2 倍に達した. すなわち outflow の表面流は, 平均は微弱であるが, その弱い流れの相対変動は inflow より格段に大きい. この知見は, 取放水構造物近傍で「outflow の瞬時流速は時間平均の 3 倍超に達し, inflow は 0.9--1.1 倍にとどまる」と報告した Zhu らの観察 \cite{zhuExperimentalInvestigationUnsteady2023} と basin スケールで整合する. なお分解能限界の帯でも $I_{\mathrm{unst}}$ は 0.2--1.1 の大きな値を示すが, これらは noise floor 近傍の $E$ の比であり, ノイズ寄与と実変動を分離できないため定量的には解釈しない(Fig.~\ref{fig:regime_comparison} では白抜きマーカーで区別).
 
 \subsection{Comparative regime transition and mode asymmetry}
 \label{sec:results_comparison}
-% ここが Results の核です.
-% inflow と outflow を並べるのは, 最後にまとめてやる方が強いです.
+% Results の核: 同一軸比較と 4 つの要約.
 
-% 出したいもの
-% 	•	inflow / outflow を同じ軸上で比較した h/a 依存曲線
-% 	•	regime map
-% 	•	代表図の対比
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{fig/fig_regime_comparison.png}
+\caption{Primary metrics versus relative submergence $h/a$: inflow (orange
+circles) versus outflow (blue squares). Symbols: mean over repetitions and
+flow levels; bars: $\pm 1$ s.d. Open markers denote resolution-limited
+bands ($\mathrm{SNR}<3$), whose $E$-based scalars are qualitative only.
+The dotted line marks $h/a = 1$.}
+\label{fig:regime_comparison}
+\end{figure}
 
-% この小節で主張すること
-% 	•	同じ port を共有しても inflow / outflow は非対称である
-% 	•	レジーム遷移は h/a に強く支配される
-% 	•	とくに h/a \approx 1 近傍が転換帯である
-% 	•	outflow では非定常性が相対的に強い
+inflow と outflow を同一の $h/a$ 軸上で比較した結果を Fig.~\ref{fig:regime_comparison} に示す. 主要な知見は次の 4 点に要約される.
 
-% この小節があると, Introduction の問い 3 つに真正面から答えられます.
+第一に, 同一の port 幾何を共有していても, inflow と outflow の表面流レジームは決定的に非対称である. トポロジーとしては「偏向ジェット + 非対称循環」(inflow)対「対称収束シンク」(outflow)であり, 指標としては $E$ で約 3 桁, $I_{\mathrm{asym}}$ で約 3 倍(0.26 対 0.08), $I_{\mathrm{rot}}$ で約 20 倍(0.06--0.12 対 0.002--0.007)の差に対応する. 非対称の向き(inflow が強く outflow が弱い)は, 深い貯水池模型 \cite{mullerInfluenceOutflowSequences2012} および実施設観測 \cite{mullerFlowFieldReservoir2018} と定性的に一致するが, その程度は本研究の浅い basin で著しく大きい(Sec.~\ref{sec:discussion}).
+
+第二に, $h/a$ によるレジーム遷移は, 流況トポロジーの切り替えとしてではなく, 非定常性と表面影響度の変化として現れた. inflow のトポロジー(偏向ジェット + 循環)と outflow のトポロジー(収束シンク)はそれぞれ全水深帯で維持される一方, (i) inflow の $I_{\mathrm{unst}}$ は $h/a \approx 1$ を境に約 1 桁減少し, (ii) inflow の $\phi_{\mathrm{lv}}$ は $h/a$ とともに単調増加し(プール平均 $0.32 \to 0.54$), (iii) $E$ と $I_{\mathrm{rot}}$ も $B_1 \to B_2$ で最も大きく変化した. すなわち $h/a \approx 1$ は, 流れの「かたち」ではなく「強さ・不安定さ・表面への到達度」が切り替わる転換帯である.
+
+第三に, 符号付き循環 $I_{\mathrm{circ}}$ は両 mode とも 0 近傍で一致するが, その理由は正反対である. inflow は強い回転が相殺した結果の 0($I_{\mathrm{rot}}$ 大)であり, outflow は回転が存在しないことによる 0($I_{\mathrm{rot}}$ 小)である. $(I_{\mathrm{circ}}, I_{\mathrm{rot}})$ の組でみることで初めて両者が区別される.
+
+第四に, 実流量 $Q$ は inflow と outflow でほぼ同一の水深依存(浅いほど小, 深いほど大)を示した. したがって上記のモード非対称は流量条件の差では説明できず, 同一流量における流入(運動量をもつジェットの注入)と流出(分布した吸込み)の力学的非対称そのものに帰着する.
+
+以上を総合すると, 本実験で観察された表面流レジームは次のように整理される. inflow は全水深帯で「偏向ジェット + 非対称循環」レジームにあり, $h < a$ では加えて強い非定常性を伴う. outflow は全水深帯で「対称収束シンク」レジームにあり, 表面運動は微弱だが相対変動は大きい. Introduction で仮説とした 3 レジームのうち「basin 全体を占める単一循環」は静水開始条件では観察されず, 収束シンクが outflow の基本レジームである.
