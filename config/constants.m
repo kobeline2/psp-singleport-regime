@@ -71,8 +71,19 @@ C.metrics = struct();
 
 % Threshold factor for low-velocity area:
 % u_th = alpha * U_p
-% Leave as NaN until fixed from pilot analysis.
-C.metrics.alpha_u_th = NaN;
+% Fixed at 0.2 from the pilot analysis (2026-07): with alpha = 0.2 the
+% inflow phi_lv resolves the h/a dependence cleanly (~0.22 shallow ->
+% ~0.60 submerged), while the outflow surface stays below u_th almost
+% everywhere (phi_lv ~= 1). The outflow saturation is reported as a
+% finding (the port forcing does not reach the free surface), not treated
+% as a defect of the metric.
+C.metrics.alpha_u_th = 0.2;
+
+% Measured PIV noise floor of E = <|u|^2> [m^2/s^2], from the pilot batch:
+% outflow-low runs sit at rms displacement ~0.06 px/frame ~ the PIV
+% uncertainty, giving E ~ 2e-7. Band means below ~3x this floor should be
+% flagged as resolution-limited rather than interpreted quantitatively.
+C.metrics.E_noise_floor_m2_s2 = 2.0e-7;
 
 % Quiescent-start criterion
 C.metrics.quiescent_rel_threshold = 0.05;

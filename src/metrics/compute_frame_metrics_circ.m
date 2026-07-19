@@ -1,13 +1,20 @@
 function T = compute_frame_metrics_circ(piv, varargin)
-%COMPUTE_FRAME_METRICS_CIRC Compute circulation index I_circ from canonical PIV.
+%COMPUTE_FRAME_METRICS_CIRC Compute circulation indices from canonical PIV.
 %
-% I_circ(t) = (a / U_p) * <omega(x,y,t)>_Omega
+% I_circ(t) = (a / U_p) * <omega(x,y,t)>_Omega        (signed net rotation)
+% I_rot(t)  = (a / U_p) * <|omega(x,y,t)|>_Omega      (rotation activity)
 %
 % where:
 %   omega(x,y,t) = dv/dx - du/dy   (2-D vorticity in the piv.x/piv.y system)
 %   a   = port height [m]
 %   U_p = Q / (a * b), port mean velocity [m/s]
 %   <.> = spatial mean over finite cells
+%
+% The two indices are complementary. In a closed basin the signed mean
+% <omega> is near zero both when there is no rotation at all (outflow
+% sink) and when strong counter-rotating cells cancel (inflow twin
+% cells); the unsigned <|omega|> separates these two cases, staying large
+% only when rotational motion is actually present.
 %
 % Sign convention: positive I_circ = net counterclockwise rotation in the
 % (piv.x rightward, piv.y increasing with row) coordinate system.
@@ -31,7 +38,8 @@ function T = compute_frame_metrics_circ(piv, varargin)
 %
 % Output columns:
 %   run_id, source, variant, frame_idx,
-%   omega_mean, I_circ, U_p_m_s, port_height_m, smooth_sigma
+%   omega_mean, I_circ, omega_abs_mean, I_rot,
+%   U_p_m_s, port_height_m, smooth_sigma
 
     p = inputParser;
     p.addRequired('piv', @isstruct);
@@ -57,9 +65,11 @@ function T = compute_frame_metrics_circ(piv, varargin)
     source  = repmat(iGetStringField(piv, 'source',  ""), nFrames, 1);
     variant = repmat(iGetStringField(piv, 'variant', ""), nFrames, 1);
 
-    frame_idx  = (1:nFrames).';
-    omega_mean = NaN(nFrames, 1);
-    I_circ     = NaN(nFrames, 1);
+    frame_idx      = (1:nFrames).';
+    omega_mean     = NaN(nFrames, 1);
+    I_circ         = NaN(nFrames, 1);
+    omega_abs_mean = NaN(nFrames, 1);
+    I_rot          = NaN(nFrames, 1);
 
     t0 = tic;
     for k = 1:nFrames
@@ -84,8 +94,10 @@ function T = compute_frame_metrics_circ(piv, varargin)
 
         valid_omega = isfinite(omega);
         if any(valid_omega(:))
-            omega_mean(k) = mean(omega(valid_omega));
-            I_circ(k)     = scale * omega_mean(k);
+            omega_mean(k)     = mean(omega(valid_omega));
+            I_circ(k)         = scale * omega_mean(k);
+            omega_abs_mean(k) = mean(abs(omega(valid_omega)));
+            I_rot(k)          = scale * omega_abs_mean(k);
         end
 
         if mod(k, prm.log_every) == 0 || k == 1 || k == nFrames
@@ -102,10 +114,12 @@ function T = compute_frame_metrics_circ(piv, varargin)
     sigma_out  = repmat(prm.smooth_sigma,   nFrames, 1);
 
     T = table(run_id, source, variant, frame_idx, ...
-              omega_mean, I_circ, U_p_out, a_out, sigma_out, ...
+              omega_mean, I_circ, omega_abs_mean, I_rot, ...
+              U_p_out, a_out, sigma_out, ...
               'VariableNames', { ...
                   'run_id', 'source', 'variant', 'frame_idx', ...
-                  'omega_mean', 'I_circ', 'U_p_m_s', 'port_height_m', 'smooth_sigma'});
+                  'omega_mean', 'I_circ', 'omega_abs_mean', 'I_rot', ...
+                  'U_p_m_s', 'port_height_m', 'smooth_sigma'});
 end
 
 % =========================================================================

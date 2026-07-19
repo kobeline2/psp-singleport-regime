@@ -20,10 +20,6 @@ init
 runID = "R0009";
 opts = metrics_defaults();
 
-% Provisional threshold for phi_lv(t). Keep this explicit until the pilot
-% analysis fixes the project-wide value.
-opts.low_speed_threshold_m_s = 0.02;
-
 % Progress log interval for long runs
 opts.log_every = 500;
 
@@ -47,16 +43,11 @@ S = load(pivMat, 'piv');
 assert(isfield(S, 'piv'), 'File does not contain variable "piv": %s', pivMat);
 piv = S.piv;
 
-frameMetrics = compute_frame_metrics_basic(piv, ...
-    'low_speed_threshold_m_s', opts.low_speed_threshold_m_s, ...
-    'log_every', opts.log_every);
-
 % -------------------------------------------------------------------------
-% Circulation index I_circ = <(a/U_p) omega>_Omega.
-% U_p = Q / (a b) is the port mean velocity. Q is the nominal discharge for
-% this run's flow level (a fixed design value per level, so I_circ is
-% comparable across repetitions and flow rates); a, b are the port height
-% and width from constants.
+% Port velocity scale U_p = Q / (a b). Q is the nominal discharge for this
+% run's flow level (a fixed design value per level, so thresholds and
+% normalized indices are comparable across repetitions and flow rates);
+% a, b are the port height and width from constants.
 % -------------------------------------------------------------------------
 T = read_runs_table(cfg);
 row = T(T.run_id == runID, :);
@@ -67,6 +58,22 @@ b_m = C.port.width_m;
 U_p = (row.nominal_Q_Lps / 1000) / (a_m * b_m);   % m/s
 opts.U_p_m_s = U_p;
 
+% Relative low-speed threshold u_th = alpha * U_p (Methods Eq. uth).
+% alpha is fixed project-wide from the pilot analysis.
+u_th = opts.alpha_u_th * U_p;
+opts.low_speed_threshold_m_s = u_th;
+
+fprintf('[s30_compute_metrics] U_p = %.4f m/s, u_th = %.4f m/s (alpha = %.2f)\n', ...
+    U_p, u_th, opts.alpha_u_th);
+
+frameMetrics = compute_frame_metrics_basic(piv, ...
+    'low_speed_threshold_m_s', u_th, ...
+    'log_every', opts.log_every);
+
+% -------------------------------------------------------------------------
+% Circulation indices: signed I_circ = <(a/U_p) omega> and unsigned
+% rotation activity I_rot = <(a/U_p)|omega|>.
+% -------------------------------------------------------------------------
 circ = compute_frame_metrics_circ(piv, ...
     'U_p_m_s', U_p, ...
     'port_height_m', a_m, ...
@@ -79,9 +86,8 @@ assert(height(circ) == height(frameMetrics), ...
     height(circ), height(frameMetrics));
 frameMetrics.omega_mean = circ.omega_mean;
 frameMetrics.I_circ = circ.I_circ;
-
-fprintf('[s30_compute_metrics] U_p = %.4f m/s (nominal Q = %.2f L/s)\n', ...
-    U_p, row.nominal_Q_Lps);
+frameMetrics.omega_abs_mean = circ.omega_abs_mean;
+frameMetrics.I_rot = circ.I_rot;
 
 writetable(frameMetrics, frameMetricsCsv);
 save(frameMetricsMat, 'frameMetrics', 'opts', '-v7');

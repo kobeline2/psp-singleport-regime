@@ -20,11 +20,16 @@ init
 % Settings
 % -------------------------------------------------------------------------
 % Metrics averaged per band. Each gets a _mean column; those in
-% stdMetrics also get a _std column. I_circ is included when s30 has
-% written it (see s30_compute_metrics.m).
-meanMetrics = ["E","phi_lv","I_asym","I_circ","mean_speed","rms_speed", ...
+% stdMetrics also get a _std column. I_circ / I_rot are included when s30
+% has written them (see s30_compute_metrics.m).
+meanMetrics = ["E","phi_lv","I_asym","I_circ","I_rot","mean_speed","rms_speed", ...
                "valid_fraction","depth_m","h_over_a","q_actual_Lps"];
-stdMetrics  = ["E","phi_lv","I_asym","I_circ"];
+stdMetrics  = ["E","phi_lv","I_asym","I_circ","I_rot"];
+
+% SNR flagging of band-mean E against the measured PIV noise floor.
+M = metrics_defaults();
+E_noise = C.metrics.E_noise_floor_m2_s2;
+E_snr_min = M.E_snr_min;
 
 % -------------------------------------------------------------------------
 % Resolve runs and bands
@@ -99,6 +104,13 @@ for i = 1:height(T)
         else
             r.I_unst = NaN;
         end
+
+        % SNR of the band-mean E against the measured PIV noise floor.
+        % E_resolved = false marks resolution-limited bands whose E-based
+        % scalars (E, I_unst, I_rot, I_circ) should not be interpreted
+        % quantitatively.
+        r.E_snr = r.E_mean / E_noise;
+        r.E_resolved = isfinite(r.E_snr) && (r.E_snr >= E_snr_min);
 
         rows = [rows; r]; %#ok<AGROW>
     end
