@@ -1,0 +1,29 @@
+#!/bin/sh
+#------------------------------------------------------------------------------
+# 実行手順そのもの。ケースのルートで ./Allrun と叩く。
+# 各コマンドの出力は log.<コマンド名> に残る。
+#------------------------------------------------------------------------------
+cd "$(dirname "$0")" || exit 1
+set -e
+
+# 並列数は decomposeParDict から読む(両者がずれると必ず失敗するため)
+NP=$(awk '/^numberOfSubdomains/ {gsub(/;/,""); print $2}' system/decomposeParDict)
+
+# 1. 初期場を用意する
+#    setFields は 0/alpha.water を上書きするので、原本の 0.orig から毎回コピーする。
+rm -rf 0 processor* postProcessing log.*
+cp -r 0.orig 0
+
+# 2. 初期水位を与える
+setFields > log.setFields 2>&1
+
+# 3. メッシュを NP 個の領域に分割する -> processor0 .. processor(NP-1)/
+decomposePar -force > log.decomposePar 2>&1
+
+# 4. 本計算
+mpirun -np "$NP" interFoam -parallel > log.interFoam 2>&1
+
+# 5. 可視化用に並列結果を統合する(必要になったときだけ実行する。重い)
+# reconstructPar > log.reconstructPar 2>&1
+
+echo "done. see log.interFoam"

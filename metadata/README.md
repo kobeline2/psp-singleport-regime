@@ -19,7 +19,12 @@ Run-level experiment table. One row corresponds to one run.
 - `timelapse_video_file`: Filename of the time-lapse video.
 - `waterlevel_file`: Filename of the water-level CSV.
 - `runlog_file`: Filename of the run log.
-- `piv_source`: Processing source, e.g. `pivlab`, `external`, `pending`.
+- `piv_source`: Processing source, e.g. `pivlab`, `external`, `pending`, or `cfd`.
+  `cfd` marks numerical companion runs (run_id `C####`): the surface-velocity field
+  comes from OpenFOAM via `src/io/import_cfd_surface.m`, and `waterlevel.csv` is
+  pseudo-logger data generated from the solver's waterVolume functionObject.
+  CFD rows have no video/runlog files; the loaders tolerate the empty fields.
+  Case-level provenance for CFD runs lives in `cfd/cases.csv`.
 - `run_status`: Processing state, e.g. `planned`, `completed`, `excluded`.
 - `notes`: Free-text notes.
 - `exclude_flag`: `true` or `false`.

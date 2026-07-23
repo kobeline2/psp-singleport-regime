@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inletOutlet
+    {
+        // 流入面のうち水で濡れている部分にだけ流量を配分する条件。
+        // flowRate [m3/s] は metadata/flow_levels.csv の medium (0.5 L/s) に対応。
+        type            variableHeightFlowRateInletVelocity;
+        flowRate        0.0005;
+        alpha           alpha.water;
+        value           uniform (0 0 0);
+    }
+
+    atmosphere
+    {
+        // 大気開放。圧力から速度を決める(流出入どちらも許す)。
+        type            pressureInletOutletVelocity;
+        value           uniform (0 0 0);
+    }
+
+    walls
+    {
+        type            noSlip;
+    }
+}
+
+// ************************************************************************* //

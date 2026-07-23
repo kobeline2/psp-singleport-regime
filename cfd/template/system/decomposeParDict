@@ -1,0 +1,25 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      decomposeParDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// MPI 並列のためのメッシュ分割。
+// numberOfSubdomains は実行時の -np と一致させ、かつ計算機の物理コア数を超えない。
+
+numberOfSubdomains 16;
+
+method          scotch;     // グラフ分割。プロセッサ間の通信面数を最小化する
+
+// ************************************************************************* //

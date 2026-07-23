@@ -1,0 +1,7 @@
+# OpenFOAM ケースの生成物は git に入れない (repo 内でケースを実行しない前提の保険)
+template/constant/polyMesh/
+processor*/
+postProcessing/
+log.*
+0/
+[0-9]*.[0-9]*/

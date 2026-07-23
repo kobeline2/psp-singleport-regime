@@ -1,0 +1,86 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 離散化された各方程式 A x = b をどの線形ソルバーで解くか。
+// 末尾 Final は PIMPLE ループ最終反復での設定(厳しめの収束条件を使う)。
+
+solvers
+{
+    "alpha.water.*"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-08;
+        relTol          0;
+
+        nAlphaCorr      1;
+        nAlphaSubCycles 2;      // alpha 方程式を 1 ステップ内で 2 分割して解く
+        cAlpha          1;      // 界面圧縮の強さ
+    }
+
+    // pcorr: 初期時刻に流束を発散ゼロへ射影するためだけに解かれる
+    pcorr
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    pcorrFinal
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    // p_rgh: 圧力ポアソン方程式。計算コストの大半を占める
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-07;
+        relTol          0.05;
+    }
+
+    p_rghFinal
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-07;
+        relTol          0;
+    }
+
+    U
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-06;
+        relTol          0;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor no;   // 運動量予測子を省略(表面波支配の流れでの定石)
+    nOuterCorrectors 1;     // 1 = 外側反復なし、実質 PISO
+    nCorrectors     2;      // 2026-07-23: 3→2 (A09 で 1.27x, 健全性同一を確認. 確定設定 v1)
+    nNonOrthogonalCorrectors 0;
+}
+
+// ************************************************************************* //

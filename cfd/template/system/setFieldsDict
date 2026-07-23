@@ -1,0 +1,45 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      setFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 初期水位を与える。box に中心が含まれるセルを water (alpha=1) にする。
+//
+// 注意: セルは離散なので、指定した z 上限がそのまま初期水位にはならない。
+// 現メッシュの鉛直分割は 1 層 9.17 mm なので、z < 0.02 では下 2 層だけが水になり
+// 実際の初期水位は約 0.0183 m になる(パイロットの初期水体積 0.1112 m3 と一致)。
+
+// 全セルの既定値。0.orig/alpha.water の internalField が既に 0 なので結果は同じだが、
+// 正しいキーワードは defaultValues ではなく defaultFieldValues(リスト形式)。
+// 元ケースは defaultValues と書いていたため、このブロックは無視されていた。
+defaultFieldValues
+(
+    volScalarFieldValue alpha.water 0
+);
+
+regions
+(
+    boxToCell
+    {
+        box (-0.61 -0.01 -0.001) (3.01 2.01 0.02);
+
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+);
+
+// ************************************************************************* //

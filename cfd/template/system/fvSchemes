@@ -1,0 +1,67 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 支配方程式の各項をどう離散化するかを、項の名前で指定する。
+// phi = 面を通る体積流束、rhoPhi = 質量流束。
+
+ddtSchemes
+{
+    default         Euler;              // d/dt : 1 次陰的
+}
+
+gradSchemes
+{
+    default         Gauss linear;       // grad : Gauss + 線形補間
+}
+
+divSchemes
+{
+    // 運動量の移流項 div(rho u u)
+    div(rhoPhi,U)   Gauss linearUpwind grad(U);
+
+    // VOF 移流項 div(u alpha) と界面圧縮項 div(u_r alpha)
+    div(phi,alpha)  Gauss interfaceCompression vanLeer 1;
+    div(phirb,alpha) Gauss interfaceCompression;
+
+    // 粘性応力項 div(mu_eff (grad u)^T) の偏差部分
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;   // 非直交補正あり
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+fluxRequired
+{
+    default         no;
+    p_rgh           ;
+    pcorr           ;
+    alpha.water     ;
+}
+
+// ************************************************************************* //

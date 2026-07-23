@@ -225,10 +225,10 @@ function T = read_runs_table(arg)
         for i = 1:n
             rawDir = string(fullfile(char(cfg.RAW_DIR), char(T.raw_subdir(i))));
             T.raw_dir(i) = rawDir;
-            T.piv_video_path(i) = string(fullfile(char(rawDir), char(T.piv_video_file(i))));
-            T.timelapse_video_path(i) = string(fullfile(char(rawDir), char(T.timelapse_video_file(i))));
-            T.waterlevel_path(i) = string(fullfile(char(rawDir), char(T.waterlevel_file(i))));
-            T.runlog_path(i) = string(fullfile(char(rawDir), char(T.runlog_file(i))));
+            T.piv_video_path(i) = iJoinOptionalFile(rawDir, T.piv_video_file(i));
+            T.timelapse_video_path(i) = iJoinOptionalFile(rawDir, T.timelapse_video_file(i));
+            T.waterlevel_path(i) = iJoinOptionalFile(rawDir, T.waterlevel_file(i));
+            T.runlog_path(i) = iJoinOptionalFile(rawDir, T.runlog_file(i));
         end
     end
 
@@ -243,6 +243,18 @@ end
 % =========================================================================
 % Local helpers
 % =========================================================================
+function p = iJoinOptionalFile(rawDir, fileName)
+    % CFD runs (piv_source = "cfd") legitimately have no video / runlog
+    % files. Leave the derived path empty instead of erroring on a missing
+    % file name.
+    fileName = string(fileName);
+    if ismissing(fileName) || strlength(strip(fileName)) == 0
+        p = "";
+    else
+        p = string(fullfile(char(rawDir), char(fileName)));
+    end
+end
+
 function cfg = iLoadProjectConfig()
     if exist('project_config_local', 'file') == 2
         cfg = project_config_local();

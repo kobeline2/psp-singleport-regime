@@ -1,0 +1,28 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ESI 版 (openfoam.com) の interFoam が読む乱流辞書はこのファイル。
+// openfoam.org 版の constant/momentumTransport は ESI 版では読まれないので、
+// 乱流モデルを変えるときは必ずこのファイルを編集する。
+//
+// laminar = 渦粘性モデルなし。本ケースの解像度では
+// 「解像できない渦は数値粘性が担う」粗い implicit LES に相当する。
+// パイロット計算 (1000 s, 27.75 h) はこの設定で走っている。
+
+simulationType  laminar;
+
+// ************************************************************************* //

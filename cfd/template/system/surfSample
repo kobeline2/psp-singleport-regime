@@ -1,0 +1,26 @@
+// 自由表面 (alpha=0.5 等値面) の速度サンプリング.
+// 使い方:
+//   実行中 : controlDict の functions に #include "surfSample" を足す
+//   事後   : mpirun -np 16 postProcess -parallel -func surfSample -time '...'
+// 出力: postProcessing/surfSample/<time>/U_freeSurface.raw  (列: x y z Ux Uy Uz)
+// これを src/io/import_cfd_surface.m が canonical piv struct に変換する.
+surfSample
+{
+    type            surfaces;
+    libs            (sampling);
+    writeControl    adjustableRunTime;
+    writeInterval   1;                  // 実行中に使う場合のサンプリング周期 [s]
+    surfaceFormat   raw;
+    interpolationScheme cellPoint;
+    fields          (U);
+    surfaces
+    (
+        freeSurface
+        {
+            type        isoSurfaceCell;
+            isoField    alpha.water;
+            isoValue    0.5;
+            interpolate true;
+        }
+    );
+}

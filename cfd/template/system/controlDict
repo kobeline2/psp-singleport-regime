@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     interFoam;
+
+startFrom       startTime;
+startTime       0;
+
+stopAt          endTime;
+endTime         1000;           // 実時間 1000 s ぶん計算する
+
+deltaT          0.01;           // 初期時間刻み(以下の adjustTimeStep で自動調整)
+
+// --- 出力 -------------------------------------------------------------------
+writeControl    adjustableRunTime;
+writeInterval   5;              // 実時間 5 s ごとに全場を書き出す
+purgeWrite      0;              // 0 = 古い時刻ディレクトリを消さない
+writeFormat     binary;         // 2026-07-23: B03 から binary を標準に (I/O・容量半減)
+writePrecision  6;
+writeCompression off;
+
+timeFormat      general;
+timePrecision   6;
+
+runTimeModifiable yes;          // 実行中の設定変更を毎ステップ読み直す
+
+// --- 時間刻みの自動調整 ------------------------------------------------------
+// 毎ステップ Co = |U| dt / dx を評価し、以下の上限を満たすよう dt を決める。
+// 2026-07-23: A11/A12 の A/B で cap 緩和 (10→20ms) を採用し B03 (=C0001) で運用。
+// ただし 20ms は毛細管時間スケール (~12-17ms @ dz=5mm) を形式上超えており、
+// 深水帯検証 (cfd/campaign.md の判別テスト) の結論次第で 10ms へ戻す可能性あり。
+adjustTimeStep  yes;
+maxCo           1.0;            // 全体のクーラン数上限
+maxAlphaCo      1.0;            // 界面セルでのクーラン数上限 (界面Co実測 max 0.61)
+maxDeltaT       0.02;           // dt の絶対上限 [s] (暫定 — 上記コメント参照)
+
+// --- 実行中に計算する量 ------------------------------------------------------
+functions
+{
+    // 水の総体積 [m3] を 20 ステップごとに記録する。
+    // 出力先: postProcessing/waterVolume/<startTime>/volFieldValue.dat
+    // 水位 h = V / 6.066 m2 として水位履歴の代わりに使える。
+    waterVolume
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        log             true;
+        writeControl    timeStep;
+        writeInterval   20;
+        writeFields     false;
+        cellZone        all;
+        operation       volIntegrate;
+        fields          (alpha.water);
+    }
+}
+
+// ************************************************************************* //
