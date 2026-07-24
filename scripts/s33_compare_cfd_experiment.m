@@ -28,8 +28,15 @@ init
 % User settings
 % -------------------------------------------------------------------------
 cfdRunID = "C0001";
-% Metrics to tabulate. 'E' is shown as E/U_p_act^2; the rest are as-is.
-metricsToShow = ["E","I_asym","I_unst","I_rot","phi_lv"];
+% Metrics to tabulate. 'E' -> E/U_p_act^2. 'I_circ' -> |net circulation|
+% (magnitude, to sidestep the y-orientation sign convention). 'I_circ_cov'
+% -> within-band coefficient of variation of I_circ(t) = std/|mean|, a direct
+% measure of whether the basin-scale gyre PULSES (the laminar-overactivity
+% signature). The rest are as-is.
+% 'I_circ_org' = |I_circ|/I_rot: circulation organization. 1 = all rotation
+% has one sense (a single coherent gyre); ~0 = counter-rotating cells cancel
+% (symmetric flow that fails to organize into one gyre).
+metricsToShow = ["E","I_asym","I_circ","I_circ_org","I_circ_cov","I_unst","I_rot","phi_lv"];
 
 % -------------------------------------------------------------------------
 % Load band metrics and resolve the comparison set
@@ -124,6 +131,19 @@ function v = iBandMetric(BM, runID, band, mname, a_m, b_m, Q_act)
         case "I_rot";  v = row.I_rot_mean;
         case "I_unst"; v = row.I_unst;
         case "phi_lv"; v = row.phi_lv_mean;
+        case "I_circ"; v = abs(row.I_circ_mean);          % net gyre strength
+        case "I_circ_org"                                  % organization into one gyre
+            if row.I_rot_mean > 0
+                v = abs(row.I_circ_mean) / row.I_rot_mean;
+            else
+                v = NaN;
+            end
+        case "I_circ_cov"                                  % gyre pulsing
+            if abs(row.I_circ_mean) > 0
+                v = row.I_circ_std / abs(row.I_circ_mean);
+            else
+                v = NaN;
+            end
         otherwise;     v = NaN;
     end
 end
