@@ -85,6 +85,17 @@ C.metrics.alpha_u_th = 0.2;
 % flagged as resolution-limited rather than interpreted quantitatively.
 C.metrics.E_noise_floor_m2_s2 = 2.0e-7;
 
+% Analysis domain Omega, in basin coordinates [m]. The experimental PIV grid
+% realizes Omega by its extent: it starts ~45 mm off the port wall and stops
+% short of the far/side walls (measured from the R0006 canonical grid,
+% 2026-07-24: x in [0.045, 2.909], y in [0.041, 1.929], 31.5 mm spacing).
+% CFD comparisons should sample onto this same box and spacing so the two
+% sides average over the same footprint and the same effective resolution
+% (import_cfd_surface: 'x_lim_m','y_lim_m','grid_dx_m'). See doc/metrics_primer.md.
+C.metrics.omega_x_m = [0.045, 2.909];
+C.metrics.omega_y_m = [0.041, 1.929];
+C.metrics.omega_grid_dx_m = 0.0315;
+
 % Quiescent-start criterion
 C.metrics.quiescent_rel_threshold = 0.05;
 C.metrics.quiescent_hold_min = 5.0;

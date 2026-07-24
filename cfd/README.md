@@ -60,9 +60,11 @@ cp -r template A_solver/A01_gamg
 3. MATLAB:
    `piv = import_cfd_surface("local/work/C0001/surfSample", 'run_id',"C0001");`
    `save(fullfile(cfg.WORK_DIR,'C0001',cfg.PIV_SINGLE_MAT), 'piv', '-v7.3');`
-4. 以降 s30 (メトリクス) / s31 (水位マップ) / s32 (バンド集計) は無改造で動く想定
-   - 注意: s31 用の水位履歴は waterVolume FO から擬似 waterlevel.csv を生成する (**未実装 TODO**)
-   - 注意: import_cfd_surface.m は 2026-07-23 起草・**実データ未検証**. 初回は B03 で試験する
+4. 以降 s30 (メトリクス) / s31 (水位マップ) / s32 (バンド集計) は無改造で動く
+   (2026-07-23 に C0001 で実証済み). s33_compare_cfd_experiment.m で実験と比較:
+   実測Q² (透過時間 Q=dV_band/T_band) で E を正規化し, 同 mode/flow の実験反復レンジと
+   照合する. 比較用の CFD import は `C.metrics.omega_*` のグリッドに揃える (公平化).
+   - 擬似 waterlevel.csv は waterVolume FO から生成 (生成ロジックは会話記録参照, 要スクリプト化).
 
 ## cases.csv のスキーマ
 
