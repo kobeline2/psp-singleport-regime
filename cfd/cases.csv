@@ -33,3 +33,4 @@ B05,B,done,20260724,koshiba-ws,B04,prism_5mm_h013,1809830,16,"B04のメッシュ
 E01,E,planned,,koshiba-ws,,hex_5mm,,,"流出BC設計 + 排水シェイクダウン (h0.05→0.035, high Q)","outflow BCの妥当性: 体積勾配=-Q, 空気混入なし, alpha有界",,,
 E02,E,planned,,koshiba-ws,E01,hex_5mm,,,"outflow high 本番","実験で唯一バンドが解像できているoutflow条件と比較",,,
 E03,E,planned,,koshiba-ws,E02,hex_5mm,,,"outflow medium/low (予測ラン)","実験のノイズ床以下のバンドをCFDで補完",,,
+P01,P,running,20260724,koshiba-ws,B03,hex_5mm_h013,720756,16,"流入Uに横成分+y 5%バイアス (U=(0.2273,0.0114,0), Q厳密). t=0からフル充填. 他はv1+cap緩和","対称性破れ摂動テスト: CFDが単一渦に組織化しブランチにロックするか(問題1) + ロック後にEが下がるか(問題2). 明確なバイアスでまず能力を確認","1000",,"就寝中の無人ラン. 起動検証後に一晩. 崩れたらWALEフル充填にフォールバック"
