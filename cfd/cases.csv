@@ -22,8 +22,8 @@ B03,B,done,20260723,koshiba-ws,B02,hex_5mm_h013,720756,16,"B02構成 + A12のcap
 A06,A,planned,,koshiba-ws,A01,prism_9mm,1112520,,"ランク数/ピニング掃引 (8=Pコアのみ vs 16 vs 24)","285K (P8+E16) での最適並列数. 各20s区間",,,
 B01,B,done,20260722,koshiba-ws,,hex_5mm_h013,720756,,"blockMeshDict新規作成: 一様鉛直5mm(0-0.11m)+10mm(上部), 天井0.13, x/yはポート近傍10mm-遠方15mm, 常時水没インレット(z<0.02, 44面)","メッシュのみ検証 (checkMesh, パッチ面数, 体積, setFields)",,0.1,"一発合格. セル720,756=X05の0.40x (内部面0.48x), 全て六面体, 体積0.78363=X05と厳密一致, 非直交0/歪みe-13/AR3.0. パッチ面数(44/29729/49317)とsetFields選択数(121,556=水位20.00mm)が事前予測と完全一致. dictはrepo cfd/template/mesh/blockMeshDict"
 B02,B,done,20260722,koshiba-ws,B01,hex_5mm_h013,720756,16,"B01メッシュ + v1設定 (laminar/fixedValue1/nCorr2/PCG), t=0から30s","シェイクダウン: 常時水没インレットで序盤dtがどこまで伸びるか, 質量100%か, s/step実測 (目標~0.45)",30,0.34,"全項目合格: s/step=0.377 (X05比5.0x), 平均dt=9.14ms・cap到達65.5% (滝消滅: 序盤からdt~10ms, X05は1.3-2.7ms), 質量100.0%, alphaMax=1.0013(過去最良), 壁:実時間=41:1. 新たな律速はmaxDeltaT 0.01 → cap緩和(A04/A05相当)をBメッシュ上で実施する価値が確定. 1000s換算 ~11.5h"
-C01,C,planned,,koshiba-ws,B03,hex_5mm,750000,16,"スタート水位30mm(6層,静止)","B1メトリクスのスタート水位感度. 判定基準=実験の反復ばらつき",,,
-C02,C,planned,,koshiba-ws,C01,hex_5mm,750000,16,"スタート水位10mm(2層)","C01で感度大の場合のみ. 発達243s≈実験364sに接近",,,
+C01,C,abandoned,,koshiba-ws,B03,hex_5mm,750000,16,"スタート水位30mm(6層,静止)","B1メトリクスのスタート水位感度",,,"[2026-07-25降格] 実験も20mm静水スタートと再確認され, CFD(20mm)と初期条件が一致. スピンアップ非対称の懸念が消滅したため妥当性確認としては不要. 純粋な頑健性チェックとしてなら実施可"
+C02,C,abandoned,,koshiba-ws,C01,hex_5mm,750000,16,"スタート水位10mm(2層)","C01で感度大の場合のみ",,,"[2026-07-25降格] C01と同理由. 前提だった『実験は0mmから364s発達』が誤りで, 実験も20mm静水スタート"
 D01,D,planned,,koshiba-ws,,hex_5mm,,,"inflow medium 本番 (表面サンプリング1-2Hz)","importer経由で実験と全バンド比較. 検証のコア",,,
 D02,D,planned,,koshiba-ws,D01,hex_5mm,,,"inflow high 本番","U_p正規化での崩し(collapse)の確認",,,
 D03,D,planned,,koshiba-ws,D01,hex_5mm,,,"inflow low 本番","優先度低. D01/D02の結果を見て判断",,,
