@@ -94,7 +94,7 @@ Fr=\frac{U_p}{\sqrt{gh}}
 
 トレーサには水面に追従する浮遊粒子を用いた. 照明条件, 背景条件, およびカメラ設置条件は, run 間の比較可能性を確保するため原則として一定とした. 静水開始条件の確認には別途タイムラプス撮影を行い, 実験間における表面流の残留の有無を確認した.
 
-PIV解析には multi-pass 相互相関法を用い, interrogation window は 000 pixel から 000 pixel へ段階的に縮小し, overlap は 000\%, 画像対間隔は \SI{000}{s} とした. 得られた速度ベクトル場に対しては, 局所的な外れ値判定により明らかな誤ベクトルを除去し, 必要最小限の補間を行った. また, port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下する可能性があるため, 指標計算には当該領域を除外した解析領域 $\Omega$ を用いた. マスク範囲は全条件で共通とし, basin 内の大域的な流動構造の比較に主眼を置いた.
+PIV解析には multi-pass 相互相関法を用い, interrogation window は 128 pixel から 64 pixel を経て 32 pixel へ 3 段階で縮小し, 最終 pass の overlap は 50\% とした(画像対間隔は流量水準ごとに異なり, 後述する). 得られた速度ベクトル場に対しては, 標準偏差フィルタ($6\sigma$)および局所メディアンフィルタにより明らかな誤ベクトルを除去し, 必要最小限の補間を行った(inflow 条件では補間ベクトルの割合は 1--3\% であった). また, port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下する可能性があるため, 指標計算には当該領域を除外した解析領域 $\Omega$ を用いた. マスク範囲は全条件で共通とし, basin 内の大域的な流動構造の比較に主眼を置いた.
 
 表面流速の大きさは流量水準および mode により大きく異なるため, 画像対間隔 $\Delta t$ は流量水準ごとに pilot 解析に基づき選定し, 各動画は単一の $\Delta t$ で time-resolved に PIV 解析した(single-$\Delta t$). 具体的には, inflow の low/medium/high に対してそれぞれ $\Delta t = $ \SIlist{0.200;0.100;0.067}{s}(実効 \SIlist{5;10;15}{Hz}), outflow は全水準で $\Delta t = \SI{0.334}{s}$(実効 \SI{3}{Hz})とした. これは, 各条件の代表的な粒子像変位を相関解析に適した範囲に保つための選定である. 同一水準内の全 run で $\Delta t$ は共通とした.
 
@@ -116,12 +116,13 @@ Imaging & Geometric correction & Projective transform (4 inner corners) \\
 Tracer & Particle type & 000 \\ % TODO: トレーサ粒子の種類
 Tracer & Representative particle size & \SI{000}{mm} \\ % TODO
 PIV & Software & PIVlab (multi-pass cross-correlation) \\
-PIV & Interrogation window & 000 $\rightarrow$ 000 pixel \\ % TODO: PIVlab_setting.mat 参照
-PIV & Window overlap & 000\% \\ % TODO
-PIV & Vector grid & 92 $\times$ 61 (spacing $\approx$ \SI{33}{mm}) \\
+PIV & Interrogation window & 128 $\rightarrow$ 64 $\rightarrow$ 32 pixel (3 passes) \\
+PIV & Window overlap & 75\% (pass 1), 50\% (passes 2--3) \\
+PIV & Vector grid & 92 $\times$ 61 (spacing 16 pixel $=$ \SI{31.5}{mm}) \\
 PIV & Image pair interval $\Delta t$ & \SIlist{0.200;0.100;0.067}{s} (inflow L/M/H), \SI{0.334}{s} (outflow) \\
-PIV & Vector validation & PIVlab standard filters + NaN masking \\
-Preprocessing & Flat-field / contrast & divide flat-field ($\sigma=\SI{30}{px}$), 1--99\% clip, invert \\
+PIV & Vector validation & Std.-dev. filter ($6\sigma$) $+$ local median filter, missing vectors interpolated \\
+Preprocessing & In-PIVlab enhancement & None (CLAHE, high-pass, Wiener, intensity capping all off) \\
+Preprocessing & Flat-field / contrast & divide flat-field ($\sigma=\SI{30}{px}$), 1--99\% clip, invert (applied before export) \\
 \hline
 \end{tabular}
 \end{table}
