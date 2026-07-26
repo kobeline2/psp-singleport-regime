@@ -65,18 +65,31 @@ bands = readtable(cfg.DEPTH_BANDS_CSV, 'TextType', 'string');
 % above a only the tank counts. Used with per-band transit time to get the
 % robust actual discharge Q = dV_band / T_band (transit-time method; more
 % reliable than the |dh/dt| q_actual column at low flow -- see audit).
-A_below = C.basin.Aplan_m2 + 0.6 * b_m;   % tank + guide channel plan area
-A_above = C.basin.Aplan_m2;               % tank only
+% The experiment and the CFD do not share a plan area: the real basin is
+% 2.952 x 1.962 m (5.7918 m^2) while the blockMesh was built on the nominal
+% 3.0 x 2.0 m (6.0 m^2). Using one area for both biased the experiment's
+% Q by +3.6% and therefore E/Up^2 by -6.8%, so keep them separate.
+A_exp = C.basin.Aplan_m2;                 % measured basin
+A_cfd = 3.0 * 2.0;                        % blockMeshDict tank footprint
 dV_band = containers.Map('KeyType','char','ValueType','double');
+dV_band_cfd = containers.Map('KeyType','char','ValueType','double');
 for bi = 1:height(bands)
     hlo = bands.h_min_m(bi); hhi = bands.h_max_m(bi);
     below = max(0, min(hhi, a_m) - min(hlo, a_m));
     above = max(0, max(hhi, a_m) - max(hlo, a_m));
-    dV_band(char(bands.band_id(bi))) = A_below*below + A_above*above;
+    % Below the channel ceiling (h = a) the guide channel adds plan area.
+    % 0.6 x b is the CFD culvert footprint; the real feed geometry is not
+    % yet confirmed, so the experimental A_below carries that assumption.
+    dV_band(char(bands.band_id(bi)))     = (A_exp + 0.6*b_m)*below + A_exp*above;
+    dV_band_cfd(char(bands.band_id(bi))) = (A_cfd + 0.6*b_m)*below + A_cfd*above;
 end
 
 % Per-run, per-band transit time from frame_metrics (actual time span in band).
-Q_act = iActualDischarge(cfg, [expRuns; cfdRunID], dV_band);
+Q_act = iActualDischarge(cfg, expRuns, dV_band);
+Q_act_cfd = iActualDischarge(cfg, cfdRunID, dV_band_cfd);
+for k = keys(Q_act_cfd)
+    Q_act(k{1}) = Q_act_cfd(k{1});
+end
 
 % -------------------------------------------------------------------------
 % Per band: actual-Q normalize E, pool experiment, compare

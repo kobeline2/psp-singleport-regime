@@ -13,9 +13,14 @@ function rect = select_rectification_points(videoPath, outFile, varargin)
 % Name-value pairs
 %   'run_id'        : run identifier, default = parent folder name of videoPath
 %   'frame_idx'     : frame index used for point selection, default = 1
-%   'Lx_m'          : basin length in meters, default = 3.0
-%   'Ly_m'          : basin width in meters,  default = 2.0
+%   'Lx_m'          : target grid extent along x in meters, default = 3.0
+%   'Ly_m'          : target grid extent along y in meters, default = 2.0
 %   'pixel_size_m'  : target pixel size in meters, default = 0.002
+%                     These three only set the output image size Nx x Ny.
+%                     They are a processing choice, not basin geometry: the
+%                     physical scale of the PIV result comes from the PIVLab
+%                     calibration, not from here. Pass C.rect.* (not
+%                     C.basin.*) so already-processed runs stay reproducible.
 %   'operator'      : operator name/id, default = ""
 %   'notes'         : notes string, default = ""
 %   'do_confirm'    : ask for confirmation after clicking, default = true

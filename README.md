@@ -18,7 +18,7 @@ The repository is organized around the following questions.
 
 ## Experimental concept
 
-- Basin plan dimensions: 3.0 m × 2.0 m
+- Basin plan dimensions: 2.952 m × 1.962 m (measured inner; plan area 5.7918 m²)
 - Basin depth: 0.33 m
 - Single reversible port at the center of the short side wall
 - Port width: 0.11 m

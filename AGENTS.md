@@ -85,7 +85,9 @@ Rules:
 ## Geometry and physical conventions
 
 Unless explicitly changed in metadata or constants:
-- Basin plan dimensions: `3.0 m x 2.0 m`
+- Basin plan dimensions (measured inner): `2.952 m x 1.962 m` (plan area `5.7918 m^2`).
+  The nominal `3.0 m x 2.0 m` appears in earlier notes and in the CFD `blockMeshDict`;
+  it overstates the plan area by 3.6%, so never use it for discharge or normalization.
 - Basin depth: `0.33 m`
 - Port width: `0.11 m`
 - Port height: `0.055 m`

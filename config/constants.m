@@ -13,11 +13,29 @@ C.project_name = 'psp-singleport-regime';
 % -------------------------------------------------------------------------
 % Basin geometry
 % -------------------------------------------------------------------------
+% Measured inner dimensions (2026-07-27, from the experimenter): the basin is
+% 295.2 cm x 196.2 cm, not the nominal "3.0 m x 2.0 m" used in early notes.
+% The nominal figures overstate the plan area by 3.6%, which propagates into
+% every |dh/dt|-based discharge, so use these values for anything physical.
 C.basin = struct();
-C.basin.Lx_m = 3.0;
-C.basin.Ly_m = 2.0;
+C.basin.Lx_m = 2.952;
+C.basin.Ly_m = 1.962;
 C.basin.H_m  = 0.33;
-C.basin.Aplan_m2 = C.basin.Lx_m * C.basin.Ly_m;
+C.basin.Aplan_m2 = C.basin.Lx_m * C.basin.Ly_m;   % 5.7918 m^2
+
+% -------------------------------------------------------------------------
+% Rectification target grid (a processing choice, NOT basin geometry)
+% -------------------------------------------------------------------------
+% R0001-R0024 were rectified onto a 1501 x 1001 pixel grid derived from the
+% nominal 3.0 x 2.0 m at 2 mm/pixel. Velocities are unaffected because the
+% scale comes from PIVLab (calxy = 1.96669 mm/pixel, set from the measured
+% 2952 mm), so these numbers stay fixed to keep new runs poolable with the
+% existing 24. Retargeting the grid to the measured dimensions is a separate
+% decision -- see doc/piv_conditions.md.
+C.rect = struct();
+C.rect.Lx_m = 3.0;
+C.rect.Ly_m = 2.0;
+C.rect.pixel_size_m = 0.002;
 
 % -------------------------------------------------------------------------
 % Port geometry

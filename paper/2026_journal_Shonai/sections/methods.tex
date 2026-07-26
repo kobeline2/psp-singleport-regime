@@ -4,7 +4,7 @@
 \subsection{Facility and operating conditions}
 \label{sec:methods_facility}
 
-実験は, 平面寸法 \SI{3}{m} $\times$ \SI{2}{m}, 深さ \SI{0.33}{m} の矩形水槽で実施した. 水槽平面積は \SI{6}{m^2} である. 座標系は, 水槽長手方向を $x$, 短手方向を $y$, 鉛直上向きを $z$ として定義した. 水槽短辺の中央には単一の開口部(port)を設け, 同一portを通じて inflow と outflow を切り替える構成とした. port の幅と高さはそれぞれ \SI{0.11}{m}, \SI{0.055}{m} であり, port 下端は水槽底面と一致する.
+実験は, 内寸 \SI{2.952}{m} $\times$ \SI{1.962}{m}, 深さ \SI{0.33}{m} の矩形水槽で実施した. 水槽平面積は \SI{5.79}{m^2} である. 座標系は, 水槽長手方向を $x$, 短手方向を $y$, 鉛直上向きを $z$ として定義した. 水槽短辺の中央には単一の開口部(port)を設け, 同一portを通じて inflow と outflow を切り替える構成とした. port の幅と高さはそれぞれ \SI{0.11}{m}, \SI{0.055}{m} であり, port 下端は水槽底面と一致する.
 
 本研究では, inflow と outflow を独立した実験系列として扱った. 各系列では 3 水準の流量条件を設定し, 各条件について 4 回の反復実験を行った. したがって, 総 run 数は inflow 12 runs, outflow 12 runs の計 24 runs である. 流量の調整はバルブ開度によって行ったが, 本論文では条件の一般化のため, 流量は L/s で整理した. 各流量水準の代表値は Table~\ref{tab:run_conditions} に示す.
 
@@ -90,7 +90,7 @@ Fr=\frac{U_p}{\sqrt{gh}}
 \subsection{Surface PIV and processing}
 \label{sec:methods_piv}
 
-表面流速は, basin 全体を含む上方固定カメラ画像に対する表面PIVにより算出した. 元動画のフレームレートは \SI{29.97}{Hz} であり, 射影変換により幾何補正を行って basin 内水面を \SI{2}{mm/pixel}(補正後 1501 $\times$ 1001 pixel, $\SI{3.0}{m} \times \SI{2.0}{m}$)の平面直交座標系に変換した. 撮影条件, PIV 解析条件, および前処理条件を Table~\ref{tab:piv_settings} に示す.
+表面流速は, basin 全体を含む上方固定カメラ画像に対する表面PIVにより算出した. 元動画のフレームレートは \SI{29.97}{Hz} であり, 射影変換により basin 内側四隅を基準として幾何補正を行い, 内寸 $\SI{2.952}{m} \times \SI{1.962}{m}$ の水面を 1501 $\times$ 1001 pixel(約 \SI{1.97}{mm/pixel})の平面直交座標系に変換した. 撮影条件, PIV 解析条件, および前処理条件を Table~\ref{tab:piv_settings} に示す.
 
 トレーサには水面に追従する浮遊粒子を用いた. 照明条件, 背景条件, およびカメラ設置条件は, run 間の比較可能性を確保するため原則として一定とした. 静水開始条件の確認には別途タイムラプス撮影を行い, 実験間における表面流の残留の有無を確認した.
 
@@ -110,8 +110,8 @@ PIV解析には multi-pass 相互相関法を用い, interrogation window は 12
 Category & Item & Value \\
 \hline
 Imaging & Source frame rate & \SI{29.97}{Hz} \\
-Imaging & Rectified resolution & 1501 $\times$ 1001 pixel (\SI{2}{mm/pixel}) \\
-Imaging & Field of view & \SI{3.0}{m} $\times$ \SI{2.0}{m} (full basin) \\
+Imaging & Rectified resolution & 1501 $\times$ 1001 pixel ($\approx$ \SI{1.97}{mm/pixel}) \\
+Imaging & Field of view & \SI{2.952}{m} $\times$ \SI{1.962}{m} (full basin, inner dimensions) \\
 Imaging & Geometric correction & Projective transform (4 inner corners) \\
 Tracer & Particle type & 000 \\ % TODO: トレーサ粒子の種類
 Tracer & Representative particle size & \SI{000}{mm} \\ % TODO
