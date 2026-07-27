@@ -11,6 +11,7 @@ out/
 *.bcf
 *.run.xml
 *.dvi
+*.xdv
 *.blg
 *.bbl
 main.pdf

@@ -151,6 +151,26 @@ I_circ(t) の3つの読み筋:
 正の割合が 0% か 100% 付近               → 片側にロック / 50% 付近 → 左右拮抗 (破れていない)
 ```
 
+### 実装: `compute_branch_statistics.m` (2026-07-27 追加)
+
+上の読み筋を関数にしたのが `src/metrics/compute_branch_statistics.m` で,
+`s40_make_paper_figures.m` が呼んで `branch_stats.csv` と `fig_branch_selection.png` を出す.
+ラン単位で次を返す (集計は**深水帯 B3+B4 のフレームのみ**):
+
+```
+branch_sign       = sign(mean I_circ)      どちらの枝に落ちたか
+R_lock            = |mean I_circ| / std    振幅から見た固定の強さ
+sign_persistence  = 同符号フレームの割合    反転頻度から見た固定の強さ
+Q_transit_Lps     = dV_band / T_band       量子化に律速されない実測流量
+```
+
+B1/B2 を外すのは, 浅水帯ではジェットが自由表面に露出して蛇行し (I_unst が 1 桁大きい),
+枝の選択とは別の理由でロックが弱く見えるため. B3/B4 はどちらも h > a なので
+`Q_transit` の掃引体積に導水路の未確認ジオメトリ (0.6·b の仮定) が入らないという利点もある.
+
+実測 (2026-07-27, inflow 12 ラン): low は 4/4 が正, high は 4/4 が負, medium のみ 3負/1正.
+R_lock の水準中央値は 3.6 → 8.7 → 11.8 と単調増加.
+
 ### 比較の鉄則: 別ブランチの反復で符号つき量を平均するな
 
 対称性が破れる系では, 反復が別ブランチ (R0006=CW と R0008=CCW) に落ちる. このとき
@@ -224,10 +244,14 @@ E=0.00110  phi_lv=0.332  I_asym=0.354  I_rot=0.097  I_unst=0.408
 
 ---
 
-## 5. 既知の要修正 (2026-07-23 時点)
+## 5. 既知の要修正 (2026-07-27 時点)
 
-- [ ] methods.tex の eq:Iasym に |·| が無い (実装・全データは絶対値). 式か本文を修正する.
+- [x] methods.tex の eq:Iasym に |·| が無い → 式を絶対値に修正し, 向きは I_circ が担う旨を明記 (2026-07-27).
 - [x] Ω マスク: `C.metrics.omega_*` に定数化し, `s33_compare_cfd_experiment.m` が
   実測Q²正規化つきのフェアな比較表を出す. CFD 比較 import は omega グリッドに揃える.
-- [ ] methods.tex のポート高さ表記 0.05 m は 0.055 m の誤記 (h/a の根幹パラメータ).
-- [ ] methods.tex の PIV interrogation window 欄が「000 pixel」の TODO のまま.
+- [x] methods.tex の「ポート近傍を除外した Ω」という記述がコードと不一致 → Ω = ベクトル格子全域
+  であることを明記し, ポート近傍が Ω に占める面積が 1% 未満で無視できる旨を追記 (2026-07-27).
+- [x] methods.tex のポート高さ表記 0.05 m は 0.055 m の誤記 (h/a の根幹パラメータ).
+- [x] methods.tex の PIV interrogation window 欄が「000 pixel」の TODO のまま.
+- [ ] methods.tex の Table `tab:piv_settings` のトレーサ粒子 (種類・粒径) が `000` のまま.
+  設定ファイルからは出ないので実験者への聞き取りが要る (`doc/piv_conditions.md` §7).

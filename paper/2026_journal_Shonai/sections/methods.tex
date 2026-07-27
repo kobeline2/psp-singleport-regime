@@ -8,6 +8,8 @@
 
 本研究では, inflow と outflow を独立した実験系列として扱った. 各系列では 3 水準の流量条件を設定し, 各条件について 4 回の反復実験を行った. したがって, 総 run 数は inflow 12 runs, outflow 12 runs の計 24 runs である. 流量の調整はバルブ開度によって行ったが, 本論文では条件の一般化のため, 流量は L/s で整理した. 各流量水準の代表値は Table~\ref{tab:run_conditions} に示す.
 
+inflow の 12 run は, 反復を実施日で block 化して配置した. すなわち 4 日間の各日に low, medium, high を 1 run ずつ実施し, 4 日間で 4 反復を得ている. この block 計画により, 流量水準による差と, 実施日ごとの装置セットアップ・環境条件による差とを分離して評価できる(Sec.~\ref{sec:results_branch}). 一方 outflow は 1 日 1 run の日程で実施したため, 同様の block 構造をもたない.
+
 各 run では, basin 内の水深変化を連続的に追跡した. inflow では水深 \SI{0.03}{m} に達した時点で撮影を開始し, \SI{0.10}{m} に達した時点で撮影を停止した. outflow では \SI{0.10}{m} から撮影を開始し, \SI{0.03}{m} に達した時点で停止した. したがって, 水深は独立の run 因子ではなく, 各 run 内で連続的に掃かれる解析軸として扱った. 本研究では, とくに port 高さ $a=\SI{0.055}{m}$ に対する相対水深 $h/a$ に着目し, basin-scale の表面流レジームを整理した.
 
 実験条件の整理は, run-level conditions と analysis-level conditions を分けて行った. 前者は mode, flow-rate level, repetition により定義し, 後者は代表水深帯ごとの可視化および比較のために定義した. 可視化用の代表水深帯は Table~\ref{tab:depth_bands} に示す. 本研究では, $h/a \approx 1$ 近傍の遷移をより明瞭に捉えるため, \SIrange{0.05}{0.06}{m}（$0.91 \le h/a < 1.09$）を独立した帯 B2 として扱った.
@@ -94,7 +96,9 @@ Fr=\frac{U_p}{\sqrt{gh}}
 
 トレーサには水面に追従する浮遊粒子を用いた. 照明条件, 背景条件, およびカメラ設置条件は, run 間の比較可能性を確保するため原則として一定とした. 静水開始条件の確認には別途タイムラプス撮影を行い, 実験間における表面流の残留の有無を確認した.
 
-PIV解析には multi-pass 相互相関法を用い, interrogation window は 128 pixel から 64 pixel を経て 32 pixel へ 3 段階で縮小し, 最終 pass の overlap は 50\% とした(画像対間隔は流量水準ごとに異なり, 後述する). 得られた速度ベクトル場に対しては, 標準偏差フィルタ($6\sigma$)および局所メディアンフィルタにより明らかな誤ベクトルを除去し, 必要最小限の補間を行った(inflow 条件では補間ベクトルの割合は 1--3\% であった). また, port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下する可能性があるため, 指標計算には当該領域を除外した解析領域 $\Omega$ を用いた. マスク範囲は全条件で共通とし, basin 内の大域的な流動構造の比較に主眼を置いた.
+PIV解析には multi-pass 相互相関法を用い, interrogation window は 128 pixel から 64 pixel を経て 32 pixel へ 3 段階で縮小し, 最終 pass の overlap は 50\% とした(画像対間隔は流量水準ごとに異なり, 後述する). 得られた速度ベクトル場に対しては, 標準偏差フィルタ($6\sigma$)および局所メディアンフィルタ(閾値 3)により明らかな誤ベクトルを除去し, 必要最小限の補間を行った(inflow 条件では補間ベクトルの割合は 1--3\% であった).
+
+指標計算の解析領域 $\Omega$ は, PIV ベクトル格子の全域($x = \SIrange{0.045}{2.909}{m}$, $y = \SIrange{0.041}{1.929}{m}$, 面積 \SI{5.41}{m^2})とした. 格子は水槽内壁から約 \SI{45}{mm} 内側に始まるため, 壁面境界層は元より含まれない. port 近傍では反射, 画像歪み, および局所的な三次元性の影響により表面PIVの信頼性が低下しうるが, port 開口(幅 \SI{0.11}{m})の近傍が $\Omega$ に占める面積は \SI{1}{\percent} 未満であり, 面平均量への寄与は無視できるため, 追加の幾何マスクは適用していない. $\Omega$ は全 run で共通であり, basin 内の大域的な流動構造の比較に主眼を置いた.
 
 表面流速の大きさは流量水準および mode により大きく異なるため, 画像対間隔 $\Delta t$ は流量水準ごとに pilot 解析に基づき選定し, 各動画は単一の $\Delta t$ で time-resolved に PIV 解析した(single-$\Delta t$). 具体的には, inflow の low/medium/high に対してそれぞれ $\Delta t = $ \SIlist{0.200;0.100;0.067}{s}(実効 \SIlist{5;10;15}{Hz}), outflow は全水準で $\Delta t = \SI{0.334}{s}$(実効 \SI{3}{Hz})とした. これは, 各条件の代表的な粒子像変位を相関解析に適した範囲に保つための選定である. 同一水準内の全 run で $\Delta t$ は共通とした.
 
@@ -156,7 +160,7 @@ u_{\mathrm{th}}=\alpha U_p
 inflow/outflow 間の basin-scale な偏りを定量化するため, basin を中央線で左右に分割した領域 $\Omega_L$ および $\Omega_R$ を定義し, 左右非対称指標
 \begin{equation}
 I_{\mathrm{asym}}(t)=
-\frac{E_R(t)-E_L(t)}{E_R(t)+E_L(t)}
+\frac{\abs{E_L(t)-E_R(t)}}{E_L(t)+E_R(t)}
 \label{eq:Iasym}
 \end{equation}
 を用いた. ここで,
@@ -164,7 +168,7 @@ I_{\mathrm{asym}}(t)=
 E_{L,R}(t)=\left\langle |\mathbf{u}(x,y,t)|^2 \right\rangle_{\Omega_{L,R}}
 \label{eq:ELR}
 \end{equation}
-である.
+である. $I_{\mathrm{asym}}$ は絶対値で定義しているため, 偏りの「強さ」のみを表し, 向きは含まない. これは, 偏りが左右を行き来する蛇行的な流れでも時間平均が 0 に潰れないようにするための選択である. 偏りの向きは, 後述する符号付き循環指標 $I_{\mathrm{circ}}$ で別途扱う.
 
 また, 大域循環を評価するため, 速度場から 2 次元渦度
 \begin{equation}
@@ -184,6 +188,21 @@ I_{\mathrm{rot}}(t)=
 \label{eq:Irot}
 \end{equation}
 を併用した. $I_{\mathrm{rot}}$ は回転運動が実在するときにのみ大きな値を取り, 「相殺による正味 0」と「無回転による 0」を分離する. 渦度の算出に必要な数値微分および平滑化条件は, 全条件で共通の手順を用いた.
+
+$I_{\mathrm{circ}}$ は符号付き量であるため, その符号は run ごとの結果, すなわち左右対称性が破れたときに系がどちらの分枝(branch)に落ちたかを表す. したがって符号付きのまま反復や条件を跨いで平均してはならない. 逆符号の分枝に落ちた反復を平均すれば互いに打ち消し合い, 実在する循環が見かけ上消えるからである. そこで本研究では, 各 run の $I_{\mathrm{circ}}(t)$ を次の 3 量に要約した. 集計はジェットが完全に潜没して流れが準定常となる深水帯 $B_3$, $B_4$($h/a>1.09$)のフレームに限る.
+\begin{itemize}
+  \item \textbf{分枝の符号} $\mathrm{sgn}\left\langle I_{\mathrm{circ}}\right\rangle$. 正は解析座標系($x$ 右向き, $y$ 上向き; Fig.~\ref{fig:inflow_mean_field} の描画系)における反時計回りであり, ジェットが $y<y_{\mathrm{port}}$ 側の側壁に付着した状態に対応する.
+  \item \textbf{ロック強度}
+  \begin{equation}
+  R_{\mathrm{lock}}=
+  \frac{\abs{\mathrm{mean}\left\{I_{\mathrm{circ}}(t)\right\}}}
+       {\mathrm{std}\left\{I_{\mathrm{circ}}(t)\right\}}
+  \label{eq:Rlock}
+  \end{equation}
+  正味循環の平均が, その時間変動に対してどれだけ明瞭に 0 から離れているかを表す. 大きいほど分枝が強く固定されている.
+  \item \textbf{符号保持率}. $I_{\mathrm{circ}}(t)$ が run 平均と同符号となるフレームの割合. $R_{\mathrm{lock}}$ が振幅の観点からの安定度であるのに対し, これは反転頻度の観点からの安定度である.
+\end{itemize}
+浅水帯 $B_1$, $B_2$ を集計から除くのは, そこではジェットが自由表面に露出して蛇行し(後述のとおり $I_{\mathrm{unst}}$ が 1 桁大きい), 分枝選択とは別の要因でロックが弱く見えるためである. これら 3 量は新たな primary metric ではなく, primary metric である $I_{\mathrm{circ}}$ の読み方の規約であり, 定義は全 run で共通に固定した.
 
 各 run では水深が連続的に変化するため, 非定常性は run 全体ではなく, 代表水深帯 $B_k$ ごとに評価した. 具体的には, 各帯に対して
 \begin{equation}
@@ -228,7 +247,7 @@ Asymmetry index. Used to quantify left-right imbalance of basin-scale motion int
 Primary &
 $I_{\mathrm{circ}}(t)$ &
 Eq.~\eqref{eq:Icirc} &
-Signed circulation index. Characterizes the sign and strength of the net basin-scale rotation; near zero both for cancelling counter-rotating cells and for irrotational flow. \\
+Signed circulation index. Characterizes the sign and strength of the net basin-scale rotation; near zero both for cancelling counter-rotating cells and for irrotational flow. Its per-run sign identifies the symmetry-breaking branch and must not be pooled across runs (Eq.~\eqref{eq:Rlock}). \\
 
 Primary &
 $I_{\mathrm{rot}}(t)$ &
