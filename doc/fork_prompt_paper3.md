@@ -11,6 +11,7 @@ psp-singleport-regime プロジェクトの 3 本目の論文 (共著) を準備
 (2D SWE / 3D VOF / 実験)」.
 
 まず以下を読んで文脈を掴んでほしい (この順で):
+0. paper/README.md                   ← 3本立ての全体計画と結果の帰属ルール
 1. doc/notes_2d3d_collaboration.md   ← 論点整理. ここが出発点
 2. cfd/campaign.md の「関連研究: 2D HEC-RAS (Weigert 2026)」節
 3. doc/metrics_primer.md の §1b (I_circ / 組織化度 / 対称性破れの測り方)

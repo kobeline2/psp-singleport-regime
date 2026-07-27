@@ -13,6 +13,8 @@ and follow it for all code, metadata, Git, and writing tasks.
 
 - `README.md` — research concept, pipeline overview, repository policy, and data layout.
 - `AGENTS.md` — coding/Git/metrics/writing conventions (the rules above).
+- `paper/README.md` — **the three-paper plan (experiment / 3D CFD / 2D comparison) and which
+  results belong to which paper.** Decide a new finding's home here before writing it up.
 - `doc/piv_preprocessing_protocol.md` — rectification and frame-prep protocol.
 - `metadata/README.md` — schema for `runs.csv`, `depth_bands.csv`, `flow_levels.csv`.
 - `scripts/README.md` — what each `s10`–`s40` driver does and the routine run order.
