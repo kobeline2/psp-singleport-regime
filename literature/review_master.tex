@@ -262,6 +262,39 @@
 \end{itemize}
 \noindent（確認: p.123--134）
 
+\noindent\litref{Imberger et al. (1976)}\quad（補助）成層した有限矩形タンクの線シンク流．主題（成層取水層）は本研究に使えず，価値は\textbf{極限の記述}数箇所に限られる．\texttt{discussion.tex} の「流出の吸込みはポテンシャル流に近く渦度供給源をもたない」を支える文献として引く．
+\begin{itemize}
+  \item \textbf{問い}：成層貯水池で線シンクを始動すると取水層はどう形成されるか．後壁は何を変えるか．
+  \item \textbf{手法}：理論（Boussinesq ＋ Laplace 変換）＋particle-in-cell 数値解．2 次元\textbf{鉛直断面}，線シンク．支配パラメータ $R = F\,Gr^{1/4}$ ほか全てが成層強度 $N$ を含む．TVA 実機（$L \sim 16$~km）と照合．知見の本体は，始動→内部せん断フロント列→後壁で反射→定在波→減衰後に取水層．分割流線が後壁に付着せざるを得ないため\textbf{定在波がなくても厳密な定常解は存在しない}．
+  \item \textbf{転用できる箇所（実質的な収穫）}：
+  \begin{itemize}
+    \item p.490／式 (10)：シンク始動直後は\textbf{ほぼ水平なポテンシャル流}が確立し，水平流速は端壁に向かって線形にゼロへ減少する．＝有限矩形タンク内のシンク流の初期応答はポテンシャル流．
+    \item §4 p.496：「重力効果は取水層を生むのに十分でなければならず慣性力に完全に支配されてはならない．\textbf{さもなくば単純なポテンシャル流にしかならない}」＝浮力が効かない極限＝ポテンシャル流と著者が明示．本研究は $N = 0$ でまさにこの極限．
+    \item p.494：\textbf{分布シンク＋緩やかな始動}の両方（式 13, 14 の $a$ と $b$）が満たされると「せん断フロントも定在波も現れず，運動は常に準定常で初期のポテンシャル流に等しい」．本研究の port は幅 0.11~m の有限開口だが，条件は分布シンク単独では足りない点に注意．
+    \item §7 p.506：流入水が中立浮力で\textbf{運動量が小さければ，流入と流出のスケーリングは厳密に対称}（流線関数の符号が反転するだけ．違いは slug の有無）．＝非対称が生じるならその原因は運動量．M\"uller 2017 の「主因は流入ジェットの運動エネルギー投入」と理論側から整合し，主張 (a) を裏返しに支える．ただし著者は「跳水・巻き込みを伴う潜り込み流は層流理論の範囲外」と留保．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：\textbf{成層が主題}でパラメータが全て $N$ を含み，均質流体では取水層という現象自体が存在しない．\textbf{断面が鉛直面}で本研究の水平面とは向きが異なり，平面内でシンクが側壁とどう相互作用するかは何も言えない．壁は slip 条件で底面摩擦を扱わない．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{引き方}：「成層取水層を扱った研究だが，浮力が慣性に対して無視できる極限では，有限矩形タンク内の流れは初期ポテンシャル流のまま準定常にとどまる」と極限の記述として引く．「Imberger らが吸込み流を扱った」と一般化すると成層が主題である事実を隠す．
+    \item \textbf{今後}：Imberger 1980 のレビューも同じ成層の枠組みで均質流体には届かない．主張を厚くするなら教科書（Batchelor, Lamb）のポテンシャルシンクの方が素直．残る穴は Fischer et al.\ 1979（未確認）．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: p.489--512，全 24~p 通読）
+
+\noindent\litref{M\"oller et al. (2015)}\quad（周辺）取水口渦による空気連行の定量（VAW/ETH Zurich）．
+\begin{itemize}
+  \item \textbf{内容}：水平・鋭縁の取水管（$D = 389$~mm）で空気連行率 $\beta = Q_a/Q_w$ を脱気装置により準連続計測（34 runs）．$\beta$ は合成 Froude 数 $\mathsf{F}_{co} = v_D/\sqrt{gh}$ の指数関数（$R^2 \geq 0.9$）．従来は渦の目視で決めていた限界潜没を，$\beta = 10^{-5}$ を inception と定義して逆算し直した（$(h/D)_{cr} = -2.5\,\mathsf{F}_D^{-0.45} + 5.3$，$h$ は管軸から）．
+  \item \textbf{本研究に効くのは 1 点＝スケール効果}：DN200/300/400/500 の系列試験で，DN500 基準の連行率比の中央値が DN200 で 0.10，DN300 で 0.33，DN400 で 1.05．\textbf{$D < 400$~mm では Froude 相似が破れ連行が 1 桁小さく出る}．無次元の閾値は $\mathsf{R}_D \geq 6\times10^5$ かつ $\mathsf{W}_D > 3.2\times10^3$（古典値は $\mathsf{R}_{D,cr} = 3.2\times10^4$，$\mathsf{W}_{D,cr} = 121$）．著者自身「プロトタイプへの外挿は 4 点の中央値に基づくだけで厳密には illusory」と留保．
+  \item \textbf{本研究との接点}（→ Limitations に 1--2 行）：
+  \begin{itemize}
+    \item 本研究の $U_p \approx 0.12$~m/s は Kobus 1984 の空気連行開始速度 0.8--1~m/s の 1/7 以下で\textbf{空気連行は起きない}．本論文の主題（$\beta$ の定量，限界潜没）は適用外．空気連行の有無を問われたらこの見積もりで足りる．
+    \item スケール効果は，自由水面の変形や渦の巻き込みに関わる現象を実機へ外挿できないことの具体例として引ける（本研究の概算 $\mathsf{R}_D \approx 7\times10^3$，$\mathsf{W}_D \approx 12$ は閾値を 2 桁下回る．要検算）．
+    \item \textbf{$h/D$ と $h/a$ は同型ではない}：$h/D$ は空気連行渦を「避ける」ための設計基準，$h/a$ は「調べる」対象．加えて本研究の $h/a = 0.55$--$0.91$ は port が完全水没していない領域で，M\"oller の範囲と重ならない．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: art.\ 04015026）
+
 \subsection*{論文横断整理}
 
 \noindent\textbf{(1) この節の全文献が指す一点：流入と流出は「別の流れ」である}
@@ -753,6 +786,35 @@ M\"uller の室内実験も現地観測も，「流出時は取水口の近く�
 \end{itemize}
 \noindent（確認: p.586--594）
 
+
+\noindent\litref{Sciacchitano (2019)}\quad（補助）PIV 不確かさ定量化の現代的総説（Topical Review，Open Access，全 31~p 通読）．
+\begin{itemize}
+  \item \textbf{問い}：PIV の測定不確かさをどう客観的に定量化するか．誤差源は何で，どの手法が使えるか．
+  \item \textbf{手法}：総説．ISO-GUM に従い誤差（random/systematic）と不確かさを定義し，計測連鎖の各段の誤差源を Fig.~4 に体系化（主に系統的／主にランダムを色分け）．UQ 手法を a-priori（合成画像・モンテカルロ・実験的評価で手法一般の目安を出す）と a-posteriori（実データから局所・瞬時の不確かさを出す）に大別し，後者 5 手法を Table~4 で比較．§5 で導出量・統計量への不確かさ伝播を扱う．
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item \textbf{「PIV の不確かさは 0.1~px」は単純化しすぎ}と冒頭と結論で明言．実験ごと・場所ごと・時刻ごとに大きく変わり，「予備的で粗い推定」としてのみ扱うべき．→単一の代表値で済ませない．
+    \item \textbf{結像系}：誤差は粒子像径 $d_\tau \approx 2$~px で最小（Fig.~5）．1~px 未満だと peak locking（変位が整数画素へ引き寄せられる）が支配し，これだけで 0.1~px オーダー．大きすぎるとランダム誤差が径に比例して増加．$32 \times 32$ 窓での最小誤差は 0.05--0.1~px．モンテカルロでの典型値は 0.01--0.2~px．
+    \item \textbf{トレーサ}：スリップ速度は粒子径の 2 乗に比例．液体中は密度差が小さく 10--50~$\mu$m で十分（Melling 1997）．→本研究の mm 級トレーサはこの基準から外れるが，Fujita 1998 の LSPIV は「個々の粒子でなくパターンを追う」立場なので前提が異なる．
+    \item \textbf{a-posteriori 5 手法}：uncertainty surface／correlation SNR metrics（PPR, PRMSR, PCE 等）／particle disparity／correlation statistics／error sampling．比較評価では\textbf{correlation statistics が最も信頼できる}（推定精度が多くの場合 85~\% 超＝実誤差 RMS との食い違いが 15~\% 未満．coverage とは別量で，Fig.~13(g) の coverage は 65~\% 程度）．SNR metrics は相関面の情報だけで済み追加計算コストがほぼゼロ．粒子視差法と相関統計法は窓内粒子数が有限のため推定値自体に $(2N_I)^{-1/2}$ ＝ 5--25~\% の内在ばらつきがある．
+    \item \textbf{error sampling}（§3.2.2.4）：装置まで含めた系統誤差を捉えられる唯一の手法．実験をできるだけ多くの側面を変えながら繰り返す．Fig.~11 は同一装置で 1 ヶ月毎日繰り返した例で，\textbf{速度の変動は標準的な不確かさ伝播が予測する値より遥かに大きかった}．ただし瞬時ベクトルのランダム不確かさは出ず，「実務では往々にして不可能」．
+    \item \textbf{渦度の不確かさ（式 16）}：$U_\omega = (U/h)\sqrt{1 - \rho(2h)}$．$U$ は速度の局所標準不確かさ，$h$ は格子間隔，$\rho(2h)$ は距離 $2h$ の 2 点における\textbf{計測誤差の相互相関係数}．誤差が空間相関しているほど渦度の不確かさは下がる．報告値は $32 \times 32$ 窓で\textbf{オーバーラップ 75~\% なら $\rho = 0.45$，50~\% 以下では $\rho = 0$}．＝オーバーラップの選択が微分量の不確かさに効く．関連して Luff 1999：渦度の不確かさが最小になるのは標準的な 3 点中心差分＋局所多項式回帰・ガウシアン平滑化の併用．Fouras \& Soria 1998：空間サンプリング間隔を広げるとバイアスが増え\textbf{ピーク渦度を過小評価する}．
+    \item \textbf{統計量}（§5.1）：平均値の不確かさには有効サンプル数 $N_\mathrm{eff}$ を使うべき．time-resolved PIV では取得周波数が高くサンプル間に時間相関があり $N_\mathrm{eff} \ll N$ になる．バイアス不確かさの推定は困難で「現時点では uncertainty surface 法のみが直接アクセスを提供する」．
+    \item \textbf{推奨}：有限窓による空間変調の系統不確かさを定量するには，異なる検査窓サイズで処理して結果のばらつきを報告せよ（§5.1 末尾）．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：平面 PIV が主で\textbf{レーザーシート＋中性浮力粒子の実験室 PIV が前提．LSPIV・表面 PIV は想定外}．射影変換の誤差や自由表面の擾乱は扱わない．a-posteriori 手法は\textbf{画像に符号化された不確かさのみ}を定量でき，非一様流入・実験中の Re 変動・粒子スリップ・較正・同期は別途評価が必要と結論で明記．系統不確かさの定量はランダムに比べ研究が遅れており，較正誤差・未解像スケールによる打ち切り誤差・peak locking が主因で\textbf{非定常・乱流の研究でとくに重要}．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{静水ノイズフロアの位置づけ}：Table~2 の ``Flow measurement with null or uniform displacement''（Willert 1996, Forliti et al.\ 2000）＝a-priori の実験的評価に該当する．error sampling ではない．
+    \item \textbf{4 回反復が error sampling に対応}．反復間のばらつきを Appendix で報告することは，単なる再現性確認ではなく本研究で実行可能な唯一の UQ．Fig.~11 の教訓（理論的伝播より実際のばらつきは大きい）を添えられる．
+    \item \textbf{式 16 は $I_\mathrm{circ}$ に直接使える}．$U$ と格子間隔が分かれば計算できる．オーバーラップを埋める際に $\rho(2h)$ の議論を持っておく．ピーク渦度の過小評価も系統誤差として言及しうる．
+    \item \textbf{Appendix の QC 設計}：検査窓サイズを変えた感度解析（§5.1）．Fujita 1998 の「窓サイズへの鈍感性」の確認と組み合わせると QC 節が構成できる．
+    \item \textbf{outflow の低流速域に効く}：表面流速が小さく変位がピクセル誤差に埋もれる領域で，peak locking と $d_\tau$ の議論が最も効く．
+    \item 役割分担：理論は Adrian 1991，大視野の実装は Fujita 1998，ツールは Thielicke 2014，不確かさの現代的枠組みが本論文．ただし\textbf{LSPIV 特有の誤差（射影変換・水面擾乱・トレーサの表面追従）は本論文の射程外}で，そこは Fujita の 3--5~\% 側で押さえる．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: art.\ 092001，全 31~p 通読）
+
 \subsection*{論文横断整理}
 
 \subsection*{原稿転記メモ}
@@ -933,6 +995,31 @@ M\"uller の室内実験も現地観測も，「流出時は取水口の近く�
 \end{itemize}
 \noindent（確認: p.615--642）
 
+\noindent\litref{Heller (2011)}\quad 物理模型のスケール効果の標準的な総説（Forum paper，全 14~p 通読）．\texttt{methods.tex} の「Reynolds 数を含む全ての無次元量を実機と同時に一致させることは意図していない」および Limitation の外挿不可の主張は，本プロジェクトの中心的な方法論的立場でありながら現在\textbf{無引用}．その出典．
+\begin{itemize}
+  \item \textbf{問い}：物理水理模型のスケール効果はどう生じ，どの条件下で無視でき，どう回避・補償・補正するか．
+  \item \textbf{手法}：総説．相似の 3 階層（幾何・運動学・力学）と 5 つの力比（$\mathsf{F}, \mathsf{R}, \mathsf{W}, \mathsf{C}, \mathsf{E}$）を整理し，相似を得る 4 手法（inspectional analysis／dimensional analysis／calibration／scale series）を比較．地すべり誘起段波を例に全手法を適用し，回避・補償・補正の実務を示す．
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item \textbf{$\lambda \neq 1$ なら必ずスケール効果が生じる}．同一流体（水）を使う限り力比のうち 1 つしか一致させられない（式 13）．「最も関連する力比を選び他は無視できる程度に抑える」しかない＝Froude 限定相似の正当化そのもの．
+    \item \textbf{$\lambda$ 単独は判定基準にならない}．$\lambda = 2$ でも空気連行に有意な差が出る例（Fig.~2）がある一方，大きい $\lambda$ でも効かない例もある．「$\lambda$ だけを限界基準にするのは不十分」と明記．→本研究が「1:X 模型」と書かず prototype-informed と位置づける方針の裏づけ．
+    \item \textbf{判定はパラメータごとに行う}：同じ模型でも流量には効かないが空気濃度には効く（Fig.~1）といったことが起きる．「各パラメータについて個別の判断が要る」．
+    \item \textbf{スケール効果は damping 側に働く}：模型では粘性・表面張力が相対的に強いので，相対波高・相対流量・輸送土砂量などは\textbf{実機より小さく出る}のが通例．予測が過大か過小かの判断はつく．
+    \item \textbf{Table~1 が実務の核心}：24 行の現象別「significant scale effects を避ける限界基準」．本研究に近いのは，Air-entraining free vortex at horizontal intake（Anwar et al.\ 1978）の $Q_i/(z_i\nu) > 30{,}000$ かつ $\rho Q_i^2 z_i/(A_i^2\sigma) > 10{,}000$，および Water wave, theoretical effect of surface tension（Hughes 1993）の $T > 0.35$~s かつ $h > 0.02$~m で表面張力の寄与が 1~\% 未満．→本研究の下限水深 0.03~m はこれを満たす．
+    \item Table~2 は現象別の典型 scale（intake は 1:50--1:100）．ただし「経済性との妥協でありスケール効果が無視できることを意味しない」と明記．
+    \item 移動床と distensible structure はスケール効果なしの模型化がとくに難しい，が主要結論の一つ．粒径をそのまま $\lambda$ で縮小すると $d_g < 0.22$~mm で付着力が効き，$d_{50} > 0.5$~mm が要るなどの制約．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：総説で新規データなし．例は段波・堰・跳水・洗掘など古典的構造物が中心で，浅水貯水池の平面流動レジームは Table~1 に項目がない．可逆流・閉鎖 basin も扱わない．Table~1 の基準は「その現象・その prototype feature に対して」定義されたもので，他の量への流用を著者が繰り返し警告．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{Froude 限定相似の立場の出典}：\texttt{methods.tex} に直接引ける．同時に「何が犠牲になっているか（$\mathsf{R}$, $\mathsf{W}$ の不一致）」も本論文の枠組みで書ける．
+    \item \textbf{primary metrics は界面現象を含まない}：$E$, $\phi_\mathrm{lv}$, $I_\mathrm{asym}$, $I_\mathrm{circ}$, $I_\mathrm{unst}$ はいずれも速度場から作る量で，空気連行や砕波のような $\mathsf{W}$ が効く現象ではない．上記「パラメータごとに判断」に従えば，これらは Froude 相似で扱える側だと主張できる．逆に将来の土砂実験では本論文の警告がそのまま効く（→§6）．
+    \item \textbf{下限水深 0.03~m}：Table~1 の $h > 0.02$~m は満たすが，これは\textbf{波長に対する表面張力の寄与}の基準で，本研究の定常流とは現象が違う．援用するなら「桁の目安として」と限定すること．なお表面膜による表面層の切り離しは scale effect ではなく model/measurement effect で本論文の範囲外．
+    \item \textbf{damping 側という指摘}は Limitations の書き方を決める：観察される非定常性や混合は，実機ではこれ以上に強く出る可能性がある（過小評価側）と述べられる．
+    \item Table~1 の取水口渦の基準は M\"oller 2015 と接続．あちらが具体，こちらが一般論．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: p.293--306，全 14~p 通読）
 
 \subsection*{論文横断整理}
 
@@ -1122,6 +1209,25 @@ M\"uller の室内実験も現地観測も，「流出時は取水口の近く�
     \item 状況：未入手（書籍）．2026-06-19 時点．
     \item 想定セクション：§4（PIV 実務の標準リファレンス）．
     \item 入手の代替：大学図書館の電子書籍/OPAC．PIV 手法の出典は Adrian (1991)・Thielicke \& Stamhuis (2014) で代替可．
+  \end{itemize}
+  \item \textbf{Fischer, List, Koh, Imberger \& Brooks (1979)} \textit{Mixing in Inland and Coastal Waters}（Academic Press, 書籍）．
+  \begin{itemize}
+    \item 状況：未入手（書籍）．2026-07-26 時点．
+    \item 想定セクション：§1（吸込み流＝シンク流の基礎）．
+    \item \textbf{残る穴（2026-07-26 に一部解消）}：\texttt{discussion.tex} の看板主張のうち「理想シンクは渦度供給源をもたない」の部分は Imberger et al.\ (1976) で引けるようになった（§1，浮力・分布シンクの極限としての言明）．\textbf{未解決なのは「実際の吸込み流が距離とともにどう減衰し，鉛直方向にどんな構造をもつか」}の側で，49 本にこれを扱う文献がない（M\"uller の「吸込みは局所的」は深い系の話で，本論文が対比の相手にしているため支えにならない）．
+    \item 入手の代替：大学図書館の電子書籍/OPAC．噴流側は Dracos (1992)・Giger (1991) で代替できるが\textbf{吸込み側の減衰構造の代替は現時点でない}．なお Imberger (1980) ``Selective withdrawal: a review'' は\textbf{成層取水の枠組みなので均質流体の本研究には届かない}（Imberger et al.\ 1976 のメモ参照）．主張(a)を厚くするだけなら流体力学の教科書（Batchelor, Lamb 等）のポテンシャルシンクで足りる．
+  \end{itemize}
+  \item \textbf{Knauss (ed., 1987)} \textit{Swirling Flow Problems at Intakes}（IAHR Hydraulic Structures Design Manual 1, Balkema, 書籍）．
+  \begin{itemize}
+    \item 状況：未入手（書籍）．2026-07-26 時点．
+    \item 想定セクション：§1（取水口渦・限界潜没の標準リファレンス）．
+    \item 入手の代替：\textbf{M\"oller et al.\ (2015) で相当部分を代替済み}（同論文が Knauss の限界潜没則を Fig.~8 で図示・比較しており，二次情報として参照できる）．ただし Knauss の原典の設計基準そのものを引く必要が生じた場合は要入手．
+  \end{itemize}
+  \item \textbf{Jain, Ranga Raju \& Garde (1978)} ``Vortex formation at vertical pipe intakes'', \textit{J. Hydraul. Div.} ASCE 104(HY10), 1429--1445．
+  \begin{itemize}
+    \item 状況：未入手．2026-07-26 時点．
+    \item 想定セクション：§1（鉛直管取水口の渦形成・限界潜没）．
+    \item 入手の代替：M\"oller et al.\ (2015) の参考文献に収録されており，同論文経由で二次的に参照可．本研究のポートは水平矩形断面なので鉛直管の知見の適用範囲は限定的．
   \end{itemize}
 \end{itemize}
 
