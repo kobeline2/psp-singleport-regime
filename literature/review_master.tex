@@ -67,6 +67,34 @@
 \end{itemize}
 \noindent（確認: p.1, p.3--8）
 
+\noindent\litref{Rehman et al. (2015)}\quad（周辺）揚水発電の技術総説（全 13~p 通読）．\texttt{introduction.tex} 冒頭のプレースホルダ \texttt{PSP\_background1--4} を埋めるための背景文献．三階層方針でいう\textbf{周辺}で，背景 1--2 文を \verb|\cite| で支えるだけの用途．
+\begin{itemize}
+  \item \textbf{内容}：PHES の技術総説．世界の設備容量，立地選定，歴史，hybrid 構成（風力/太陽光/海水），経済性を横断的に整理．純揚水/混合式は EU 統計として 1 箇所出るのみで，\textbf{可変速機の議論はない}．上池の流況・堆砂・取放水構造物には一切触れない．
+  \item \textbf{引用できる箇所}：
+  \begin{itemize}
+    \item \textbf{PHES は世界の大規模蓄電容量の 99~\% 超，約 127~GW}（EPRI, 2012 年時点）＝第 1 文の根拠．
+    \item PHES の利点 3 つ（Hino \& Lejeune）：起動停止が柔軟で応答が速い／負荷変動を追随し急変にも適応／周波数を調整し電圧安定性を保つ＝第 2 文（短時間の出力追従・系統安定化）の根拠．
+    \item 1890 年代のアルプスが最初で\textbf{1950 年代以降は単一の可逆ポンプ水車が主流}＝本研究が可逆単一ポートを扱うことの実機側の裏づけ．適地が稀になりつつあるとの指摘もあり，既存上池の運用・維持管理が重要という論理にも使える．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：「変動性再エネの拡大に伴い運転頻度・起動停止が増える」は本総説には\textbf{明示的にない}．あるのは上記の能力の記述まで．頻度の増加自体を主張するなら Hunt 2020 側か運用寄りの別文献が要る．また統計は 2009--2013 年で 2026 年の原稿には 10 年以上古い．定性的主張（99~\% を占める）は今も妥当だが GW 値を引くなら IEA/IRENA の近年資料へ．本文内でも 127~GW／Table~1 の 104~GW（2009）／「約 100~GW」が基準年混在のまま並び，数値の内的整合性が弱い．
+\end{itemize}
+\noindent（確認: p.586--598，全 13~p 通読）
+
+\noindent\litref{Hunt et al. (2020)}\quad（周辺）揚水発電の配置形式の総説（全 14~p 通読）．Rehman 2015 と同じく \texttt{PSP\_background1--4} 用．役割分担は Rehman ＝容量・重要性（99~\%，127~GW），本論文＝運転形態（反転頻度・可変速機）．統計も 2019 年時点で Rehman より新しい．
+\begin{itemize}
+  \item \textbf{内容}：§2 で既存 PHS を 4 軸（貯蔵サイクル／ポンプ水車の速度・型式／用途／配置）で分類．§3 以降は新配置（CCSPHS, CHPHS）の提案とザンベジ流域の GIS 評価で\textbf{本研究とは無関係}．使えるのは §2 のみ．海水・地下・廃坑利用は ``less common configurations'' として 1 文で列挙されるだけで分類の本体ではない．
+  \item \textbf{引用できる箇所}：
+  \begin{itemize}
+    \item \textbf{Hourly PHS は短絡モードで運転でき 1 日 100 回を超える反転が可能}（例：オーストリア Kops II，原典は Goekler \& Meusburger 2009）．＝可逆単一ポートを主題にすることの実機側の動機として最も強い．ただし「再エネ拡大→運転頻度増」という因果は §1（再エネ→柔軟性需要）＋§2.1（HPHS が ancillary service を担う）を繋いだもので，一文で書かれてはいない．引く際は該当の 2 箇所を併記すること．
+    \item 貯蔵サイクル分類（Table~1）：Hourly／Daily（現在最も一般的）／Weekly／Seasonal／Pluri-annual．HPHS と DPHS は容量が同じで，区別は運用サイクルによる．
+    \item \textbf{可変速ポンプ水車}：固定速は定格でしか運転できないが可変速は 60--100~\% で可変．コスト約 30~\% 高．ternary（Pelton＋Francis，回転反転が不要で切替が速い）・quaternary（Gordon Butte で 20~MW/秒）も．＝Rehman にはない論点．
+    \item 電池コストの低下により\textbf{日サイクルの PHS は将来の競争力を失う可能性}があり，PHS は長サイクルか高速 ancillary service の両極へ向かう．＝高頻度反転が今後重要になる論拠．
+    \item 日本への言及 2 箇所：多数のダムが可逆水車を備える（原子力の硬直性による．ただし本文の ``reduces the need for daily storage'' は論理が逆で編集上の誤りとみられる）／神流川の pump-back．
+  \end{itemize}
+  \item \textbf{本研究との接点}：本研究の basin（矩形の人工上池，流入は port のみ）は\textbf{closed-loop} に対応する（大きな水源から離れ流入が限られる小さな人工池．環境影響は小さいが日〜週サイクルに限られる）．ただし\textbf{池の幾何（浅い/深い，平面形）には踏み込まない}ので Methods の prototype-informed の補強には使えない．上池の流況・堆砂も対象外（堆砂は「集水域が小さいので速度が小さい」の 1 行のみ）．
+\end{itemize}
+\noindent（確認: art.\ 109914，全 14~p 通読）
+
 \noindent\litref{M\"uller (2012)}\quad 本研究のラボスケール直系の先行研究（EPFL TH\`ESE NO 5471，本体 155~p，学位論文）．流況データは本論文の Ch5 にしか存在しない．
 \begin{itemize}
   \item \textbf{章構成}（目次・Ch7 で確認済）：Ch3 現地 ADCP＋数値 ＝ M\"uller 2018（会議版 M\"uller 2010），Ch4 濁度監視 ＝ M\"uller 2014，Ch5 ジェット挙動・流況・運動エネルギー ＝ \textbf{論文化されていない}，Ch6 土砂交換率 ＝ M\"uller 2017，Ch7 結論．読解範囲は Ch5（PDF p.71--96）と Ch7（PDF p.121--127）を精読し，Ch3/4/6 は論文版で代替．
@@ -1185,6 +1213,146 @@ M\"uller の室内実験も現地観測も，「流出時は取水口の近く�
 \subsection*{原稿転記メモ}
 
 % ================================================================
+\section{CFD 手法（2 本目・3 本目の材料）}
+% ================================================================
+
+\noindent 本節は\textbf{2 本目（3D VOF）・3 本目（2D/3D 比較）のための手法文献}を集める．
+1 本目（実験）には CFD の数値を入れない方針（\texttt{paper/README.md}）なので，本節の文献は 1 本目では引かない．
+収集の優先順位は「CFD の計画判断に効くか」で決めており，執筆時に引くだけの文献（V\&V の作法，分岐論の古典）は後回しとする．
+
+\subsection*{論文メモ}
+
+\noindent\litref{Komen et al. (2017)}\quad 本節の最重要文献．OpenFOAM を名指しした数値散逸の定量法（全 31~p 通読）．
+\begin{itemize}
+  \item \textbf{なぜ読むか}：\texttt{cfd/campaign.md} の診断「系が分岐の臨界より下にいる」は現状\textbf{定性的な推論}．laminar（陽な SGS なし）で回している以上，実効的な散逸は数値散逸であり，その大きさが不明．本論文の手法で $\nu_\mathrm{num}$ を測れれば，実験と CFD を Chen \& Jirka の同じ $S$ 軸上に並べられ，「どれだけ下にいるか」「あとどれだけ散逸を減らせば臨界を越えるか」が数値で言える．本研究の no-model 運転は本論文の ``no-model LES (UDNS)'' と同一設定であり，対応が直接つく．
+  \item \textbf{問い}：産業用 LES（非スタガード有限体積・2 次精度・implicit top-hat filter．OpenFOAM, STAR-CCM+, FLUENT, Code\_Saturne を名指し）の数値散逸を物理空間でどう定量するか．SGS の寄与との比は．
+  \item \textbf{手法}：\textbf{乱流運動エネルギー $k$ の収支残差から測る}．統計的定常では $k$ の収支（生成＋粘性散逸＋乱流輸送＋圧力拡散＋分子拡散）の和がゼロになるはずだが，数値誤差で非ゼロ残差が残る．これを $\epsilon_\mathrm{num}$ と定義（式 14, 15）．数値粘性は $\nu_\mathrm{num} = \nu\,\epsilon_\mathrm{num}/\epsilon$（式 16）．Schranner 2015 との違いは 2 点：(i) あちらは\textbf{全運動エネルギー}，本論文は\textbf{乱流運動エネルギー}で小スケールの寄与を強調でき，収支項の分析から傾向の\textbf{機構}も説明できる．(ii) Schranner はセル $m$ の制御体積と時間刻み $\Delta t$ で数値積分するため\textbf{瞬時・局所評価が可能}，本論文は統計平均を要する．検証は $\mathrm{Re}_\tau = 180$--$950$ のチャネル流．格子は $\Delta x^+$ で命名（90/60/30-Grid，q-DNS 用 9-Grid ＝ 265 万セル）．SGS は Smagorinsky・動的 Smagorinsky・no-model の 3 通り．統計は 60--80 FTT（TKE 収支は 180 FTT）．
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item \textbf{q-DNS でも数値散逸は残る}：9-Grid で総散逸が総生成より約 8~\% 小さく，平均 $\nu_\mathrm{num}/\nu \approx 0.08$．参照の擬スペクトル DNS は収支和が実質ゼロ（$-0.1$--$1.0$~\%）＝この 8~\% は有限体積法に固有．
+    \item \textbf{数値散逸は SGS 散逸より 2.4--3.5 倍大きい}：no-model LES（$\mathrm{Re}_\tau = 180$）の平均で $\nu_\mathrm{num}/\nu = 0.35$（30-Grid）／$0.60$（60-Grid）に対し $\nu_\mathrm{SGS}/\nu = 0.10$／$0.25$．原文は ``substantially larger'' とし，``This explains why the addition of an explicit SGS model is not effective'' と結論．実際 LES モデルありと no-model の差は\textbf{数 \% 未満}．Fig.~14(b) の局所値は 60-Grid のチャネル中央で $\nu_\mathrm{num}/\nu \approx 1.05$ ＝数値粘性が分子粘性を超える．
+    \item \textbf{誤差の署名（4 点セット）}：格子を粗くすると，平均速度が $y^+ > 10$ で過大／$u_\mathrm{rms}$（主流方向）のピークが過大／$v_\mathrm{rms}$・$w_\mathrm{rms}$（横・鉛直）がほぼ全域で過小／$k$ が過大．＝この組み合わせが「数値散逸が効いている」ことの指紋になる．
+    \item \textbf{機構（本論文の独自性）}：チャネル流では $\overline{u'u'}$ のみが生成を持ち，pressure strain rate 項が $\overline{u'u'} \to \overline{v'v'}, \overline{w'w'}$ へ再分配する．格子を粗くすると\textbf{3 つの pressure strain 項すべてが過小評価}され，再分配が不足→$\overline{u'u'}$ の正味生成が増え（主流方向 RMS 過大），$\overline{v'v'}$・$\overline{w'w'}$ が受け取れない（横方向 RMS 過小）．また散逸率の正確な計算は生成率より高い解像度を要する（変動の空間勾配のため）．
+    \item \textbf{数値散逸が増えると $k$ は「増える」}：より散逸的な Van Leer（TVD 混合＝中心差分に風上を混ぜたもの）を使うと，中心差分より平均速度・$u_\mathrm{rms}$ の過大評価が拡大し $k$ はさらに高くなる（Fig.~12）．＝粗格子で $k$ が人工的に増えるのは中心差分の数値振動のせいではなく，数値散逸そのものが原因．安定化のため風上を混ぜると事態は悪化する．
+    \item \textbf{CFL が効く}：最大 CFL を $0.4 \to 0.2$ にすると最大数値散逸率が約 1.4 分の 1（Fig.~16）．
+    \item \textbf{Rhie--Chow 補正も数値散逸源ではないか}と著者が推測．非スタガード格子の圧力振動抑制に使うが，本論文では分離できなかったと明記．＝OpenFOAM 固有の未解明因子．
+    \item \textbf{アスペクト比は主因ではない}：$\Delta x^+/\Delta z^+$ を 2 倍・半分に振っても影響小．(90,15) 格子が改善するのは\textbf{スパン方向解像度}が上がり近傍壁ストリークを解像できるため（Fig.~17）．
+    \item 粗い格子は同じ $\mathrm{Re}_\tau$ を得るのに大きい流量を要する（Table~4：$\mathrm{Re}_\mathrm{bulk}$ が DNS 5650 に対し 30-Grid 5643，60-Grid 6205，90-Grid 6723）＝平均速度過大評価の直接の理由．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：\textbf{完全発達乱流チャネル流・統計的定常・周期境界}が前提．式 (15) が使えるのは $R_k = C_k = 0$ のときのみで，チャネル流は平行流ゆえ $k$ の平均対流がゼロ．統計収束に 180 FTT を要する．単相（VOF ではない），自由表面も剥離もない．$\mathrm{Re}_\tau = 180$--$950$．OpenFOAM 2.2.0（2013 年）．Rhie--Chow の寄与は未分離．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{適用の可否が最大の論点}：本研究は $C_k \neq 0$（ジェットが $k$ を輸送する）ため式 (15) をそのまま使えない．式 (14) に戻り\textbf{平均対流項 $C_k$ を明示的に計算する}必要がある．手間は増えるが原理的に可能．非定常性については，各バンド内で準定常とみなせる区間を切り出す近似が要検討．
+    \item \textbf{より軽い代替}：Schranner 2015 はセル単位・時間刻み単位で局所・瞬時に評価でき，統計平均を要しない＝非定常・非周期に強い．本研究にはこちらが実際的かもしれない．
+    \item \textbf{参照すべき桁は 0.08 ではなく 0.35--0.60}：0.08 は q-DNS 格子（265 万セル）の値．本研究の no-model 運転に対応するのは no-model LES 格子の値で，実効 Re の低下は 26--38~\%，局所的には 60-Grid 中央で $\nu_\mathrm{num} \approx \nu$（5 割超）．しかも本研究のメッシュ（水深方向 5~mm で 6--20 セル）は Komen の LES 格子より遥かに粗く，$\nu_\mathrm{num}/\nu$ が 1 を超える可能性は十分ある．測る価値が高い．
+    \item \textbf{symmetric twin cell への含意}（本論文の主張ではなく推論）：数値散逸は等方的に効かず，pressure strain の過小評価を通じて\textbf{横方向変動を選択的に潰す}．蛇行や非対称モードは横方向の振動なので，主流ジェットを保ったまま非対称モードだけが消える，という機構がありうる．P09 でメッシュ依存性がないことは示せても，「どのメッシュでも数値散逸が十分大きく対称化している」可能性は排除できない．$\nu_\mathrm{num}$ を実測すれば区別がつく．
+    \item \textbf{CFD と実験が別の枝にある件の診断}：上記「誤差の署名 4 点セット」と照合する．合致するなら数値散逸が第一容疑者，合致しないなら境界条件・幾何・物理モデルを探すべき，という切り分けができる．
+    \item \textbf{設定への含意}：(i) 対流項に風上系（upwind, limitedLinear, vanLeer 等）を混ぜているならそれが $k$ を人工的に増やしている．(ii) CFL を下げると数値散逸が減る．(iii) P10 の $z$ 精密化は Fig.~17 の「アスペクト比より横断方向解像度」と整合し，方向性が支持される．(iv) SGS モデルの選択よりスキームと CFL に時間をかけるべき．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: p.565--595，全 31~p 通読）
+
+\noindent\litref{Schranner et al. (2015)}\quad Komen と対をなす数値散逸定量法．\textbf{本研究で実際に使えるのはこちら}（全 14~p 通読）．
+\begin{itemize}
+  \item \textbf{問い}：任意のグリッドベース Navier--Stokes ソルバの実効数値散逸率・数値粘性を，ソルバ非依存の後処理として物理空間で定量するには．
+  \item \textbf{手法}：\textbf{全運動エネルギーの輸送方程式の残差から測る}．エネルギー減衰率を 2 通りに計算し差を取る：(i) シミュレーションのエネルギーデータを直接時間微分，(ii) NS の空間項から評価．離散化誤差がなければ一致するはずの差が数値散逸 $\epsilon_n$（式 24--26）：
+  \[ -\epsilon_n = \frac{dE_\mathrm{kin}}{dt} + F_\mathrm{ekin} + F_\mathrm{ac} - F_v - \Pi + \epsilon_v \]
+  （$\Pi$ は非圧縮でゼロ）
+  \begin{itemize}
+    \item 数値粘性は $\nu_n = \epsilon_n/\mathcal{E}$（式 38--40）．$\mathcal{E}$ は\textbf{散逸関数}（式 14）であって $\epsilon_v$ ではない．$\epsilon_v = \nu\mathcal{E}$ なので $\nu\,\epsilon_n/\epsilon_v$ と等価＝Komen 式 (16) と同形．$\epsilon_n/\epsilon_v$ とすると無次元比になり粘性の次元にならない．\textbf{実装時の要注意点}．
+    \item \textbf{必要なのは速度場 3 時刻分}．時間微分は $t \pm \Delta t$ の 2 次中心差分（式 59）だが空間項は $t_n$ で評価するため $t_{n-1}, t_n, t_{n+1}$ を保存する．セル面流束は 6 次中心で再構成（式 60）．
+    \item \textbf{評価法は 2 通り}：(a) 各セルで式 (26) を評価し部分領域で積分，(b) 部分領域の\textbf{境界面でのみ}流束を評価．(b) は局所評価が不要で計算負荷が小さい．数学的・数値的には同一．
+    \item \textbf{自己完結}：ソルバの出力（速度・圧力・密度）だけでよく追加情報が不要．周期境界も統計的定常も不要．検証は 3 次元 Taylor--Green 渦（層流→遷移→乱流を通過），$64^3$ セル，$\mathrm{Re} = 100$--$\infty$，ALDM モデル．
+  \end{itemize}
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item 物理空間法とスペクトル空間法の一致は\textbf{相対誤差 $\pm 0.5$~\%}．小スケールが急速に生成される $t \approx 4$ 付近でわずかに増える程度．非周期・非一様・非構造格子に適用できる点がスペクトル法との決定的な差．
+    \item \textbf{時間刻みへの依存は弱い}：$\Delta t$ を 20 倍振っても $\epsilon_n$ はほとんど変わらない（Fig.~3）．原文は「CFL $<1$ を満たし時間積分誤差が空間離散化誤差以下なら影響は無視でき，解析のためにとくに小さい $\Delta t$ を考慮する必要はない」＝既存の計算結果をそのまま後処理できる．
+    \item \textbf{セル面再構成の次数も効かない}：2 次/4 次/6 次の差は最大 2.8~\%（それも $t \in [8, 9.5]$ の短期間のみ，大半の時間は同一）．理由は\textbf{手法自体が保存的だから，セル間流束の評価方法は問題にならない}．
+    \item 任意の非周期部分領域で機能（CSD1--3, NCSD1--2 で検証）．ただし\textbf{小さい部分領域かつ低 Re では食い違いが目立つ}．同じ体積 $6^3$ セルでも $\epsilon_n$ が大きい CSD2 の方が一致が良く，数値散逸が小さい領域ほど相対誤差が大きい．
+    \item \textbf{局所的には数値散逸が負にもなる}（Fig.~6 が $\mathrm{sgn}(\nu)$ で色分けした 3 次元可視化）．残差を数値散逸と解釈できるのは\textbf{十分大きい制御体積で散逸的寄与が分散的寄与を上回る}ときのみ（Komen も同じ論理を引用）．
+    \item 完全周期領域では流束項が厳密に相殺し，全数値散逸は全運動エネルギーの変化率と全粘性散逸だけで決まる（式 61）．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：検証は\textbf{Taylor--Green 渦のみ}＝滑らかで周期的な単相流で，壁境界層も自由水面も剥離も含まない．ALDM という特定の ILES スキームでの検証．粘性散逸項自体も離散化誤差を含み，Appendix~A で議論されるが完全には除去できない（著者は「関心はコードが既に生む粘性散逸を超える分なので $\mathcal{E}$ の誤差は他項より重要でない」と整理）．\textbf{総量しか出ず，どの収支項が壊れているかは分からない}＝そこは Komen の TKE ベース手法の役割．VOF・二相流は想定外．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{本研究に適用できるのはこちら}．統計的定常も周期境界も要求せず瞬時場から局所評価できるため，充填過程という非定常問題にそのまま使える．Komen が要求する 180 FTT の統計平均は本研究では不可能．ソルバ改造も不要で，$\Delta t$ を小さくし直す必要も高次スキームで回し直す必要もない（上記 2 点より）．
+    \item \textbf{部分領域ごとに測れる点が問いに直結}：ジェットのコア／再循環セル内部／低流速域／port 近傍で別々に $\nu_n$ を評価すれば，「数値散逸が非対称モードの住む場所に集中しているか」に直接答えうる．$\Omega$ マスクの妥当性の裏づけにもなる．ただし低 Re ＋小領域は精度が落ちるので，領域は大きめに取り複数サイズで測ってばらつきを見ること．
+    \item \textbf{閉鎖 basin では流束項が大幅に簡略化される}：no-slip 壁では $u = 0$ なので $F_\mathrm{ekin}$ も $F_v$ も消える．残るのは\textbf{port 面の流束}のみ（＋自由表面が slip 条件なら粘性流束）．ただし port 近傍は流速最大で勾配も急なので，ここの評価精度が全体を左右する．
+    \item \textbf{VOF での適用は未検証}．interFoam の界面圧縮項が運動エネルギー収支にどう入るかは本論文の枠組みに含まれない．界面近傍を除外して評価するなどの工夫が要るかもしれない．実装前に要検討．
+    \item Komen との使い分け：Komen ＝乱流運動エネルギー基準・統計的定常向け・\textbf{機構の説明に強い}，Schranner ＝全運動エネルギー基準・非定常/非周期向け・\textbf{実装が軽い}．実務的には「Schranner で $\nu_n$ を測り，Komen の誤差の署名（平均速度過大／主流方向 RMS 過大／横方向 RMS 過小／$k$ 過大）で解釈する」という組み合わせになる．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: p.84--97，全 14~p 通読）
+
+\noindent\litref{Deshpande et al. (2012)}\quad interFoam の標準的な評価論文（Open Access，全 36~p 通読）．
+\begin{itemize}
+  \item \textbf{なぜ読むか}：数値散逸を測る（Komen/Schranner）にせよ，その解釈には interFoam が運動量場に何をするかの理解が要る．また「laminar + interFoam」という組合せ固有の癖を知らないと，測った $\nu_\mathrm{num}$ をどこに帰属させるか判断できない．
+  \item \textbf{問い}：interFoam は界面移流・慣性支配流・表面張力支配流のそれぞれでどの程度の性能をもつか．
+  \item \textbf{手法}：\textbf{コードそのものを解析した}アルゴリズム記述（§2）＋検証テスト（§3）．テストは (i) 純移流，(ii) 慣性支配（定在重力波，液滴衝突），(iii) 表面張力支配（曲率精度，spurious current），(iv) 毛管流．OpenFOAM 1.5 で検証，2.1.1 まで有効と著者が明記．
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item \textbf{界面圧縮の仕組み}：MULES limiter $\lambda_M$ は界面近傍で 1，それ以外で 0（Fig.~2）．＝界面から離れた領域では $\gamma$ の移流は\textbf{単純な風上差分}（式 13）．界面近傍のみ圧縮流束と高次スキームが加わる（式 14）．$\gamma$ の面値は vanLeer，運動量は PISO 3 反復．
+    \item \textbf{$C_\gamma$（cAlpha）は 1 を推奨}：「全計算で $C_\gamma = 1$ を用いた．増やしても減らしても界面曲率の誤差と界面のにじみを悪化させることが分かったため」＝既定値の根拠を引ける．
+    \item \textbf{質量保存は極めて良好}：質量誤差 $1.3\times10^{-7}$~\%（level set 32--80~\%，CLSVOF 0.4~\% と桁違い，Table~8）．
+    \item \textbf{移流精度}：Zalesak 円板では CLSVOF/ELVIRA と同程度（Table~3）．2D 渦場では THINC-SW より誤差が\textbf{3--5 倍}大きく収束率も低い（Table~6）．3D 渦場は「やや大きいが同等」（Table~7）＝2D の方が変形が激しいため．幾何再構成法には劣る．
+    \item \textbf{非構造格子では界面に波紋}（Fig.~4）．構造格子では滑らか．本研究は六面体構造格子なので回避済み．
+    \item 補間スキーム（linear/cubic）の違いは移流精度にほとんど影響しない（Table~4, 5）．
+    \item \textbf{打ち切り誤差は格子細分で収束しない}：$\tilde{e}_\tau \sim 1/\Delta x$（Table~9，収束率が一貫して $-1.00$）．圧縮流束に置き換えても同じ．一方グローバル誤差指標は収束する．著者は「今後の研究の余地」と結論．
+    \item \textbf{spurious current も格子細分で悪化する}：$C_{\Delta x} \sim \sqrt{\sigma/(\rho\Delta x)}$（式 70）．「格子細分化は緩和せず，むしろ悪化させる」と明記．密度比が大きいほど気相側で増幅される（式 68 の $1/\rho$）．
+    \item \textbf{定在重力波（§3.2.1）が本研究に最も近い検証}：$H = L = 1$~m，密度比 1000，閉じた容器，slip 壁．$\lambda/\Delta x = 50$ という粗さでも解析解（Lamb）と周波数がよく一致．ただし Fig.~8 では 8 周期ほどで位相ずれが見え始める＝\textbf{長時間計算では位相誤差が蓄積する}．大半のケースを $\sigma = 0$ で実施．
+    \item 曲率は格子を細かくしても 10~\% ずれたまま収束する（$\Delta P_\mathrm{exact} = 4$ に対し 3.6，§3.3.2）．
+    \item \textbf{時間刻みの安定条件}：$\Delta t \leq \max(10\tau_\mu,\ 0.1\tau_\rho)$，$\tau_\mu = \mu\Delta x/\sigma$，$\tau_\rho = \sqrt{\rho\Delta x^3/\sigma}$（式 84）．$C_1 = 0.01$, $C_2 = 10$ は約 80 本の計算から決めた interFoam 固有の値．これは\textbf{表面張力の陽的処理に対する数値安定条件}であって，表面張力が物理的に効くかとは無関係．$\sigma \neq 0$ なら We が大きくても適用される．ただし著者は「移動界面では spurious current の生成は二次的なので保守的な見積もり」と留保．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：検証は理想化ベンチマークが中心．\textbf{乱流との相互作用は扱わない}．OpenFOAM 1.5 ベース．本研究のような\textbf{浅い自由表面流・充填過程}の検証例はない．打ち切り誤差の非収束は未解決のまま．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{Methods の interFoam 記述の出典}：アルゴリズム（MULES，界面圧縮，PISO，$C_\gamma = 1$）は本論文を引けばよい．使用バージョンを明記すること．
+    \item \textbf{質量保存 100~\% の裏づけ}：\texttt{cfd/campaign.md} の「質量 100~\%」は VOF の構造上の性質で本論文の $1.3\times10^{-7}$~\% と整合．ただしこれは\textbf{$\gamma$ 移流の質量保存}であって運動量の保存精度ではない．
+    \item \textbf{界面から遠い領域は風上差分}という事実は数値散逸の帰属を考える上で重要．basin 中央部の散逸は $\gamma$ 方程式ではなく\textbf{運動量方程式の対流項スキーム}に帰属すべき．もし \texttt{div(phi,U)} に \texttt{linearUpwind} 等の風上混合を使っているなら，Komen 2017 の Fig.~12（Van Leer が中心差分より顕著に悪化させ，$k$ を人工的に増やす）がそのまま当てはまる．第一に確認すべき設定．
+    \item \textbf{時間刻みの再確認}：本研究の $\Delta x = 5$~mm で式 (84) を概算すると $\Delta t \leq$ 約 4.2~ms．CFL $=0.5$ 基準の約 21~ms より 5 倍厳しい．\texttt{adjustTimeStep} を CFL だけで回しているなら要確認（概算，要検算）．
+    \item \textbf{$\sigma = 0$ という選択肢}：$\mathrm{Bo} = \rho g h^2/\sigma \approx 410$ で表面張力は物理的に無視できる．$\sigma = 0$ にすれば (i) 上記の時間刻み制約が消え，(ii) spurious current が原理的に消え，(iii) 曲率の 10~\% 誤差が入らず，(iv) Schranner の運動エネルギー収支に表面張力の仕事項を足す必要がなくなる．本論文の定在重力波検証自体が $\sigma = 0$ で行われており validated な構成．
+    \item \textbf{細分化の効果は一方向でない}：§3.1.4（打ち切り誤差 $\sim 1/\Delta x$）と §3.3.3（spurious current が悪化）は細分化で悪化する側，Komen の数値散逸は細分化で改善する側．P09/P10 で「細かくしたら変わった」を単純に「収束した」と読めない．Limitations に書くべき論点．
+    \item \textbf{Schranner 適用時の障害}：interFoam は修正圧力 $p_d = p - \rho\mathbf{g}\cdot\mathbf{x}$（式 28）で離散化するため，Schranner の圧力仕事項をそのまま取り出せない．加えて (i) 密度が $\gamma$ で変わる（式 31），(ii) 重力の仕事項 $\int \rho\mathbf{g}\cdot\mathbf{U}\,dV$ の追加が要る．表面張力項は $\sigma = 0$ なら不要．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: art.\ 014016，全 36~p 通読）
+
+\noindent\litref{Pope (2004)}\quad LES の概念的基礎を問い直す古典（Open Access，全 24~p 通読）．
+\begin{itemize}
+  \item \textbf{なぜ読むか}：「底面摩擦／鉛直解像度」が \texttt{cfd/campaign.md} で\textbf{唯一まだ触っていない物理軸}とされている．5~mm 鉛直セルで水深 30--100~mm ＝ 6--20 セルが十分かを判断する基準が要る．加えて Komen/Schranner が「数値誤差をどう測るか」なのに対し，本論文は\textbf{なぜ測るのか，測った後どう論じるか}を与える．
+  \item \textbf{問い}：LES の概念的基礎に関する 10 の問い．とくに (i) LES は物理モデルか数値手続きか，(ii) LES をどう「完全」にできるか，(iii) 統計量はフィルタ幅 $\Delta$ にどう依存するか，(iv) LES モデルをどう評価すべきか．問題提起が目的で「答えは決定的でも網羅的でもない」と明言．
+  \item \textbf{主要知見}：
+  \begin{itemize}
+    \item \textbf{LES の 3 分類}：pure physical LES（陽なモデル＋数値誤差が無視できる）／physical LES（数値誤差あり）／numerical LES（$W$ の記述と発展が数値手法と本質的に結びつく．MILES 等）．numerical LES では \textbf{$\Delta = h$}（格子幅）と定義する．
+    \item \textbf{「no model」という呼び方は不適切}．陽なモデルがなくても計算場はメッシュと数値手法の両方に依存する．MILES は「不適切な空間解像度の領域で安定に応答するよう数値手法を特別に構成」している．
+    \item \textbf{最適な計算は非無視な数値誤差を含む}：§4「$\Delta/h$ の最適値は非無視な数値誤差に対応する可能性が高い」，§7「pure physical LES が有利とは考えにくい」，結論「最適なモデルが非無視な数値誤差を含む可能性は極めて高い」．理由は §9 の費用対効果：精度だけでなく\textbf{許容精度を達成する計算コスト}で比較すべきだから．
+    \item \textbf{$M$ による解像度基準（式 1, 2）}：$M(x,t) = k_r/(K + k_r)$．$k_r$ は残差運動の TKE，$K$ は解像運動のそれ．$M = 0$ が DNS，$M = 1$ が RANS．$\epsilon_M = 0.2$ が「運動エネルギーの 80~\% を解像」に対応し，$M$ が $\epsilon_M$ を超える領域は細分，大きく下回る領域は粗くする（adaptive LES）．ただし\textbf{$k_r$ の推定法が要る}と著者も認める．
+    \item \textbf{$\Delta$ 依存性の評価は LES 手法の必須要素}：「$\Delta(x)$ への依存を評価することが LES の一般的な作法になっていないのは遺憾」．\textbf{単一の $\Delta$ での比較は極めて誤解を招きうる}（Fig.~5 で 2 モデルの曲線が $\Delta^*$ で交差し，そこだけ見ると結論が逆になる）．
+    \item \textbf{収束先は真値とは限らない}：$\Delta$ が慣性小領域にあるとき，収束先は真値 $Q$ ではなく\textbf{中間漸近 $Q_I^m$}（§7 (iii)(a)，Fig.~2）．ただし §7 (iv)：統計量 $Q$ とそれに影響する過程が\textbf{もっぱらエネルギー保有領域に属するなら単一漸近（$Q_I^m = Q$）}となり $Q^m$ は真値に収束する（Fig.~4）．さらに §7 (i)：中程度の Re では中間漸近が識別できないかもしれない，という留保つき．
+    \item \textbf{$W$ と $U$ の関係は統計的でしかない}：解像速度場 $W$ はフィルタ済み $\bar{U}$ と等しくなり得ない（$\bar{U}$ はランダム場で将来発展が現在の状態で決まらない）．→a priori テストは疑わしい．
+    \item \textbf{壁近傍は LES の弱点}：「粘性壁近傍領域には大きな渦は存在しない」（Bradshaw）．高 Re では壁近傍運動は解像できずモデル化が必須．LES が最も成功するのは\textbf{高 Re の自由せん断流}で，律速過程が解像された大スケールにある場合．
+    \item 動的モデルの成功理由を「スケール相似性」ではなく\textbf{予測が $\Delta$ に依存しないようにする原理}から導き直し，標準的な $c_s$ の式（式 30）が本質的にそのまま得られることを示す（§10）．
+  \end{itemize}
+  \item \textbf{限界・適用範囲}：概念的な問題提起が目的で具体的な手順・数値は最小限．図はすべて概念スケッチで定量的な曲線ではない．例は均質乱流・チャネル流・自由せん断流など古典的な流れ．\textbf{VOF・自由表面・浅水流は扱わない}．高 Re・慣性小領域の存在を前提とする議論が中心．
+  \item \textbf{本研究との接点}：
+  \begin{itemize}
+    \item \textbf{Methods の書き方}：laminar 設定は Pope の枠組みでは「モデルなし」ではなく\textbf{numerical LES}．「陽な SGS モデルを用いず，数値スキームの散逸が残差運動の効果を担う」と書くのが正確で，Komen の「数値散逸が SGS 散逸より 2.4--3.5 倍大きい」という測定結果とも整合する．
+    \item \textbf{Limitations の枠組み}：「最適な計算は非無視な数値誤差を含む」は，数値誤差の存在自体が失格の証拠ではないという論拠になる．問題は誤差があることではなく\textbf{その大きさを特徴づけていないこと}．Schranner で $\nu_\mathrm{num}$ を測ることの正当化に直結する．
+    \item \textbf{本研究の metrics は有利な側}：$E$, $\phi_\mathrm{lv}$, $I_\mathrm{asym}$, $I_\mathrm{circ}$ はいずれも basin スケールのエネルギー保有運動から決まる量で，§7 (iv) の「単一漸近＝真値に収束する」場合にあたる．燃焼や高 Re 壁流のように律速過程が解像スケール以下にある状況ではない．CFD の妥当性の論拠．
+    \item \textbf{ただし中間漸近の理論はそのまま持ち込めない}：本研究は $\mathrm{Re}_h$ が $10^3$ オーダーで慣性小領域が明瞭でなく，準 2 次元で逆カスケードを持つため Kolmogorov 的でない．Figs.~2--5 の漸近の絵は引かず，\textbf{$\Delta$ 依存性を特徴づけよという方法論的主張（§7, §8）に限って引く}のが安全．
+    \item \textbf{P09/P10 の位置づけ}：メッシュを振ること自体が Pope の求める作法．ただし「単一 $\Delta$ での比較は誤解を招く」（Fig.~5 の交差）ので，振った範囲の広さが結論の強さを決める．
+    \item \textbf{壁近傍の論点は理由が違う}：Pope の議論は高 Re 乱流境界層のストリーク解像が対象で，本研究の底面境界層（$\mathrm{Re}_h \approx 10^3$ で遷移域かそれ以下）にはそのまま移せない．ただし解像度の懸念は正当：6--20 セルでは底面近傍の速度勾配＝$c_f$ が実質 1--2 セルで決まる．Chen \& Jirka の $S$ を通じて分岐の位置を左右するので要確認だが，引用は Pope ではなく境界層解像の議論として立てるべき．
+    \item \textbf{$M$ を laminar 設定で見積もる代替案}：$k_r$ の推定には本来 SGS モデルが要るが，複数の $\Delta$ で走らせて\textbf{解像運動エネルギー $K$ の変化}を見れば，$\Delta$ と $\Delta/2$ の間のスケールが持つエネルギーを近似できる．$K$ がまだ増え続けていれば解像不足．SGS モデルに依存しない実際的な代替．
+  \end{itemize}
+\end{itemize}
+\noindent（確認: art.\ 35，全 24~p 通読）
+
+\subsection*{論文横断整理}
+
+\subsection*{原稿転記メモ}
+
+% ================================================================
 \section{入手メモ（未入手・保留中の文献）}
 % ================================================================
 
@@ -1222,6 +1390,12 @@ M\"uller の室内実験も現地観測も，「流出時は取水口の近く�
     \item 状況：未入手（書籍）．2026-07-26 時点．
     \item 想定セクション：§1（取水口渦・限界潜没の標準リファレンス）．
     \item 入手の代替：\textbf{M\"oller et al.\ (2015) で相当部分を代替済み}（同論文が Knauss の限界潜没則を Fig.~8 で図示・比較しており，二次情報として参照できる）．ただし Knauss の原典の設計基準そのものを引く必要が生じた場合は要入手．
+  \end{itemize}
+  \item \textbf{Celik, Cehreli \& Yavuz (2005)} ``Index of resolution quality for large eddy simulations'', \textit{J. Fluids Eng.} 127(5), 949--958．
+  \begin{itemize}
+    \item 状況：未入手．2026-07-27 時点．
+    \item 想定セクション：§9（LES 解像度の妥当性基準）．
+    \item 入手の代替：\textbf{Pope (2004) で代替可能}．Pope の $M = k_r/(K+k_r)$（$\epsilon_M = 0.2$ で運動エネルギーの 80~\% を解像）が同じ役割を果たす．Celik の LES\_IQ は Pope の $M$ を実装しやすくした指数で，本質的な内容は重複する．本研究では \textbf{laminar 設定のため $k_r$ を直接出せない}という別の問題があり，どちらの指数を使うにせよ同じ困難に直面する．
   \end{itemize}
   \item \textbf{Jain, Ranga Raju \& Garde (1978)} ``Vortex formation at vertical pipe intakes'', \textit{J. Hydraul. Div.} ASCE 104(HY10), 1429--1445．
   \begin{itemize}
