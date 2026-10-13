@@ -27,6 +27,11 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   Makes a quick-look figure for one run from `frame_metrics.mat`.
   This is for exploratory inspection, not for final paper figures.
 
+- `s38_compute_reattachment_divergence.m`
+  Secondary, inflow-only metrics as time series against depth: reattachment length R(t)
+  along the side wall and the sign of the surface divergence relative to the rising water
+  level. Needs `s30` and `s31` first; writes `secondary_metrics.csv/mat`.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.

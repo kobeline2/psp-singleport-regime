@@ -36,6 +36,20 @@ M.smooth_sigma_circ = 0;
 % Fix after pilot analysis and apply consistently across all runs.
 M.smooth_sigma_div = 1.5;
 
+% Secondary metrics added 2026-10: reattachment length R(t) and the sign of
+% the surface divergence relative to the rising water level. All are
+% provisional until the pilot analysis; fix them and keep them for all runs.
+% Moving-average window [s] applied to the near-wall velocity (R) and to
+% the divergence-sign scalars (_win columns).
+M.secondary_avg_window_s = 30;
+% |u| below this [m/s] carries no sign in the reattachment search
+% (~2x the PIV noise rms sqrt(C.metrics.E_noise_floor_m2_s2)).
+M.reattach_u_eps_m_s = 1e-3;
+% Sign-resolution threshold of D' = D - D_ref [1/s]; |D'| below it is
+% treated as undetermined. ~3x the propagated PIV noise of D (see
+% compute_divergence_sign); replace by a quiescent-frame measurement.
+M.divsign_D_noise_1_s = 5e-3;
+
 % Per-run output filenames written under local/derived/metrics/<run_id>/
 M.frame_metrics_csv_name = 'frame_metrics.csv';
 M.frame_metrics_mat_name = 'frame_metrics.mat';
