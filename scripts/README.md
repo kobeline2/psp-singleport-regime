@@ -31,6 +31,11 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.
 
+- `checks/qdip_jet_check.py`
+  Verification-only Python tool, not part of the pipeline (needs numpy, h5py, matplotlib).
+  Tests whether the inflow discharge dip in the water-level record (h ~ 44-50 mm) is a real
+  drop in port discharge, using the PIV jet speed. Procedure and criteria: `doc/qdip_jet_check.md`.
+
 ## What Students Should Usually Run
 
 At the current project stage, most students should start with:
