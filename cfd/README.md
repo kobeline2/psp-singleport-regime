@@ -3,13 +3,21 @@
 実験の runs.csv と同じ発想で, CFD ケースを台帳駆動で管理する.
 ケース本体 (重いデータ) は koshiba-ws に置き, ここには台帳と計画だけを置く.
 
+**引き継いで自分で回す人は `HANDOFF.md` から読むこと** (場所・手順・ルール・ハマりどころ).
+
 ## ファイル
 
-- `cases.csv` — ケース台帳. 1 ケース 1 行. これが正本
-- `campaign.md` — シリーズ (目的別のケース群) の計画と判定基準. Excel の「シート」に相当
-- `template/` — クリーンな基準ケースの正本 (dict 類のみ, 84 KB).
-  `constant/polyMesh` (147 MB) は git に入れない. 実行環境で補う (下記)
-- `~/Downloads/Inflow_min` (Mac) は polyMesh 込みのローカルコピー. 設定の更新は repo 側を正とする
+- `HANDOFF.md` — 引き継ぎの入口 (2026-10, shonai さん向けに作成)
+- `cases.csv` — 小柴のケース台帳 (2026-07 キャンペーン). 1 ケース 1 行. これが正本
+- `campaign.md` — キャンペーンの軸別の総括 (結論・全ケースの表・指標の読み方・棄却と訂正)
+- `campaign_log.md` — 時系列の生記録 (撤回された判断も含む)
+- `methods_audit.md` — 文献 (数値散逸・時間刻み) に照らした設定の監査
+- `template/` — 基準ケース B03 と同一の設定の原本 (dict 類とメッシュ定義のみ.
+  メッシュ本体 `constant/polyMesh` は git に入れず, 実行時に blockMesh で作る)
+- `tools/` — ケースを作る・回す・見る道具 (`new_case.sh`, `run_case.sh`, `case_status.sh`,
+  `surface_movie.py`). WS で動く. `surface_movie.py` は Python で, MATLAB 不要
+- `recipes/` — 摂動・RANS ケースの組み方 (テンプレートに上書きするファイル一式)
+- `shonai/` — shonai さんの台帳とメモ (ブランチ `shonai-cfd` 上にある)
 
 ## WS (koshiba-ws) のセットアップ
 
@@ -17,16 +25,14 @@
 # 1. repo をクローン (共同利用者は GitHub の collaborator 登録が必要)
 git clone https://github.com/kobeline2/psp-singleport-regime.git
 
-# 2. 実行ツリーは repo の外に作る (結果データを git に近づけない)
-mkdir -p ~/OpenFOAM/$USER/run/psp && cd ~/OpenFOAM/$USER/run/psp
-cp -r <repo>/cfd/template template
-
-# 3. polyMesh を補う: 既存 Inflow ケースからコピー (または gmsh で再生成)
-cp -r <既存Inflow>/constant/polyMesh template/constant/
-
-# 4. 以後はテンプレート複製で運用
-cp -r template A_solver/A01_gamg
+# 2. ケースは repo の外に作る (結果データを git に近づけない). 道具が自動でやる
+bash <repo>/cfd/tools/new_case.sh S01_example          # ~/OpenFOAM/yuna-v2412/run/psp_shonai/ に作る
+bash <repo>/cfd/tools/run_case.sh <ケースのパス>       # メッシュ作成から表面サンプリングまで
 ```
+
+メッシュは各ケースで `blockMesh` から作る (数秒). 古い手順 (既存 Inflow ケースから
+polyMesh をコピー, gmsh の `tank.geo`) は三角柱 + 全断面インレットになり,
+流入が滝になって時間刻みが潰れるので使わない (B04 の教訓).
 
 ## 3 台同期ルール (WS を含む)
 
@@ -51,7 +57,13 @@ cp -r template A_solver/A01_gamg
    restart 時刻の場の BC を編集する場合は全プロセッサ分を python で置換したか
 8. ランチャーは必ず `nohup` (または tmux) で切り離す — VPN や ssh が切れても計算は死なない
 
-## CFD 結果を実験側パイプライン (s30 以降) に通す
+## CFD 結果を見る / 実験と比べる
+
+**手早く見る (WS 上, MATLAB 不要)**: `python3 cfd/tools/surface_movie.py <ケース>` で
+動画・平均場の図・判定指標 (campaign.md §2 の表と同じ定義. B03/P02/P09/R0006 で全桁一致を確認済み)
+が出る. 実験側の参照 (R0006/R0008) も同じ道具で描ける (`--frame-metrics` を渡す).
+
+**実験側パイプライン (s30 以降) に通す (MATLAB)**:
 
 1. OpenFOAM 側: `mpirun -np 16 postProcess -parallel -func surfSample -time '...'`
    (定義は `template/system/surfSample`. 実行中サンプリングなら controlDict の functions に追加)
@@ -76,7 +88,7 @@ cp -r template A_solver/A01_gamg
 | date | 実行日 YYYYMMDD |
 | machine | koshiba-ws など |
 | parent | 派生元 case_id (系譜. ブラッシュアップの鎖がこれで追える) |
-| mesh | tet_coarse / prism_5mm / prism_9mm / hex_5mm |
+| mesh | hex_5mm_h013 (基準 B01) / hex_fine_h013 (B07) / hex_z2.5mm_h013 (B08) / prism_* (旧) / tet_coarse (旧) |
 | cells | セル数 |
 | np | MPI ランク数 |
 | delta | parent から変えた点 (1 フレーズ) |

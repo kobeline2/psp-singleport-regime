@@ -3,8 +3,20 @@
 # 実行手順そのもの。ケースのルートで ./Allrun と叩く。
 # 各コマンドの出力は log.<コマンド名> に残る。
 #------------------------------------------------------------------------------
+#   通常は cfd/tools/run_case.sh を使うこと (切り離し実行・安全装置・表面サンプリング込み).
+#   下の手順 1 は既存の結果を消すので, 回し終えたケースや参照ケースでは実行しない.
+#------------------------------------------------------------------------------
 cd "$(dirname "$0")" || exit 1
+case "$(pwd)" in */psp_tests/*) echo "psp_tests は参照ケース. ここでは実行しない"; exit 1 ;; esac
+if ls -d processor* >/dev/null 2>&1; then
+    echo "既に回した結果がある (processor*). 消さないよう中止. 新しいケースを作ること"; exit 1
+fi
 set -e
+
+# 0. メッシュ (system/blockMeshDict があり, まだメッシュが無いとき)
+if [ -f system/blockMeshDict ] && [ ! -d constant/polyMesh ]; then
+    blockMesh > log.blockMesh 2>&1
+fi
 
 # 並列数は decomposeParDict から読む(両者がずれると必ず失敗するため)
 NP=$(awk '/^numberOfSubdomains/ {gsub(/;/,""); print $2}' system/decomposeParDict)
