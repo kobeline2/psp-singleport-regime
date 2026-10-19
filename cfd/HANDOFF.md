@@ -76,6 +76,7 @@ python3 cfd/tools/surface_movie.py ~/OpenFOAM/yuna-v2412/run/psp_tests/B03_fullf
 python3 cfd/tools/surface_movie.py ~/OpenFOAM/yuna-v2412/run/psp_tests/P02_perturb_geom --label P02
 ```
 
+出力は `~/surface_movies/B03_surface/` (動画 `B03_surface.mp4`, 平均場の図, 指標) に入る.
 `B03_metrics.txt` が次の値になれば, 判定指標も小柴の表 (`campaign.md` §2) と同じ物差しで出ている:
 `E_inst 0.000864, mean-flow 0.000449, fluct 48.0 %, bias +0.076, dominant 50.3 %, largest 35.7 %, lock 0.67`
 
@@ -99,7 +100,7 @@ bash cfd/tools/new_case.sh S01_sigma0             # 1. ケースを作る (基�
 #                                                    3. cfd/shonai/cases.csv に行を足す
 bash cfd/tools/run_case.sh <ケース>               # 4. 切り離して実行 (VPN が切れても止まらない)
 bash cfd/tools/case_status.sh <ケース>            # 5. 1-2 分後に一度見て, モデル選択と質量を確認
-python3 cfd/tools/surface_movie.py <ケース>       # 6. 終わったら動画と判定指標
+python3 cfd/tools/surface_movie.py <ケース>       # 6. 終わったら動画と判定指標 (~/surface_movies/ に出る)
 ```
 
 時間の目安 (16 ランク, 1000 秒): 基準メッシュ 5-6 h / RANS 6.6 h / 鉛直細分 14 h / 水平細分 41 h.
@@ -123,7 +124,8 @@ python3 cfd/tools/surface_movie.py <ケース>       # 6. 終わったら動画�
 | ポート開口の形 | `system/pre_run.sh` + `createBafflesDict` | P04 → `cfd/recipes/` |
 | 計算時間・出力間隔 | `system/controlDict` の `endTime`, `writeInterval` | |
 
-`cfd/recipes/<名前>/` のファイルはケースに上書きコピーして使う. 中の `README.md` に手順がある.
+`cfd/recipes/<名前>/` のファイルはケースに上書きコピーして使う. 手順は `cfd/recipes/README.md`,
+各レシピの中身と結果は中の `RECIPE_<名前>.md`.
 
 ## 8. もう試したこと / まだ試していないこと
 

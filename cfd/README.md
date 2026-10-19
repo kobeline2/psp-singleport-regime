@@ -61,7 +61,8 @@ polyMesh をコピー, gmsh の `tank.geo`) は三角柱 + 全断面インレッ
 
 **手早く見る (WS 上, MATLAB 不要)**: `python3 cfd/tools/surface_movie.py <ケース>` で
 動画・平均場の図・判定指標 (campaign.md §2 の表と同じ定義. B03/P02/P09/R0006 で全桁一致を確認済み)
-が出る. 実験側の参照 (R0006/R0008) も同じ道具で描ける (`--frame-metrics` を渡す).
+が `~/surface_movies/<label>_surface/` に出る. 実験側の参照 (R0006/R0008) も同じ道具で描ける
+(`--frame-metrics` を渡す).
 
 **実験側パイプライン (s30 以降) に通す (MATLAB)**:
 

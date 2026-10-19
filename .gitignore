@@ -156,3 +156,9 @@ __pycache__/
 *.pyc
 .venv/
 *.dSYM/
+
+# ---------------------------------------
+# cfd/tools/surface_movie.py の出力 (動画・図). 既定は ~/surface_movies/ だが,
+# --out-dir で repo の中に作っても commit されないように
+# ---------------------------------------
+*_surface/
