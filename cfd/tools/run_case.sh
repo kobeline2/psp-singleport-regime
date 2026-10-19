@@ -28,7 +28,7 @@ done
 case "$CASE" in
   */psp_tests/*) echo "psp_tests は参照ケース (読み取り専用). new_case.sh で自分のケースを作ること"; exit 1 ;;
 esac
-[ -w "$CASE" ] || { echo "書き込めない: $CASE"; exit 1; }
+[ -w "$CASE" ] || { echo "書き込めない: $CASE  (psp_tests からコピーしたなら chmod -R u+w で書けるようにする)"; exit 1; }
 { [ -d "$CASE/system" ] && [ -d "$CASE/0.orig" ]; } \
   || { echo "ケースの形をしていない (system/ と 0.orig/ が要る): $CASE"; exit 1; }
 if ls -d "$CASE"/processor* >/dev/null 2>&1; then

@@ -32,8 +32,9 @@ CFD の流れは, 動画で見ると**瞬間的には片側に大きく偏る**�
 | もの | 場所 |
 |---|---|
 | 計算機 | koshiba-ws (10.244.3.122), アカウント `shonai`. 学外からは VPN |
-| **参照ケース (読み取り専用)** | `~/OpenFOAM/yuna-v2412/run/psp_tests/` — 小柴の 29 ケース, 322 GB. **中身を変えない.** 使いたいファイルはコピーして使う |
+| **参照ケース (読み取り専用)** | `~/OpenFOAM/yuna-v2412/run/psp_tests/` — 小柴の 29 ケース, 322 GB. **中身を変えない.** 使いたいファイルはコピーして使う (コピーも読み取り専用になるので `chmod -R u+w <コピー先>`) |
 | 自分の作業場 | `~/OpenFOAM/yuna-v2412/run/psp_shonai/` (`new_case.sh` が自動で作る) |
+| 以前のケース | 同じ `run/` の `Inflow`, `Inflow_260720`, `tank`, `tank1` (6-7 月. 台帳の X 系列). **`Inflow` は消さない**: 参照ケース A01-A10 がそのメッシュをリンクで使っている |
 | repo | WS 上の `~/psp-singleport-regime` (ブランチ `shonai-cfd`) |
 | 自分の記録 | repo の `cfd/shonai/cases.csv` (台帳) と `cfd/shonai/notes.md` (メモ) |
 
@@ -41,13 +42,15 @@ CFD の流れは, 動画で見ると**瞬間的には片側に大きく偏る**�
 その中でうっかり叩くと, 冒頭の `rm -rf processor* postProcessing` で 17 GB の結果が消えるため.
 
 このアカウントには小柴の Mac の ssh 鍵が登録されていて, 小柴 (と小柴の Claude) が
-レビューのために中を見ることがある.
+レビューのために中を見ることがある. §5 で作る GitHub 用の ssh 鍵もこのアカウントの中に置かれる.
 
 ## 4. Git — Claude Code に任せてよい
 
 - 作業を始めるとき: Claude に「**pull して**」
 - 区切りがついたら: 「**push して**」(作業中のファイルも含めて commit して push する)
 - 作業するブランチは **`shonai-cfd` だけ**. `main` と `cfd-campaign` には commit しない
+- 小柴が道具やテンプレートを直したら「**cfd-campaign の更新を取り込んで**」
+  (`git fetch` → `git merge origin/cfd-campaign`. 自分の記録 `cfd/shonai/` とはぶつからない)
 - 計算結果 (メッシュ, processor*, 時刻ディレクトリ, 動画) は git に入れない.
   repo に入れるのは台帳・メモ・設定ファイルの変更だけ
 - 小柴のファイル (`cfd/cases.csv`, `cfd/campaign*.md`, `cfd/methods_audit.md`) は参照用. 編集しない
@@ -57,12 +60,24 @@ CFD の流れは, 動画で見ると**瞬間的には片側に大きく偏る**�
 **初回だけの準備** (Claude Code に頼めばやってくれる):
 
 ```sh
-gh auth login                       # GitHub にログイン (ブラウザで承認). gh が無ければ HTTPS + トークン
+# 1. repo を持ってくる (公開 repo なので clone に認証は要らない)
 git clone https://github.com/kobeline2/psp-singleport-regime.git ~/psp-singleport-regime
 cd ~/psp-singleport-regime && git checkout shonai-cfd
-python3 -c "import numpy, scipy, matplotlib"     # 動画ツールの部品. 無ければ次の行
-pip install --user numpy scipy matplotlib imageio-ffmpeg
+git config user.name "<自分の名前>" && git config user.email "<GitHub のメール>"
+
+# 2. push できるようにする. WS に gh は無いので ssh 鍵を使う
+ssh-keygen -t ed25519 -C "shonai@koshiba-ws"   # 質問は Enter でよい
+cat ~/.ssh/id_ed25519.pub                     # 表示された 1 行を, 自分の GitHub の
+#                                               Settings → SSH and GPG keys → New SSH key に貼る (自分でやる)
+ssh -T git@github.com                         # "Hi <自分の GitHub 名>!" と出れば OK
+git remote set-url origin git@github.com:kobeline2/psp-singleport-regime.git
+
+# 3. 動画ツールの部品
+python3 -c "import numpy, scipy, matplotlib"   # WS には入っている
+ffmpeg -version | head -1                     # 無いと動画は mp4 でなく GIF になる (小柴に入れてもらう)
 ```
+
+WS には pip も sudo 権限も無い (Ubuntu 24.04) ので, 足りない部品は自分では入れられない. 小柴に頼む.
 
 参照用の動画と平均場の図 (実験 R0006・R0008, CFD B03・P02) は
 `~/OpenFOAM/yuna-v2412/run/psp_tests/_reference/` に置いてある. **まず実験の 2 本を見て,
@@ -89,8 +104,10 @@ bash cfd/tools/run_case.sh ~/OpenFOAM/yuna-v2412/run/psp_shonai/S00_check
 bash cfd/tools/case_status.sh ~/OpenFOAM/yuna-v2412/run/psp_shonai/S00_check
 ```
 
-20 分ほどで終わる. ステップ数と水量が B03 の `log.interFoam` / `waterVolume` の t = 30 s と
-ほぼ一致すれば環境は正しい. 確認したら `S00_check` は消してよい (台帳には残す).
+10 分ほどで終わる. B03 は t = 30 s までに 1662 ステップ (`log.interFoam` の `Time = ` の行数).
+ぴったりは一致しない: B03 のメッシュは座標を丸めた ascii 形式, 新しいケースは binary 形式で書かれるので,
+軌道がわずかにずれる (2026-10 の確認では t = 10 s までが 647 対 646 ステップ). ステップ数の差が 1-2 % 以内で,
+`case_status.sh` の質量保存が 99.9 % 以上なら環境は正しい. 確認したら `S00_check` は消してよい (台帳には残す).
 
 ## 6. 1 本回す手順
 

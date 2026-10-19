@@ -12,7 +12,8 @@ psp-singleport-regime プロジェクトの CFD (OpenFOAM interFoam) を自分�
 これまでの計算は指導教員 (小柴) が 2026 年 7 月に回したもので, それを引き継いでいる.
 
 この PC に repo (~/psp-singleport-regime) がまだ無ければ, まず clone を手伝ってほしい
-(GitHub のログインは gh auth login で私がブラウザから行う. clone したら shonai-cfd ブランチに切り替える).
+(公開 repo なので https で認証なしに clone できる. clone したら shonai-cfd ブランチに切り替え,
+cfd/HANDOFF.md §5 の「初回だけの準備」で push 用の ssh 鍵も用意する. 鍵の GitHub への登録は私がやる).
 repo があれば git pull して, ブランチが shonai-cfd であることを確認してから, 次を読んでほしい (この順で):
 1. cfd/HANDOFF.md        ← 引き継ぎの入口. 場所・手順・ルール・ハマりどころ. 全部読む
 2. cfd/campaign.md の §0, §2, §3  ← これまでの結論, 全ケースの表, 指標の読み方
@@ -51,4 +52,4 @@ WS 上でなければ ssh koshiba-ws 経由でコマンドを実行してほし�
   (計算・repo・動画ツールが同じ場所にある). ノート PC で起動する場合は, WS へ ssh して操作する.
 - 小柴の作業ブランチは `cfd-campaign`. shonai さんの `shonai-cfd` はそこから分岐している.
   小柴が道具やテンプレートを直したときは, Claude に「cfd-campaign の更新を取り込んで」と頼む
-  (`git merge cfd-campaign`).
+  (`git fetch` してから `git merge origin/cfd-campaign`).

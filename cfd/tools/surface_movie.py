@@ -365,7 +365,7 @@ def write_movie(path, label_, data, window, fps, every, level, smooth_s, tmin=-n
     axb.legend(loc="lower right", fontsize=7, ncol=2, frameon=False)
 
     if not animation.FFMpegWriter.isAvailable():
-        try:                               # sudo なしで入る ffmpeg: pip install --user imageio-ffmpeg
+        try:                               # pip が使える環境なら sudo なしで入る: pip install --user imageio-ffmpeg
             import imageio_ffmpeg
             matplotlib.rcParams["animation.ffmpeg_path"] = imageio_ffmpeg.get_ffmpeg_exe()
         except ImportError:
@@ -375,8 +375,8 @@ def write_movie(path, label_, data, window, fps, every, level, smooth_s, tmin=-n
     else:
         path = os.path.splitext(path)[0] + ".gif"
         writer = animation.PillowWriter(fps=fps)
-        print("  ffmpeg が無いので GIF で書き出す (大きく遅い). "
-              "pip install --user imageio-ffmpeg で mp4 になる")
+        print("  ffmpeg が無いので GIF で書き出す (大きく遅い). mp4 にするには ffmpeg を入れる "
+              "(Ubuntu なら管理者が sudo apt install ffmpeg)")
 
     with writer.saving(fig, path, dpi=100):
         cbar = None
