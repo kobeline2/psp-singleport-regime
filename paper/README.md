@@ -190,6 +190,7 @@ semi-Lagrangian の方向バイアス由来である可能性, または 2D SWE 
 | **1 本目** | 実験の解析・執筆. CFD には触れない | `doc/fork_prompt_paper1.md` |
 | **2 本目 (主チャット)** | CFD ランの実行と `cfd/campaign.md` の維持 | — (現行チャット) |
 | **3 本目** | 共著. 2D/3D 比較 | `doc/fork_prompt_paper3.md` |
+| **CFD (shonai)** | 学生が自分で条件を変えて回す練習・探索. 偏向流の再現を動画で確かめる. ブランチ `shonai-cfd`, 台帳は `cfd/shonai/` | `doc/fork_prompt_cfd_shonai.md` |
 
 共有状態は常に repo. どのチャットも作業前に `git pull` する.
 同じファイルを編集しうる場合はコミットのタイミングをずらすこと.
