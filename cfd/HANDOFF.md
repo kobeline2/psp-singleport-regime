@@ -54,6 +54,20 @@ CFD の流れは, 動画で見ると**瞬間的には片側に大きく偏る**�
 
 ## 5. 最初の 1 時間 — 道具が自分の手で動くか確かめる
 
+**初回だけの準備** (Claude Code に頼めばやってくれる):
+
+```sh
+gh auth login                       # GitHub にログイン (ブラウザで承認). gh が無ければ HTTPS + トークン
+git clone https://github.com/kobeline2/psp-singleport-regime.git ~/psp-singleport-regime
+cd ~/psp-singleport-regime && git checkout shonai-cfd
+python3 -c "import numpy, scipy, matplotlib"     # 動画ツールの部品. 無ければ次の行
+pip install --user numpy scipy matplotlib imageio-ffmpeg
+```
+
+参照用の動画と平均場の図 (実験 R0006・R0008, CFD B03・P02) は
+`~/OpenFOAM/yuna-v2412/run/psp_tests/_reference/` に置いてある. **まず実験の 2 本を見て,
+目標の姿を目に焼き付けてから**, B03 (典型的な失敗) と比べるとよい.
+
 **(a) 動画ツール**: 参照ケース B03 (基準) と P02 (唯一単一渦になったケース) の動画を作る.
 
 ```sh

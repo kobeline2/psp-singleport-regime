@@ -11,7 +11,9 @@ psp-singleport-regime プロジェクトの CFD (OpenFOAM interFoam) を自分�
 を CFD で再現すること. いろいろ条件を変えて回し, 動画にして目で見て確かめたい.
 これまでの計算は指導教員 (小柴) が 2026 年 7 月に回したもので, それを引き継いでいる.
 
-最初に git pull して, ブランチが shonai-cfd であることを確認してから, 次を読んでほしい (この順で):
+この PC に repo (~/psp-singleport-regime) がまだ無ければ, まず clone を手伝ってほしい
+(GitHub のログインは gh auth login で私がブラウザから行う. clone したら shonai-cfd ブランチに切り替える).
+repo があれば git pull して, ブランチが shonai-cfd であることを確認してから, 次を読んでほしい (この順で):
 1. cfd/HANDOFF.md        ← 引き継ぎの入口. 場所・手順・ルール・ハマりどころ. 全部読む
 2. cfd/campaign.md の §0, §2, §3  ← これまでの結論, 全ケースの表, 指標の読み方
 3. cfd/shonai/cases.csv と cfd/shonai/notes.md  ← 自分の台帳とメモ (最初は空)
