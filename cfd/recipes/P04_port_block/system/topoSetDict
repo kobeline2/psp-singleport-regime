@@ -1,0 +1,10 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// ポート面 x = 0 (導水路と水槽の境) のうち, y = 1.045-1.055 (開口 y 0.945-1.055 の最上端 1 cm) の面を拾う.
+// 基準メッシュでは 1 列 x z 11 層 = 11 面. ポート面は内部面なので createPatch では壁にできず (P04 で失敗),
+// faceZone にして createBaffles で両面の壁にする.
+actions
+(
+    { name portTop;     type faceSet;     action new; source boxToFace;
+      box (-0.001 1.0449 -0.001) (0.001 1.0551 0.0551); }
+    { name portTopZone; type faceZoneSet; action new; source setToFaceZone; faceSet portTop; }
+);

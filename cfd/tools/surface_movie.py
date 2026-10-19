@@ -19,7 +19,8 @@ B03 / P02 / P09 / 実験 R0006・R0008 で §2 の数値を再現することを
     --tmin/--tmax    動画にする時間範囲 (省略時は全時刻)
     --no-movie       判定指標と平均場の図だけ作る (速い)
 
-出力 (--out-dir, 省略時はカレントの <label>_surface/):
+出力 (--out-dir, 省略時はカレントの <label>_surface/. カレントに書けないとき
+      (読み取り専用の psp_tests の中など) は ~/surface_movies/<label>_surface/):
   <label>_surface.mp4     渦度 (色) + 流速 (矢印) の動画. 下段に偏り指数の時系列
   <label>_meanfield.png   判定窓の平均場 (渦度と符号) と判定指標
   <label>_metrics.txt     判定指標 1 行 (campaign.md §2 と同じ列)
@@ -399,6 +400,15 @@ def write_movie(path, label_, data, window, fps, every, level, smooth_s, tmin=-n
 
 # ======================================================================================
 
+def default_out_dir(label_):
+    """カレントの <label>_surface/. カレントに書けない (psp_tests の中など) ときはホームの下."""
+    if os.access(os.getcwd(), os.W_OK):
+        return os.path.join(os.getcwd(), f"{label_}_surface")
+    fallback = os.path.join(os.path.expanduser("~"), "surface_movies", f"{label_}_surface")
+    print(f"  注意: カレント {os.getcwd()} に書けないので {fallback} に出力する")
+    return fallback
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input")
@@ -416,7 +426,7 @@ def main():
     args = ap.parse_args()
 
     label_ = args.label or os.path.basename(os.path.normpath(args.input)).replace(".mat", "")
-    out_dir = args.out_dir or os.path.join(os.getcwd(), f"{label_}_surface")
+    out_dir = args.out_dir or default_out_dir(label_)
     os.makedirs(out_dir, exist_ok=True)
 
     print(f"[{label_}] 読み込み: {args.input}")

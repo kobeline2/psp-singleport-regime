@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 乱流散逸率 epsilon [m2/s3]。
+//
+// 流入値の見積り:
+//   水力直径 D_h = 4A/P = 4 x 0.0022 / (2 x (0.11 + 0.02)) = 0.0339 m
+//   混合長 L = 0.07 D_h = 2.37e-3 m
+//   epsilon = Cmu^0.75 k^1.5 / L = 0.1643 x (1.94e-4)^1.5 / 2.37e-3 = 1.87e-4  ->  2e-4 を採用
+//
+// この k, epsilon の組で初期の渦粘性は
+//   nut = Cmu k^2 / epsilon = 0.09 x (2e-4)^2 / 2e-4 = 1.8e-5 m2/s
+// = 分子粘性 (1e-6) の 18 倍。laminar/WALE が供給できなかった拡散をここで無条件に与える。
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 2e-04;
+
+boundaryField
+{
+    inletOutlet
+    {
+        type            fixedValue;
+        value           uniform 2e-04;
+    }
+
+    atmosphere
+    {
+        type            inletOutlet;
+        inletValue      uniform 1e-06;
+        value           uniform 2e-04;
+    }
+
+    walls
+    {
+        // epsilon 側は低 Re/高 Re 共通の壁関数 (生成項と散逸を壁セルで上書きする)。
+        type            epsilonWallFunction;
+        value           uniform 2e-04;
+    }
+}
+
+// ************************************************************************* //

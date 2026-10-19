@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 渦粘性 nut [m2/s]。内部では k, epsilon から計算されるので初期値は目安。
+// 壁面だけは境界条件として与える必要がある。
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   uniform 1.8e-05;
+
+boundaryField
+{
+    inletOutlet
+    {
+        type            calculated;
+        value           uniform 1.8e-05;
+    }
+
+    atmosphere
+    {
+        type            calculated;
+        value           uniform 1.8e-05;
+    }
+
+    walls
+    {
+        // y+ ~ 2-10 のため低 Re 型。高 Re 型 (nutkWallFunction) は対数則を仮定するので不適。
+        type            nutLowReWallFunction;
+        value           uniform 0;
+    }
+}
+
+// ************************************************************************* //

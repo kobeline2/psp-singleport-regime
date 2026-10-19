@@ -1,0 +1,8 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// 流入面 inletOutlet (基準メッシュで 44 面 = y 11 列 x z 4 層) のうち, 面中心が y <= 1.0005 の面を拾う.
+// 基準メッシュでは y 中心 0.95-1.00 の 6 列 x 4 層 = 24 面. 残る y 1.01-1.05 の 5 列 (20 面) が流入になる.
+actions
+(
+    { name loFaces; type faceSet; action new;    source patchToFace; patches (inletOutlet); }
+    { name loFaces; type faceSet; action subset; source boxToFace;   box (-0.7 0.90 -0.01) (-0.55 1.0005 0.021); }
+);

@@ -9,6 +9,7 @@ cd "$CASE" || exit 1
 log() { echo "[$(date '+%F %T')] $*"; }
 fail() { log "失敗: $*"; touch FAILED; exit 1; }
 
+rm -f DONE FAILED                    # 前回の失敗の印が残っていると case_status.sh が紛らわしい
 NP=$(awk '/^numberOfSubdomains/ {gsub(/;/,""); print $2}' system/decomposeParDict)
 log "開始: $CASE  ($NP ランク)"
 

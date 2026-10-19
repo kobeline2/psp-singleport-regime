@@ -1,0 +1,23 @@
+FoamFile { version 2.0; format ascii; class dictionary; object createBafflesDict; }
+// faceZone portTopZone を厚さゼロの壁にする. 両面が別パッチ portTopWall_master / portTopWall_slave になる.
+// 境界条件は 0.orig/{U,p_rgh,alpha.water} の同名の項目 (下の patchFields はその時点で 0/ がある場合だけ使われる).
+internalFacesOnly true;
+baffles
+{
+    portTopWall
+    {
+        type        faceZone;
+        zoneName    portTopZone;
+        patchPairs
+        {
+            type            wall;
+            patchFields
+            {
+                U               { type noSlip; }
+                p_rgh           { type fixedFluxPressure; value uniform 0; }
+                alpha.water     { type zeroGradient; }
+                nut             { type calculated; value uniform 0; }
+            }
+        }
+    }
+}

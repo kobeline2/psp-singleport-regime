@@ -1,0 +1,54 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// 乱流運動エネルギー k [m2/s2]。
+//
+// 流入値の見積り (常時水没インレット: 0.11 m x 0.02 m = 0.0022 m2, Q = 5e-4 m3/s):
+//   U_in = 0.0005 / 0.0022 = 0.2273 m/s
+//   乱流強度 I = 5% (ポンプ送水管の出口として控えめ) とすると
+//   k = 1.5 (I U)^2 = 1.5 x (0.05 x 0.2273)^2 = 1.94e-4  ->  2e-4 を採用
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 2e-04;
+
+boundaryField
+{
+    inletOutlet
+    {
+        // 常時水没の流入面。流れは常に内向きなので fixedValue で十分。
+        type            fixedValue;
+        value           uniform 2e-04;
+    }
+
+    atmosphere
+    {
+        // 空気が入ってくる場合は小さい値を与える (水面上の乱流は本研究の対象外)。
+        type            inletOutlet;
+        inletValue      uniform 1e-06;
+        value           uniform 2e-04;
+    }
+
+    walls
+    {
+        // y+ が 2-10 程度なので低 Re 型の壁関数を使う (高 Re 型は y+ > 30 が前提)。
+        type            kLowReWallFunction;
+        value           uniform 2e-04;
+    }
+}
+
+// ************************************************************************* //

@@ -18,7 +18,7 @@ REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 RUN_ROOT="${PSP_RUN:-$HOME/OpenFOAM/yuna-v2412/run/psp_shonai}"
 
 NAME="${1:-}"
-[ -n "$NAME" ] || { sed -n '2,17p' "$0"; exit 1; }
+[ -n "$NAME" ] || { sed -n '2,14p' "$0"; exit 1; }
 shift
 MESH=base
 while [ $# -gt 0 ]; do
@@ -49,7 +49,7 @@ cat > "$DEST/NOTES.md" <<EOF
 # $NAME
 
 - 作成: $(date '+%F %T')
-- テンプレート: $(git -C "$REPO" rev-parse --short HEAD) (branch $(git -C "$REPO" branch --show-current))
+- テンプレート: $(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || echo unknown) (branch $(git -C "$REPO" branch --show-current 2>/dev/null || echo unknown))
 - メッシュ: $MESH ($MESH_DICT)
 - 変更点: (基準ケース B03 からの変更を 1 行で. 1 ケース 1 変更)
 EOF

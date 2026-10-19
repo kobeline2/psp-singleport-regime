@@ -1,0 +1,34 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// ESI 版 (openfoam.com) の interFoam が読む乱流辞書はこのファイル。
+// openfoam.org 版の constant/momentumTransport は ESI 版では読まれないので、
+// 乱流モデルを変えるときは必ずこのファイルを編集する。
+//
+// レシピ P06_rans: RAS の RNG k-epsilon. 壁は低 Re 型 (0.orig/k, epsilon, nut を参照).
+// 結果 (cfd/cases.csv の P06): 脈動は半減したが, 上下対称の二渦がむしろ安定になった.
+
+simulationType  RAS;
+
+RAS
+{
+    RASModel        RNGkEpsilon;
+    turbulence      on;
+    printCoeffs     on;
+}
+
+// ************************************************************************* //

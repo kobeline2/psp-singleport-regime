@@ -7,13 +7,14 @@
 
 ```sh
 bash cfd/tools/new_case.sh S03_p02_highflow          # テンプレートからケースを作る
-cp -r cfd/recipes/P02_upper_half_inlet/. <ケース>/   # レシピを上書きコピー (README.md もコピーされるが無害)
+cp -r cfd/recipes/P02_upper_half_inlet/. <ケース>/   # レシピを上書きコピー (RECIPE_*.md も入り, 使ったレシピの記録になる)
 #                                                       ここで自分の変更を 1 つ足す (例: flowRate)
 bash cfd/tools/run_case.sh <ケース>
 ```
 
 `system/pre_run.sh` があると, `run_case.sh` がメッシュ作成の直後 (初期水位の設定の前) に実行する.
 流入面やポートの面を切り分ける手術 (topoSet → createPatch / createBaffles) はここに書く.
+手術の結果 (選ばれた面の数) は `log.pre_run` に出るので, 各レシピの `RECIPE_*.md` の数字と照らすこと.
 
 レシピの `0.orig/` などは**ファイルごと上書き**する. テンプレート側をその後に変えた場合は,
 上書き後に `diff -r cfd/template/0.orig <ケース>/0.orig` で意図しない差が無いか見ること.

@@ -1,0 +1,8 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// 流入面の上 2 層 (基準メッシュのセル中心 z = 0.0125, 0.0175) だけを拾う. y は全幅なので左右対称.
+// 基準メッシュでは 11 列 x 2 層 = 22 面. 残る下 2 層 (z < 0.01) の 22 面が流入になり, 流速は 2 倍.
+actions
+(
+    { name upFaces; type faceSet; action new;    source patchToFace; patches (inletOutlet); }
+    { name upFaces; type faceSet; action subset; source boxToFace;   box (-0.7 0.90 0.0100) (-0.55 1.10 0.021); }
+);
