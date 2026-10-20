@@ -1,1 +1,2 @@
 case_id,series,status,date,machine,parent,mesh,cells,np,delta,purpose,sim_time_s,wall_h,verdict
+S00_check,S,done,2026-10-20,koshiba-ws,B03,hex_5mm_h013,720756,16,endTime 1000 -> 30 (試運転),t=30 s までのステップ数が B03 の 1662 と 1-2% 以内かつ質量保存 99.9% 以上なら環境OK,30,0.18,環境OK: 1662 ステップ (B03 と一致) / 質量保存 100.00% / laminar 選択を確認
