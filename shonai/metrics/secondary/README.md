@@ -22,6 +22,10 @@ driver to your local clone. Run `s30` and `s31` of that project first.
 
 ## Status
 
-Not yet run in MATLAB. Provisional values (averaging window, `u_eps`,
-`D_noise`) must be checked on pilot runs, and the assumed coordinates
-(x = 0 at the port wall, `piv.u` = +x) verified on the first run.
+Run on all inflow runs R0001-R0012 (2026-10-27); results and caveats in
+`NOTES_inflow_R0001-R0012.md`. The coordinate assumptions (x = 0 at the port
+wall, `piv.u` = +x, `piv.v` along +y) were checked on R0009. Provisional values
+(averaging window, `u_eps`, `D_noise`) are still to be fixed.
+`compute_reattachment_length` searches x <= `x_max_m` (default 2.4 m) to skip
+the turning flow at the far wall. Figures: `scripts/s39_plot_reattachment_vs_depth.m`,
+`scripts/s41_plot_divergence_sign_map.m`.

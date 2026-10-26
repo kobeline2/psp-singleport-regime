@@ -27,6 +27,16 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   Makes a quick-look figure for one run from `frame_metrics.mat`.
   This is for exploratory inspection, not for final paper figures.
 
+- `s39_plot_reattachment_vs_depth.m`
+  Reattachment length R/dB against water depth for several inflow runs, one
+  panel per flow level (runs without reattachment left out). Needs
+  `secondary_metrics.mat` from `shonai/metrics/secondary/s38_compute_reattachment_divergence.m`.
+
+- `s41_plot_divergence_sign_map.m`
+  Up/down-welling map of one inflow run: time-mean D' = D - D_ref on the basin
+  plan view, one panel per depth band. Needs `pivlab_single.mat` and the same
+  `secondary_metrics.mat`.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.

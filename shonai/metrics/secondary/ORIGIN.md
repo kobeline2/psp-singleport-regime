@@ -32,7 +32,12 @@ pspRoot = fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 このファイルは `<repo>/shonai/metrics/secondary/` にあるので、`fileparts` を 4 回適用するとリポジトリルートになる。
 フォルダを移動した場合は `fileparts` の段数を合わせること。
 
+## 移行後の変更 (2026-10-27)
+
+- `compute_reattachment_length.m`: 探索範囲の上限 `x_max_m` (既定 2.4 m) を追加。遠端壁での折り返しを再付着と誤検出するため。
+- `s38_compute_reattachment_divergence.m`: `compute_divergence_sign` に `'edge_margin_cells', 4` を追加。
+
 ## 備考
 
 - 移行元の `master` ブランチのファイルは削除・変更していない。
-- MATLAB での実行は未確認 (移行元 README の Status と同じ)。
+- MATLAB での実行は R0001–R0012 で確認済み (結果は `NOTES_inflow_R0001-R0012.md`)。
