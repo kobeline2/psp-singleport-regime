@@ -34,6 +34,15 @@ function T = compute_branch_statistics(cfg, varargin)
 %   branch_sign       +1 / -1 (sign of I_circ_mean), NaN if undefined
 %   Q_transit_Lps     transit-time discharge over the same bands,
 %                     Q = dV_band / T_band
+%   Q_run_mean_Lps    run-average discharge over the whole record,
+%                     Q = A_plan * |dh| / T
+%
+% Q_run_mean_Lps is the figure the manuscript quotes. The discharge turned out
+% to be steady within each run, so a single run average is both the simplest
+% and the most robust estimate: unlike the per-band numbers it does not depend
+% on where the band edges fall, which matters while the depth axis itself is
+% under review (doc/qdip_jet_check.md). It ignores the guide-channel plan area
+% below h = a, worth about 1%.
 %
 % Note on Q_transit_Lps: with the default deep bands the swept volume is
 % simply A_plan * dh, because both bands lie above the guide-channel ceiling
@@ -77,6 +86,7 @@ function T = compute_branch_statistics(cfg, varargin)
     date = strings(0,1); repetition = []; n_frames = [];
     I_circ_mean = []; I_circ_std = []; R_lock = [];
     sign_persistence = []; branch_sign = []; Q_transit_Lps = [];
+    Q_run_mean_Lps = [];
 
     for k = 1:height(R)
         rid = string(R.run_id(k));
@@ -87,6 +97,12 @@ function T = compute_branch_statistics(cfg, varargin)
                 'Skipping %s: frame_metrics lacks I_circ / band_id / time_s.', rid);
             continue;
         end
+
+        % Run average over the whole record, before restricting to bands.
+        okAll = isfinite(FM.depth_m) & isfinite(FM.time_s);
+        dAll = FM.depth_m(okAll); tAll = FM.time_s(okAll);
+        T_run = max(tAll) - min(tAll);
+        Q_run = 1000 * C.basin.Aplan_m2 * abs(dAll(end) - dAll(1)) / max(T_run, eps);
 
         inBand = ismember(string(FM.band_id), bandIds);
         ic = FM.I_circ(inBand);
@@ -115,11 +131,12 @@ function T = compute_branch_statistics(cfg, varargin)
         sign_persistence(end+1,1) = mean(sign(ic) == sg);             %#ok<AGROW>
         branch_sign(end+1,1) = sg;                                    %#ok<AGROW>
         Q_transit_Lps(end+1,1) = 1000 * dV_m3 / max(T_s, eps);        %#ok<AGROW>
+        Q_run_mean_Lps(end+1,1) = Q_run;                              %#ok<AGROW>
     end
 
     T = table(run_id, mode, flow_level, date, repetition, n_frames, ...
         I_circ_mean, I_circ_std, R_lock, sign_persistence, branch_sign, ...
-        Q_transit_Lps);
+        Q_transit_Lps, Q_run_mean_Lps);
 end
 
 function FM = iReadFrameMetrics(cfg, runID)

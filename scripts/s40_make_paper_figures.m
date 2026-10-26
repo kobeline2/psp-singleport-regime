@@ -232,20 +232,20 @@ box(axB, 'on');
 axC = nexttile(tl2); hold(axC, 'on');
 for k = 1:height(BS)
     cc = iBranchColor(BS.branch_sign(k));
-    plot(axC, BS.Q_transit_Lps(k), BS.R_lock(k), levelMarker(char(BS.flow_level(k))), ...
+    plot(axC, BS.Q_run_mean_Lps(k), BS.R_lock(k), levelMarker(char(BS.flow_level(k))), ...
         'MarkerSize', 8, 'MarkerFaceColor', cc, 'MarkerEdgeColor', 'none', ...
         'HandleVisibility', 'off');
 end
 for lbl = ["R0007" "R0008" "R0002"]
     r = BS(BS.run_id == lbl, :);
     if isempty(r); continue; end
-    text(axC, r.Q_transit_Lps + 0.012, r.R_lock, char(lbl), 'FontSize', 9);
+    text(axC, r.Q_run_mean_Lps + 0.010, r.R_lock, char(lbl), 'FontSize', 9);
 end
-xlabel(axC, 'transit-time discharge over B_3+B_4  [L/s]');
+xlabel(axC, 'run-average discharge  [L/s]');
 ylabel(axC, 'R_{lock} = |mean I_{circ}| / s.d.');
 title(axC, '(c) lock strength vs discharge');
 grid(axC, 'on'); box(axC, 'on');
-xlim(axC, [0.22 0.90]);
+xlim(axC, [0.17 0.70]);
 
 title(tl2, 'Flow rate selects the circulation branch (inflow, deep bands B_3+B_4)');
 

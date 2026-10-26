@@ -12,11 +12,31 @@ inflow の 12 run は, 反復を実施日で block 化して配置した. すな
 
 各 run では, basin 内の水深変化を連続的に追跡した. inflow では水深 \SI{0.03}{m} に達した時点で撮影を開始し, \SI{0.10}{m} に達した時点で撮影を停止した. outflow では \SI{0.10}{m} から撮影を開始し, \SI{0.03}{m} に達した時点で停止した. したがって, 水深は独立の run 因子ではなく, 各 run 内で連続的に掃かれる解析軸として扱った. 本研究では, とくに port 高さ $a=\SI{0.055}{m}$ に対する相対水深 $h/a$ に着目し, basin-scale の表面流レジームを整理した.
 
+ここで, 本装置に固有の交絡を明示しておく. 給水路は開水路であり, その断面高さは port 高さと同じ \SI{0.055}{m} である. したがって水位が $h=a$ に達する瞬間に, port の潜没完了と給水路の満管遷移とが同時に起こる. 両者は本装置では分離できないため, $h/a \approx 1$ 前後に現れる指標変化を, どちらの機構に帰属するかは判定できない. 以降で $h/a \approx 1$ を転換帯として論じる際は, この限界を前提とする.
+
 実験条件の整理は, run-level conditions と analysis-level conditions を分けて行った. 前者は mode, flow-rate level, repetition により定義し, 後者は代表水深帯ごとの可視化および比較のために定義した. 可視化用の代表水深帯は Table~\ref{tab:depth_bands} に示す. 本研究では, $h/a \approx 1$ 近傍の遷移をより明瞭に捉えるため, \SIrange{0.05}{0.06}{m}（$0.91 \le h/a < 1.09$）を独立した帯 B2 として扱った.
 
 各 run の流量水準は, 水位変化率 \SIlist{2.5;5.0;7.5}{mm/min} に対応する名目流量
 $Q_1=\SI{0.25}{L/s}$, $Q_2=\SI{0.50}{L/s}$, $Q_3=\SI{0.75}{L/s}$ として設定した.
 ただし, 実際の流量は水深および開口の没水状態に応じて名目値からずれるため, 各 run の実流量は水位計で記録した水深時系列と水槽平面積に基づく体積収支から評価し, 解析に用いた.
+
+\subsection{Discharge and its verification}
+\label{sec:methods_discharge}
+
+各 run の流量は, 記録区間全体の平均 $Q = A_{\mathrm{plan}} \Delta h / T$ として評価した. ここで $\Delta h$ は記録区間の水深変化, $T$ は所要時間である.
+
+水位時系列から瞬時的に求めた $A_{\mathrm{plan}} \left| \mathrm{d}h/\mathrm{d}t \right|$ は, inflow の全 run で $h \approx \SIrange{44}{50}{mm}$ に名目の約 0.3 倍まで落ちる谷を示す. これが実流量の変化であれば, $h/a \approx 1$ 近傍の指標変化に流量という第三の交絡が加わることになるため, 水位を経由しない独立な検証を行い, 見かけ上のものと判定した. 根拠は互いに独立な 3 点である.
+\begin{enumerate}
+  \item \textbf{port 噴流の表面流速}. $x = \SIrange{0.19}{0.52}{m}$ の区間で噴流中心の表面流速を取り, これを $\log$--$\log$ 回帰で水位由来の流量に対して回帰すると, 傾きは $-0.17$ から $-0.05$(95\% 上限 $\le +0.03$)であった. 谷が実流量であれば $+0.8$ から $+1.1$ が期待されるから, 噴流は谷に追従していない. 同じ指標は流量水準の違いに対しては期待どおりの感度($n \approx 0.8$--$1.1$)を示すので, 流量の変化自体は検出できる.
+  \item \textbf{下池の水位}. 上池の読みが谷を示す区間においても, 下池の水位は一定の割合で変化した. 給水側から見た流量は一定である.
+  \item \textbf{水位計の挙動}. 谷の位置は, 水位計から見た水面の乱れが収まる水深と全 12 run で一致する. 谷の通過後に水位由来の流量が回復しても水面は静まったままであり, 水面が静まることは流量低下の結果ではない.
+\end{enumerate}
+さらに, 流量水準どうしの流量比はどの水深でも保たれている(high/low で 2.8--3.4, medium/low で 1.8--2.3). 以上より, 流量は各 run 内で一定として扱い, 水位から得た水深依存の流量は解析に用いない.
+
+水位計は 60\,GHz レーダー式(KEYENCE FR-S01)で, inlet に対向する壁際に設置し, 水面までの距離は \SIrange{0.40}{0.47}{m} であった.
+
+\subsection{Initial condition and residual-motion check}
+\label{sec:methods_initial}
 
 各 run は静水状態から開始した. 実験間には十分な待機時間を設け, 長時間撮影画像から表面流の残留が十分小さいことを確認した後に次の run を開始した. この判定には, 後述する面平均指標 $E(t)$ を用い, 停止後に $E(t)$ が停止直前値の \SI{5}{\percent} 未満となり, その状態が \SI{5}{min} 以上継続することを基準とした.
 
@@ -41,12 +61,11 @@ Outflow & High   & \SI{0.75}{L/s} & 4 & \SIrange{0.10}{0.03}{m} \\
 \vspace{1mm}
 \parbox{0.96\linewidth}{\footnotesize
 $^\dagger$ Nominal discharge corresponding to target water-level change rates of
-\SIlist{2.5;5.0;7.5}{mm/min}. In both inflow and outflow, the actual discharge
-could deviate from the nominal value depending on water depth and the degree of
-port submergence. This deviation became more pronounced under shallow,
-partially free-surface conditions. Therefore, the actual discharge in each run
-was evaluated from the recorded water-level time series and referred to in the
-analysis.
+\SIlist{2.5;5.0;7.5}{mm/min}. The actual discharge was steady within each run
+and is quoted as the run average $A_{\mathrm{plan}}\Delta h/T$, which falls
+below the nominal value by a roughly constant factor (0.75--0.89 for inflow,
+0.78--1.00 for outflow). Depth-resolved discharges derived from the water-level
+record are not used; see Sec.~\ref{sec:methods_discharge}.
 }
 \end{table}
 
