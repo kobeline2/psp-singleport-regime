@@ -50,7 +50,7 @@ def main():
     fig, ax = plt.subplots(4, 1, figsize=(8, 9), sharex=True)
     for path in a.cases:
         name = os.path.basename(path.rstrip("/"))
-        tmin = a.tmin if "P02" in name else max(a.tmin, 600)
+        tmin = a.tmin                         # 再開ケースは表面データが再開時刻からしか無いので, 読めた範囲から追う
         r, means, X, Y = track(path, tmin, a.block)
         np.savetxt(os.path.join(a.out_dir, name + "_track.csv"), r, delimiter=",", fmt="%.4f",
                    header="t_mid_s,core_x_m,core_y_m,core_area_m2,peak_vorticity_1_s,core_to_wall_m")

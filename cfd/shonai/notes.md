@@ -41,3 +41,8 @@
 - case_status.sh の質量保存は flowRate を 2 パッチに分けた再開ケースで "inf %" になる (読み取りの都合). dα/dt で確認する
 - 再開ケースは run_case.sh が processor* で止まるので cfd/shonai/tools/s02_release_setup.sh / s02_release_run.sh を使う. 渦の追跡は cfd/shonai/tools/vortex_track.py
 - 次: S03_p02_release_t100 (t=100 s で外す). 成功条件は台帳の purpose
+
+## 2026-10-27 S03_p02_release_t100 (t=100 s で外す)
+- 外しても単一渦は 900 s 保たれる. 700 s 以降は丸く強い渦 (ピーク渦度 0.27 /s). 800-1000 s で dominant/largest 55.4 % (今までで最大)
+- 核は盆地の中央 (x~1.8, y~1.0 m) で壁に付着せず, 偏り bias は +0.05 止まり (実験 ±0.25 には届かない)
+- 非対称注入は浅水 (~100 s) だけで渦のきっかけとして足りる可能性 -> 次は更に早く外す / 流量 / 時間スキームなど
