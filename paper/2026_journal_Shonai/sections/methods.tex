@@ -232,6 +232,8 @@ I_{\mathrm{unst}}(B_k)=
 \end{equation}
 を定義した. ここで, $h(t)$ は時刻 $t$ における水深であり, $B_k$ は Table~\ref{tab:depth_bands} に示した代表水深帯である.
 
+$I_{\mathrm{unst}}$ は帯の滞在中に生じた $E$ の変化をすべて変動として数えるため, 短い時間スケールの揺らぎだけでなく, 帯を通過する間の単調なトレンドも含む. 実際, inflow の $B_1$ では値の 5--8 割が時間の一次トレンドで説明される. 本研究では全条件で同一の定義を用いて帯間・mode 間を比較するため, この寄与は比較を歪めないが, $I_{\mathrm{unst}}$ の絶対値をそのまま「揺らぎの強さ」と読むことはできない. トレンドを除いた値は Sec.~\ref{sec:results_inflow} に併記する.
+
 指標の解釈にあたっては, 表面 PIV の計測分解能を明示的に考慮した. pilot 解析の結果, 本計測系における $E$ の noise floor は $E_{\mathrm{noise}} \approx \SI{2e-7}{m^2/s^2}$(粒子像変位に換算して 1 画像対あたり約 0.06 pixel)と評価された. そこで, 各水深帯の帯平均 $\overline{E}(B_k)$ に対して $\mathrm{SNR} = \overline{E}/E_{\mathrm{noise}}$ を算出し, $\mathrm{SNR} < 3$ の帯を「分解能限界(resolution-limited)」として区別した. 分解能限界の帯では, $E$ に基づくスカラー指標($E$, $I_{\mathrm{circ}}$, $I_{\mathrm{rot}}$, $I_{\mathrm{unst}}$)は定量的には解釈せず, 定性的な参考値として扱う. 一方, 時間平均ベクトル場はランダム誤差が平均化により約 $1/\sqrt{N}$ に抑制されるため, 瞬時場が noise floor 近傍にある条件でも, 帯内の数百フレームを平均することで coherent な平均構造の判読が可能である. この点は outflow の流況判読において特に重要となる.
 
 レジーム判定では, 代表水深帯ごとの時間平均ベクトル場および streamlines に加え, $E(t)$, $\phi_{\mathrm{lv}}(t)$, $I_{\mathrm{asym}}(t)$, $I_{\mathrm{circ}}(t)$, $I_{\mathrm{rot}}(t)$, および $I_{\mathrm{unst}}(B_k)$ を総合的に参照した. 本研究では, (i) 偏向ジェットと循環構造が卓越する状態, (ii) port へ向かう収束流が卓越する状態, (iii) それらの間の遷移的または不安定な状態, を基本的なレジームとして整理した.
