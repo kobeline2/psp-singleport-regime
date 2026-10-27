@@ -12,7 +12,8 @@ clear; clc;
 % depth_m. Output is written next to frame_metrics:
 %   local/derived/metrics/<run_id>/secondary_metrics.{csv,mat}
 %
-% Inflow runs only. For daily/per-run use, copy this file and edit the copy.
+% R is computed for inflow runs only; outflow runs get D' (and D_ref) only.
+% For daily/per-run use, copy this file and edit the copy.
 %
 % Dependency: this folder is NOT self-contained. It uses the functions,
 % metadata and data layout of the (read-only) psp-singleport-regime
@@ -46,9 +47,9 @@ opts.divsign_D_noise_1_s    = 5e-3;  % sign-resolution threshold of D' [1/s]
 T = read_runs_table(cfg);
 row = T(T.run_id == runID, :);
 assert(height(row) == 1, 'Run ID not found or duplicated: %s', char(runID));
-assert(string(row.mode) == "inflow", ...
-    's38:InflowOnly', 'This metric is defined for inflow runs only (%s is %s).', ...
-    char(runID), char(row.mode));
+isInflow = string(row.mode) == "inflow";
+assert(isInflow || string(row.mode) == "outflow", ...
+    's38:Mode', 'Unknown mode for %s: %s.', char(runID), char(row.mode));
 
 pivMat = fullfile(cfg.WORK_DIR, char(runID), cfg.PIV_SINGLE_MAT);
 outDir = fullfile(cfg.DERIVED_METRICS_DIR, char(runID));
@@ -76,11 +77,16 @@ yPort_m = C.basin.Ly_m / 2;
 % -------------------------------------------------------------------------
 % Metrics
 % -------------------------------------------------------------------------
-[Rt, infoR] = compute_reattachment_length(piv, ...
-    'time_s', fm.time_s, ...
-    'avg_window_s', opts.secondary_avg_window_s, ...
-    'u_eps_m_s', opts.reattach_u_eps_m_s, ...
-    'dB_m', dB_m);
+% R is defined for inflow only (jet from the port wall); outflow runs get D' only.
+if isInflow
+    [Rt, infoR] = compute_reattachment_length(piv, ...
+        'time_s', fm.time_s, ...
+        'avg_window_s', opts.secondary_avg_window_s, ...
+        'u_eps_m_s', opts.reattach_u_eps_m_s, ...
+        'dB_m', dB_m);
+else
+    infoR = struct();
+end
 
 Dt = compute_divergence_sign(piv, ...
     'time_s', fm.time_s, ...
@@ -92,12 +98,14 @@ Dt = compute_divergence_sign(piv, ...
     'edge_margin_cells', 4, ...   % Gaussian smoothing (sigma 1.5) + gradient bias D within 4 cells of the border
     'log_every', opts.log_every);
 
-fprintf('[s38] wall rows used: y = %s m (ymin side), %s m (ymax side)\n', ...
-    mat2str(infoR.y_rows_lo, 3), mat2str(infoR.y_rows_hi, 3));
-fprintf('[s38] frames with a reattachment point: %d / %d\n', ...
-    nnz(isfinite(Rt.R_m)), height(Rt));
-
-secondary = [Dt, Rt(:, {'R_ymin_m', 'R_ymax_m', 'R_m', 'R_side', 'R_over_dB'})];
+secondary = Dt;
+if isInflow
+    fprintf('[s38] wall rows used: y = %s m (ymin side), %s m (ymax side)\n', ...
+        mat2str(infoR.y_rows_lo, 3), mat2str(infoR.y_rows_hi, 3));
+    fprintf('[s38] frames with a reattachment point: %d / %d\n', ...
+        nnz(isfinite(Rt.R_m)), height(Rt));
+    secondary = [Dt, Rt(:, {'R_ymin_m', 'R_ymax_m', 'R_m', 'R_side', 'R_over_dB'})];
+end
 if ismember('band_id', fm.Properties.VariableNames)
     secondary.band_id = fm.band_id;   % reference label only; metrics are not band-averaged
 end
@@ -114,9 +122,15 @@ if show_figure
     tl = tiledlayout(fig, 2, 1, 'TileSpacing', 'compact');
 
     ax1 = nexttile(tl);
-    plot(ax1, secondary.depth_m, secondary.R_over_dB, '.-');
-    ylabel(ax1, 'R / \DeltaB'); grid(ax1, 'on');
-    title(ax1, sprintf('%s  reattachment length (NaN = none)', char(runID)));
+    if isInflow
+        plot(ax1, secondary.depth_m, secondary.R_over_dB, '.-');
+        ylabel(ax1, 'R / \DeltaB'); grid(ax1, 'on');
+        title(ax1, sprintf('%s  reattachment length (NaN = none)', char(runID)));
+    else
+        plot(ax1, secondary.depth_m, secondary.D_ref_1_s, '-');
+        ylabel(ax1, 'D_{ref} [1/s]'); grid(ax1, 'on');
+        title(ax1, sprintf('%s  uniform-fall reference (outflow, no R)', char(runID)));
+    end
 
     ax2 = nexttile(tl);
     hold(ax2, 'on');

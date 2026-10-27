@@ -37,6 +37,8 @@ pspRoot = fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 - `compute_reattachment_length.m`: 探索範囲の上限 `x_max_m` (既定 2.4 m) を追加。遠端壁での折り返しを再付着と誤検出するため。
 - `s38_compute_reattachment_divergence.m`: `compute_divergence_sign` に `'edge_margin_cells', 4` を追加。
 
+- `s38_compute_reattachment_divergence.m`: 流出ラン (R0013–R0024) も受け付ける。R は流入のみ計算し、流出では D′・D_ref のみ出力。
+
 ## 備考
 
 - 移行元の `master` ブランチのファイルは削除・変更していない。
