@@ -13,7 +13,7 @@ Assets: python3 gen_assets.py           (needs local/derived/metrics on disk)
 """
 import os, sys
 
-TEMPLATE = "/Users/takahiro/Library/CloudStorage/Dropbox/agent/PPTテンプレート"
+TEMPLATE = os.path.expanduser("~/Documents/git/kyoto-slide-deck")
 sys.path.insert(0, TEMPLATE)
 from deck import *   # noqa: F401,F403
 from deck import EMW, CW, ML  # explicit for layout math
