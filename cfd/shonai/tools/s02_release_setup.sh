@@ -1,6 +1,6 @@
 #!/bin/bash
 # s02_release_setup.sh -- P02 (流入面の上半分のみ注水) の t=T の場から, 流入面全体の注水に切り替えて再開するケースを作る.
-#   usage: bash s02_release_setup.sh [ケース名] [T]     既定: S02_p02_release 600
+#   usage: [SRC=<元ケース>] [Q=<流量>] bash s02_release_setup.sh [ケース名] [T]     既定: S02_p02_release 600 (元は P02, Q=0.0005)
 # 参照ケース psp_tests/P02_perturb_geom は読むだけ (書かない).
 #
 # 切り替え: 壁 inletLowerWall (24 面) を注水面にする. 流入面全体 (44 面) で Q = 0.0005 m3/s を
@@ -11,9 +11,9 @@
 . /usr/lib/openfoam/openfoam2412/etc/bashrc 2>/dev/null
 set -u
 NAME="${1:-S02_p02_release}"; T="${2:-600}"
-SRC=$HOME/OpenFOAM/yuna-v2412/run/psp_tests/P02_perturb_geom
+SRC=${SRC:-$HOME/OpenFOAM/yuna-v2412/run/psp_tests/P02_perturb_geom}   # 元ケース (環境変数 SRC で変えられる. 読むだけ)
 DEST=$HOME/OpenFOAM/yuna-v2412/run/psp_shonai/$NAME
-Q=0.0005; NLOW=24; NALL=44
+Q=${Q:-0.0005}; NLOW=24; NALL=44                      # 元ケースの流量 (環境変数 Q)
 [ -e "$DEST" ] && { echo "既にある: $DEST"; exit 1; }
 [ -d "$SRC/processor0/$T" ] || { echo "P02 に t=$T が無い"; exit 1; }
 log() { echo "[$(date '+%F %T')] $*"; }
