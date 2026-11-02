@@ -94,7 +94,7 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
     % --- Single-frame noise of D (structure function at lag 0) -------------
     sigmaNoise = prm.noise_1_s;
     if ~isfinite(sigmaNoise)
-        sigmaNoise = iEstimateNoise(div.D, keep, depth_m >= prm.noise_min_depth_m);
+        sigmaNoise = estimate_divergence_noise(div.D, keep, depth_m >= prm.noise_min_depth_m);
     end
 
     % --- Block means and area fractions ------------------------------------
@@ -156,24 +156,4 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
         ttl = sprintf('%s  %s', ttl, char(string(prm.title_suffix)));
     end
     title(tl, ttl);
-end
-
-% =========================================================================
-function sigma = iEstimateNoise(D, keep, useFrame)
-% sigma_noise^2 = 2 g(1) - g(2), g(k) = 0.5*mean((D(t+k)-D(t))^2) per cell,
-% median over cells. Frames are taken as contiguous runs of useFrame; at
-% most 4000 frames (from the middle of the longest run) to bound memory.
-    idx = find(useFrame);
-    assert(numel(idx) >= 100, 'plot_divergence_sign_timeseries:NoiseFrames', ...
-        'Too few frames deeper than noise_min_depth_m to measure the noise.');
-    if numel(idx) > 4000
-        mid = round(numel(idx) / 2);
-        idx = idx(mid - 1999:mid + 2000);
-    end
-    [Ny, Nx, ~] = size(D);
-    X = reshape(D(:, :, idx), Ny * Nx, []);
-    X = X(keep(:), :);
-    g1 = 0.5 * mean((X(:, 2:end) - X(:, 1:end - 1)) .^ 2, 2, 'omitnan');
-    g2 = 0.5 * mean((X(:, 3:end) - X(:, 1:end - 2)) .^ 2, 2, 'omitnan');
-    sigma = sqrt(median(max(2 * g1 - g2, 0), 'omitnan'));
 end

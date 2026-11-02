@@ -43,6 +43,12 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   single-frame noise of D; also writes `divergence_sign_blocks.csv`.
   Needs the same inputs as `s41`.
 
+- `s43_plot_divergence_sign_frequency_map.m`
+  Where up/down-welling occurs most often: per cell and depth band, the
+  fraction of 30 s blocks with block-mean D' beyond a threshold; writes the
+  largest high-frequency regions to `divergence_sign_hotspots.csv`.
+  Same inputs as `s41`.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.
