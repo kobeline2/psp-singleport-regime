@@ -31,14 +31,25 @@ function [T, info] = compute_reattachment_length(piv, varargin)
 %   avg_window_s = 0 the instantaneous (per-frame) field is used.
 %   Report R against depth_m (from frame_metrics after s31).
 %
-% Walls
+% Walls and the attached side
 %   Both side walls are examined (the grid rows with the smallest and the
 %   largest piv.y), so the result does not depend on the orientation of
 %   piv.y. For each wall R is NaN when no reverse->forward crossing
-%   exists, i.e. no reattachment (symmetric-type flow, or both ends of the
-%   wall still inside the gyre). R_m is the shorter of the defined ones
-%   (the first reattachment seen from the port) and R_side tells which
-%   wall it belongs to.
+%   exists (no reattachment, or both ends of the wall still inside the
+%   gyre); both are returned as R_ymin_m and R_ymax_m.
+%
+%   The wall the jet attaches to is decided FIRST, by a quantity that is
+%   independent of R: the lateral position of the jet axis. With
+%   side_mode = 'jet_axis' (default) the axis is the y at which the
+%   window-averaged u, averaged over x in 'axis_x_range_m', is largest.
+%   If the axis is more than 'axis_dead_band_m' above (below) the basin
+%   centre line 'y_center_m', the attached wall is ymax (ymin); inside the
+%   dead band the flow is treated as symmetric and R_side = "none".
+%   R_m is the reattachment length of the attached wall only; R_other_m
+%   is the crossing found on the opposite wall, recorded separately and not
+%   mixed into R_m. R_side is the attached wall even when no crossing was
+%   found on it (R_m = NaN). With side_mode = 'min' the older rule is used:
+%   R_m is the shorter of R_ymin_m and R_ymax_m and R_side its wall.
 %
 % Assumptions (check on the first run you analyze)
 %   - piv.x is in basin coordinates with x = 0 at the port wall and
@@ -66,6 +77,12 @@ function [T, info] = compute_reattachment_length(piv, varargin)
 %   exclude_interpolated  If true (default) and piv.typevector exists,
 %                   vectors flagged 2 (PIVLab-interpolated) are ignored.
 %   dB_m            Expansion width for R/dB. Default NaN (R_over_dB = NaN).
+%   side_mode       'jet_axis' (default) or 'min' (older rule, see Walls).
+%   axis_x_range_m  [x1 x2] columns used for the jet axis. Default [0.6 1.0].
+%   axis_dead_band_m  Axis within this distance of y_center_m = symmetric,
+%                   no attached side. Default 0.05 m.
+%   y_center_m      Basin centre line in piv.y coordinates. Default NaN =
+%                   middle of the piv.y range.
 %   x_max_m         Crossings are searched only for x <= x_max_m. Default 2.4 m.
 %                   Near the far wall (x = 2.952 m) the surface flow turns
 %                   along the side wall and gives a weak reverse -> forward
@@ -74,7 +91,8 @@ function [T, info] = compute_reattachment_length(piv, varargin)
 %                   Inf disables the limit.
 %
 % Output table T (one row per frame):
-%   run_id, frame_idx, time_s, R_ymin_m, R_ymax_m, R_m, R_side, R_over_dB
+%   run_id, frame_idx, time_s, R_ymin_m, R_ymax_m, R_m, R_side, R_over_dB,
+%   R_other_m, jet_axis_y_m
 % Output struct info: x, y_rows_lo, y_rows_hi, n_window_frames, params.
 
     p = inputParser;
@@ -86,6 +104,10 @@ function [T, info] = compute_reattachment_length(piv, varargin)
     p.addParameter('min_run_cells', 2, @(x) isnumeric(x) && isscalar(x) && x >= 1);
     p.addParameter('exclude_interpolated', true, @(x) islogical(x) || isnumeric(x));
     p.addParameter('dB_m', NaN, @(x) isnumeric(x) && isscalar(x));
+    p.addParameter('side_mode', 'jet_axis', @(x) any(strcmp(x, {'jet_axis', 'min'})));
+    p.addParameter('axis_x_range_m', [0.6 1.0], @(x) isnumeric(x) && numel(x) == 2);
+    p.addParameter('axis_dead_band_m', 0.05, @(x) isnumeric(x) && isscalar(x) && x >= 0);
+    p.addParameter('y_center_m', NaN, @(x) isnumeric(x) && isscalar(x));
     p.addParameter('x_max_m', 2.4, @(x) isnumeric(x) && isscalar(x) && x > 0);
     p.parse(piv, varargin{:});
     prm = p.Results;
@@ -152,16 +174,48 @@ function [T, info] = compute_reattachment_length(piv, varargin)
         R_ymax(k) = iFirstReattachment(xv(inSearch), uHi(inSearch, k), prm.u_eps_m_s, prm.min_run_cells);
     end
 
-    R_m = min([R_ymin, R_ymax], [], 2, 'omitnan');
-    R_m(isnan(R_ymin) & isnan(R_ymax)) = NaN;
-    R_side = repmat("none", nFrames, 1);
-    R_side(~isnan(R_ymin) & (isnan(R_ymax) | R_ymin <= R_ymax)) = "ymin";
-    R_side(~isnan(R_ymax) & (isnan(R_ymin) | R_ymax < R_ymin)) = "ymax";
+    % Jet axis: y of the largest window-averaged u, averaged over the axis columns.
+    yCenter = prm.y_center_m;
+    if isnan(yCenter), yCenter = (min(yv) + max(yv)) / 2; end
+    axisCols = xv >= prm.axis_x_range_m(1) & xv <= prm.axis_x_range_m(2);
+    assert(any(axisCols), 'compute_reattachment_length:AxisRange', ...
+        'No grid column inside axis_x_range_m.');
+    uAxis = squeeze(mean(U(:, axisCols, :), 2, 'omitnan'));   % [Ny x nFrames]
+    if nFrames == 1, uAxis = uAxis(:); end
+    if nWin > 1
+        uAxis = movmean(uAxis, nWin, 2, 'omitnan', 'Endpoints', 'shrink');
+    end
+    [uMax, iMax] = max(uAxis, [], 1);
+    jet_axis_y = yv(iMax);
+    jet_axis_y(~isfinite(uMax)) = NaN;
+    jet_axis_y = jet_axis_y(:);
+
+    if strcmp(prm.side_mode, 'jet_axis')
+        R_side = repmat("none", nFrames, 1);
+        R_side(jet_axis_y - yCenter > prm.axis_dead_band_m) = "ymax";
+        R_side(jet_axis_y - yCenter < -prm.axis_dead_band_m) = "ymin";
+        R_m = NaN(nFrames, 1);
+        R_other = NaN(nFrames, 1);
+        isMin = R_side == "ymin";
+        isMax = R_side == "ymax";
+        R_m(isMin) = R_ymin(isMin);
+        R_m(isMax) = R_ymax(isMax);
+        R_other(isMin) = R_ymax(isMin);
+        R_other(isMax) = R_ymin(isMax);
+    else
+        R_m = min([R_ymin, R_ymax], [], 2, 'omitnan');
+        R_m(isnan(R_ymin) & isnan(R_ymax)) = NaN;
+        R_side = repmat("none", nFrames, 1);
+        R_side(~isnan(R_ymin) & (isnan(R_ymax) | R_ymin <= R_ymax)) = "ymin";
+        R_side(~isnan(R_ymax) & (isnan(R_ymin) | R_ymax < R_ymin)) = "ymax";
+        R_other = NaN(nFrames, 1);
+    end
 
     run_id = repmat(iGetString(piv, 'run_id'), nFrames, 1);
     T = table(run_id, (1:nFrames).', time_s, R_ymin, R_ymax, R_m, R_side, R_m / prm.dB_m, ...
+        R_other, jet_axis_y, ...
         'VariableNames', {'run_id', 'frame_idx', 'time_s', 'R_ymin_m', 'R_ymax_m', ...
-        'R_m', 'R_side', 'R_over_dB'});
+        'R_m', 'R_side', 'R_over_dB', 'R_other_m', 'jet_axis_y_m'});
 
     info = struct();
     info.x = xv;
