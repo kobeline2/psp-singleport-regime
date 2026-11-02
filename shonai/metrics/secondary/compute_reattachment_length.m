@@ -66,6 +66,12 @@ function [T, info] = compute_reattachment_length(piv, varargin)
 %   exclude_interpolated  If true (default) and piv.typevector exists,
 %                   vectors flagged 2 (PIVLab-interpolated) are ignored.
 %   dB_m            Expansion width for R/dB. Default NaN (R_over_dB = NaN).
+%   x_max_m         Crossings are searched only for x <= x_max_m. Default 2.4 m.
+%                   Near the far wall (x = 2.952 m) the surface flow turns
+%                   along the side wall and gives a weak reverse -> forward
+%                   sign change at x ~ 2.7 m that is NOT a reattachment
+%                   (seen in R0009 on the wall opposite to the attached jet).
+%                   Inf disables the limit.
 %
 % Output table T (one row per frame):
 %   run_id, frame_idx, time_s, R_ymin_m, R_ymax_m, R_m, R_side, R_over_dB
@@ -80,6 +86,7 @@ function [T, info] = compute_reattachment_length(piv, varargin)
     p.addParameter('min_run_cells', 2, @(x) isnumeric(x) && isscalar(x) && x >= 1);
     p.addParameter('exclude_interpolated', true, @(x) islogical(x) || isnumeric(x));
     p.addParameter('dB_m', NaN, @(x) isnumeric(x) && isscalar(x));
+    p.addParameter('x_max_m', 2.4, @(x) isnumeric(x) && isscalar(x) && x > 0);
     p.parse(piv, varargin{:});
     prm = p.Results;
 
@@ -136,9 +143,13 @@ function [T, info] = compute_reattachment_length(piv, varargin)
 
     R_ymin = NaN(nFrames, 1);
     R_ymax = NaN(nFrames, 1);
+    inSearch = xv <= prm.x_max_m;   % exclude the far-wall turning region
+    assert(nnz(inSearch) >= 2 * prm.min_run_cells, ...
+        'compute_reattachment_length:SearchRange', ...
+        'x_max_m = %g leaves too few grid columns to search.', prm.x_max_m);
     for k = 1:nFrames
-        R_ymin(k) = iFirstReattachment(xv, uLo(:, k), prm.u_eps_m_s, prm.min_run_cells);
-        R_ymax(k) = iFirstReattachment(xv, uHi(:, k), prm.u_eps_m_s, prm.min_run_cells);
+        R_ymin(k) = iFirstReattachment(xv(inSearch), uLo(inSearch, k), prm.u_eps_m_s, prm.min_run_cells);
+        R_ymax(k) = iFirstReattachment(xv(inSearch), uHi(inSearch, k), prm.u_eps_m_s, prm.min_run_cells);
     end
 
     R_m = min([R_ymin, R_ymax], [], 2, 'omitnan');
