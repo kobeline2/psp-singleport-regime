@@ -39,6 +39,8 @@ pspRoot = fileparts(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 
 - `s38_compute_reattachment_divergence.m`: 流出ラン (R0013–R0024) も受け付ける。R は流入のみ計算し、流出では D′・D_ref のみ出力。
 
+- `compute_reattachment_length.m`: 付着側を噴流軸で先に決める方式を既定に変更 (`side_mode`)。出力に `R_other_m`, `jet_axis_y_m` を追加。`s38` は `y_center_m` を渡し、この 2 列も保存する。
+
 ## 備考
 
 - 移行元の `master` ブランチのファイルは削除・変更していない。

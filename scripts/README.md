@@ -37,6 +37,20 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   plan view, one panel per depth band. Needs `pivlab_single.mat` and the same
   `secondary_metrics.mat`.
 
+- `s42_plot_divergence_sign_timeseries.m`
+  Time series of the up/down-welling area fractions of one run (inflow or
+  outflow). Block-mean D' (30 s) against a detection limit from the measured
+  single-frame noise of D; cells are split into up / down / ~0 confirmed
+  (|D'| < eps) / undetectable; also writes `divergence_sign_blocks.csv`.
+  Needs the same inputs as `s41`.
+
+- `s43_plot_divergence_sign_frequency_map.m`
+  Where up/down-welling occurs most often: per cell and depth band, the
+  fraction of 30 s blocks with block-mean D' beyond a threshold; writes the
+  largest high-frequency regions to `divergence_sign_hotspots.csv`. Extra rows
+  show where D' is confirmed ~0 and where it is undetectable.
+  Same inputs as `s41`.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.

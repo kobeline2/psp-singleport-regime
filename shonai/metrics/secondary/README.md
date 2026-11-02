@@ -28,5 +28,7 @@ wall, `piv.u` = +x, `piv.v` along +y) were checked on R0009. `s38` also accepts 
 are written (2026-10-27). Provisional values
 (averaging window, `u_eps`, `D_noise`) are still to be fixed.
 `compute_reattachment_length` searches x <= `x_max_m` (default 2.4 m) to skip
-the turning flow at the far wall. Figures: `scripts/s39_plot_reattachment_vs_depth.m`,
+the turning flow at the far wall.
+The attached wall is decided first from the jet axis (`side_mode = 'jet_axis'`); R is measured on that
+wall only and the opposite wall's crossing goes to `R_other_m` (2026-11-02). Figures: `scripts/s39_plot_reattachment_vs_depth.m`,
 `scripts/s41_plot_divergence_sign_map.m`.

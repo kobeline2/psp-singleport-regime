@@ -21,6 +21,9 @@ function [fig, excludedRunIds] = plot_reattachment_vs_depth(secondaryTables, run
 %   min_valid_fraction  Default 0.30.
 %   depth_lim_m         Default [0.03 0.10].
 %   y_lim               Default [0 2.6] for R/dB, [] (auto) for R_m.
+%   reference_value     Horizontal reference line in the units of value_column
+%                       (e.g. a literature prediction). Default NaN = none.
+%   reference_label     Legend text of the reference line.
 %   title_suffix        Appended to the figure title.
 
     p = inputParser;
@@ -31,6 +34,8 @@ function [fig, excludedRunIds] = plot_reattachment_vs_depth(secondaryTables, run
     p.addParameter('min_valid_fraction', 0.30, @(x) isnumeric(x) && isscalar(x));
     p.addParameter('depth_lim_m', [0.03 0.10], @(x) isnumeric(x) && numel(x) == 2);
     p.addParameter('y_lim', [], @(x) isnumeric(x) && (isempty(x) || numel(x) == 2));
+    p.addParameter('reference_value', NaN, @(x) isnumeric(x) && isscalar(x));
+    p.addParameter('reference_label', "reference", @(x) isstring(x) || ischar(x));
     p.addParameter('title_suffix', "", @(x) isstring(x) || ischar(x));
     p.parse(secondaryTables, runIds, flowLevels, varargin{:});
     prm = p.Results;
@@ -72,6 +77,10 @@ function [fig, excludedRunIds] = plot_reattachment_vs_depth(secondaryTables, run
             plot(ax, T.depth_m, T.(valueColumn), '.', 'MarkerSize', 3, ...
                 'Color', colors(mod(nDrawn - 1, size(colors, 1)) + 1, :), ...
                 'DisplayName', char(runIds(k)));
+        end
+        if isfinite(prm.reference_value)
+            yline(ax, prm.reference_value, 'k--', 'LineWidth', 1.2, ...
+                'DisplayName', char(string(prm.reference_label)));
         end
         grid(ax, 'on');
         xlim(ax, prm.depth_lim_m);
