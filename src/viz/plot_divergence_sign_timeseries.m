@@ -11,10 +11,16 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
 % The record is cut into blocks of block_s seconds. In each block the
 % anomaly D' = D - D_ref is averaged over the frames, and the plan-view area
 % fractions are counted on that block-mean field:
-%   f_up   : block-mean D' >  +limit  (upwelling resolved)
-%   f_down : block-mean D' <  -limit  (downwelling resolved)
-%   f_below: |block-mean D'| <= limit (smaller than the detection limit;
-%            not distinguishable from zero)
+%   f_up   : block-mean D' >  max(limit, eps)   (upwelling, resolved and sizable)
+%   f_down : block-mean D' < -max(limit, eps)   (downwelling)
+%   f_zero : |D'| + limit <= eps   (small: the whole +-limit interval of the
+%            block mean lies inside +-eps, so |D'| < eps is confirmed)
+%   f_undet: all other cells (the sign / size cannot be settled: the noise
+%            limit is too large to confirm |D'| < eps, and D' is not above eps)
+% eps = min_abs_1_s is the smallest |D'| counted as a real up/down-welling
+% (default 5e-3 1/s). 'Zero' therefore means 'smaller than eps', not exactly
+% 0. If limit >= eps, f_zero is always 0 and everything not up/down is
+% undetectable (noise-limited).
 % The detection limit is  limit = k_sigma * sigma_noise / sqrt(n_frames), the
 % k_sigma-sigma bound of a block mean of white single-frame noise. It replaces
 % the fixed single-frame threshold of s38 (D_noise), which is not appropriate
@@ -30,12 +36,13 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
 %
 % Outputs:
 %   blocks  table, one row per block: time_s, depth_m, D_ref_1_s, limit_1_s,
-%           Dp_mean_1_s, f_up, f_down, f_below.
+%           Dp_mean_1_s, f_up, f_down, f_zero, f_undet.
 %   info    struct: sigma_noise_1_s, dt_s, n_per_block, k_sigma.
 %
 % Parameters:
 %   block_s             Averaging block [s]. Default 30.
 %   k_sigma             Default 3.
+%   min_abs_1_s         eps, see above. Default 5e-3.
 %   noise_1_s           Fixed sigma_noise [1/s]; default NaN = measure.
 %   noise_min_depth_m   Default 0.05.
 %   smooth_sigma        Gaussian sigma [cells] of D. Default 1.5.
@@ -50,6 +57,7 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
     p.addRequired('secondary', @istable);
     p.addParameter('block_s', 30, @(x) isnumeric(x) && isscalar(x) && x > 0);
     p.addParameter('k_sigma', 3, @(x) isnumeric(x) && isscalar(x) && x > 0);
+    p.addParameter('min_abs_1_s', 5e-3, @(x) isnumeric(x) && isscalar(x) && x >= 0);
     p.addParameter('noise_1_s', NaN, @(x) isnumeric(x) && isscalar(x));
     p.addParameter('noise_min_depth_m', 0.05, @(x) isnumeric(x) && isscalar(x));
     p.addParameter('smooth_sigma', 1.5, @(x) isnumeric(x) && isscalar(x) && x >= 0);
@@ -99,10 +107,10 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
 
     % --- Block means and area fractions ------------------------------------
     nBlocks = floor(nFrames / nPer);
-    blocks = table('Size', [nBlocks 8], ...
-        'VariableTypes', repmat({'double'}, 1, 8), ...
+    blocks = table('Size', [nBlocks 9], ...
+        'VariableTypes', repmat({'double'}, 1, 9), ...
         'VariableNames', {'time_s', 'depth_m', 'D_ref_1_s', 'limit_1_s', ...
-        'Dp_mean_1_s', 'f_up', 'f_down', 'f_below'});
+        'Dp_mean_1_s', 'f_up', 'f_down', 'f_zero', 'f_undet'});
     for j = 1:nBlocks
         idx = (j - 1) * nPer + (1:nPer);
         Dbar = mean(div.D(:, :, idx), 3, 'omitnan') - mean(D_ref(idx), 'omitnan');
@@ -113,9 +121,14 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
         blocks.D_ref_1_s(j) = mean(D_ref(idx), 'omitnan');
         blocks.limit_1_s(j) = limit;
         blocks.Dp_mean_1_s(j) = mean(values);
-        blocks.f_up(j) = mean(values > limit);
-        blocks.f_down(j) = mean(values < -limit);
-        blocks.f_below(j) = mean(abs(values) <= limit);
+        threshold = max(limit, prm.min_abs_1_s);
+        isUp = values > threshold;
+        isDown = values < -threshold;
+        isZero = abs(values) + limit <= prm.min_abs_1_s;
+        blocks.f_up(j) = mean(isUp);
+        blocks.f_down(j) = mean(isDown);
+        blocks.f_zero(j) = mean(isZero);
+        blocks.f_undet(j) = mean(~(isUp | isDown | isZero));
     end
     info = struct('sigma_noise_1_s', sigmaNoise, 'dt_s', dt, ...
         'n_per_block', nPer, 'k_sigma', prm.k_sigma);
@@ -132,10 +145,12 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
     hold(ax2, 'on');
     plot(ax2, blocks.time_s, blocks.f_up, '-', 'Color', [0.85 0.2 0.15], 'LineWidth', 1.4);
     plot(ax2, blocks.time_s, blocks.f_down, '-', 'Color', [0.15 0.35 0.85], 'LineWidth', 1.4);
-    plot(ax2, blocks.time_s, blocks.f_below, '-', 'Color', [0.5 0.5 0.5], 'LineWidth', 1.4);
+    plot(ax2, blocks.time_s, blocks.f_zero, '-', 'Color', [0.35 0.35 0.35], 'LineWidth', 1.4);
+    plot(ax2, blocks.time_s, blocks.f_undet, '-', 'Color', [0.95 0.6 0.1], 'LineWidth', 1.4);
     hold(ax2, 'off'); grid(ax2, 'on'); ylim(ax2, [0 1]);
     ylabel(ax2, 'area fraction');
-    legend(ax2, {'upwelling', 'downwelling', 'below detection limit'}, ...
+    legend(ax2, {'upwelling', 'downwelling', sprintf('~0 confirmed (|D''|<%.0e)', prm.min_abs_1_s), ...
+        'undetectable'}, ...
         'Location', 'eastoutside');
 
     ax3 = nexttile(tl);
@@ -150,8 +165,8 @@ function [fig, blocks, info] = plot_divergence_sign_timeseries(piv, secondary, v
 
     runId = "";
     if isfield(piv, 'run_id'), runId = string(piv.run_id); end
-    ttl = sprintf('%s  D'' = D - D_{ref}, %g s blocks; detection limit %g\\sigma_{noise}/\\surd n = %.1e 1/s (\\sigma_{noise} = %.1e 1/s)', ...
-        char(runId), prm.block_s, prm.k_sigma, blocks.limit_1_s(1), sigmaNoise);
+    ttl = sprintf('%s  D'' = D - D_{ref}, %g s blocks; detection limit %g\\sigma_{noise}/\\surd n = %.1e 1/s (\\sigma_{noise} = %.1e 1/s), \\epsilon = %.0e 1/s', ...
+        char(runId), prm.block_s, prm.k_sigma, blocks.limit_1_s(1), sigmaNoise, prm.min_abs_1_s);
     if strlength(string(prm.title_suffix)) > 0
         ttl = sprintf('%s  %s', ttl, char(string(prm.title_suffix)));
     end

@@ -19,6 +19,7 @@ init
 runID = "R0009";
 block_s = 30;            % averaging block [s]
 k_sigma = 3;             % detection limit = k_sigma * sigma_noise / sqrt(frames per block)
+min_abs_1_s = 5e-3;      % eps: smallest |D'| counted as up/down-welling; |D'|+limit <= eps is '~0 confirmed'
 noise_min_depth_m = 0.05;% frames deeper than this are used to measure sigma_noise
 save_png = true;
 save_csv = true;
@@ -42,7 +43,8 @@ F = load(secondaryMat, 'secondary');
 % Figure
 % -------------------------------------------------------------------------
 [fig, blocks, info] = plot_divergence_sign_timeseries(piv, F.secondary, ...
-    'block_s', block_s, 'k_sigma', k_sigma, 'noise_min_depth_m', noise_min_depth_m, ...
+    'block_s', block_s, 'k_sigma', k_sigma, 'min_abs_1_s', min_abs_1_s, ...
+    'noise_min_depth_m', noise_min_depth_m, ...
     'port_center_y_m', C.basin.Ly_m / 2);
 fprintf('[s42] sigma_noise = %.2e 1/s, dt = %.3f s, %d frames/block, detection limit = %.2e 1/s\n', ...
     info.sigma_noise_1_s, info.dt_s, info.n_per_block, blocks.limit_1_s(1));

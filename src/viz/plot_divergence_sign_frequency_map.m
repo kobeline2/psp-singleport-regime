@@ -22,8 +22,17 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
 % 'up' in inflow runs. A value of 1 means the sign was resolved and sizable in
 % every block of the band.
 %
-% Figure: top row up frequency (white to red), bottom row down frequency
-% (white to blue), one column per band. Arrows: band-mean surface velocity.
+% Two more rows separate 'zero' from 'undetectable' for the cells that are
+% neither up nor down (eps = min_abs_1_s):
+%   freq_zero  = fraction of blocks with |D'| + limit <= eps  (|D'| < eps is
+%                confirmed: the +-limit interval lies inside +-eps)
+%   freq_undet = the rest (the noise limit is too large to confirm |D'| < eps
+%                and D' is not above eps). 'Zero' means 'smaller than eps'.
+% The four fractions add up to 1 in every cell.
+%
+% Figure: rows up (white to red), down (white to blue), ~0 confirmed (white to
+% gray), undetectable (white to orange); one column per band. Arrows:
+% band-mean surface velocity.
 %
 % hotspots: connected regions (8-neighbour) of cells with frequency >=
 % hotspot_freq, one row per region: band_id, kind ("up"/"down"), x_m, y_m
@@ -126,10 +135,13 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
 
     % --- Per band: frequency maps, hotspots, figure ------------------------
     nBands = height(bands);
-    fig = figure('Color', 'w', 'Position', [100 100 420 * nBands 620]);
-    tl = tiledlayout(fig, 2, nBands, 'TileSpacing', 'compact');
+    fig = figure('Color', 'w', 'Position', [100 100 420 * nBands 1100]);
+    tl = tiledlayout(fig, 4, nBands, 'TileSpacing', 'compact');
+    kinds = ["up", "down", "zero", "undet"];
     freqUp = NaN(Ny, Nx, nBands);
     freqDown = NaN(Ny, Nx, nBands);
+    freqZero = NaN(Ny, Nx, nBands);
+    freqUndet = NaN(Ny, Nx, nBands);
     nBlocksBand = zeros(nBands, 1);
     hotspots = table(strings(0, 1), strings(0, 1), zeros(0, 1), zeros(0, 1), zeros(0, 1), ...
         zeros(0, 1), zeros(0, 1), 'VariableNames', {'band_id', 'kind', 'x_m', 'y_m', ...
@@ -143,14 +155,24 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
             Dsel = Dbar(:, :, inBand);
             freqUp(:, :, b) = mean(Dsel > threshold, 3);
             freqDown(:, :, b) = mean(Dsel < -threshold, 3);
+            freqZero(:, :, b) = mean(abs(Dsel) + limit <= prm.min_abs_1_s, 3);
+            freqUndet(:, :, b) = 1 - freqUp(:, :, b) - freqDown(:, :, b) - freqZero(:, :, b);
             meanDp = mean(Dsel, 3, 'omitnan');
         end
         freqUp(:, :, b) = iMask(freqUp(:, :, b), keep);
         freqDown(:, :, b) = iMask(freqDown(:, :, b), keep);
+        freqZero(:, :, b) = iMask(freqZero(:, :, b), keep);
+        freqUndet(:, :, b) = iMask(freqUndet(:, :, b), keep);
 
-        for kind = ["up", "down"]
-            if kind == "up", F = freqUp(:, :, b); else, F = freqDown(:, :, b); end
-            ax = nexttile(tl, (kind == "down") * nBands + b);
+        for iKind = 1:numel(kinds)
+            kind = kinds(iKind);
+            switch kind
+                case "up", F = freqUp(:, :, b);
+                case "down", F = freqDown(:, :, b);
+                case "zero", F = freqZero(:, :, b);
+                otherwise, F = freqUndet(:, :, b);
+            end
+            ax = nexttile(tl, (iKind - 1) * nBands + b);
             hold(ax, 'on');
             if nBlocksBand(b) == 0
                 title(ax, sprintf('%s: no blocks', char(string(bands.band_id(b)))));
@@ -177,7 +199,8 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
                     char(string(bands.band_id(b))), bands.h_min_m(b), bands.h_max_m(b), nBlocksBand(b)));
             end
             if b == 1, ylabel(ax, sprintf('%s: y [m]', char(kind))); end
-            if kind == "down", xlabel(ax, 'x [m]'); end
+            if kind == "undet", xlabel(ax, 'x [m]'); end
+            if kind == "zero" || kind == "undet", continue; end
 
             % hotspots: connected regions of frequently resolved cells
             cc = bwconncomp(F >= prm.hotspot_freq, 8);
@@ -196,11 +219,12 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
     end
     cb = colorbar;
     cb.Layout.Tile = 'east';
-    cb.Label.String = sprintf('fraction of %g s blocks with |D''| > %.1e 1/s', prm.block_s, threshold);
+    cb.Label.String = sprintf('fraction of %g s blocks (up/down: |D''| > %.1e 1/s; ~0: |D''|+limit <= %.0e)', ...
+        prm.block_s, threshold, prm.min_abs_1_s);
 
     runId = "";
     if isfield(piv, 'run_id'), runId = string(piv.run_id); end
-    ttl = sprintf('%s  frequency of up (top) / down (bottom) with |D''| > %.1e 1/s  (detection limit %.1e);  + : largest regions with frequency >= %.1f', ...
+    ttl = sprintf('%s  frequency of up / down / ~0 confirmed / undetectable;  |D''| > %.1e 1/s counts as up/down (detection limit %.1e);  + : largest regions with frequency >= %.1f', ...
         char(runId), threshold, limit, prm.hotspot_freq);
     if strlength(string(prm.title_suffix)) > 0
         ttl = sprintf('%s  %s', ttl, char(string(prm.title_suffix)));
@@ -208,6 +232,7 @@ function [fig, hotspots, info] = plot_divergence_sign_frequency_map(piv, seconda
     title(tl, ttl);
 
     info = struct('sigma_noise_1_s', sigmaNoise, 'limit_1_s', limit, ...
+        'freq_zero', freqZero, 'freq_undet', freqUndet, ...
         'n_blocks', nBlocksBand, 'dt_s', dt, 'n_per_block', nPer);
 end
 
@@ -218,10 +243,11 @@ end
 
 function cmap = iWhiteTo(kind)
     t = linspace(0, 1, 256)';
-    if kind == "up"
-        target = [0.80 0.10 0.10];
-    else
-        target = [0.10 0.30 0.85];
+    switch kind
+        case "up", target = [0.80 0.10 0.10];
+        case "down", target = [0.10 0.30 0.85];
+        case "zero", target = [0.30 0.30 0.30];
+        otherwise, target = [0.95 0.55 0.05];
     end
     cmap = (1 - t) .* [1 1 1] + t .* target;
 end

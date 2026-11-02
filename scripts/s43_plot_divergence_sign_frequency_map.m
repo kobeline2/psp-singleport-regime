@@ -19,7 +19,7 @@ init
 runID = "R0009";
 block_s = 30;            % averaging block [s]
 k_sigma = 3;             % detection limit = k_sigma * sigma_noise / sqrt(frames per block)
-min_abs_1_s = 5e-3;      % count only |D'| above this (D_ref subtraction leaves an offset of ~|D_ref|)
+min_abs_1_s = 5e-3;      % eps: count only |D'| above this as up/down; |D'|+limit <= eps is '~0 confirmed' (same for all runs)
 hotspot_freq = 0.8;      % a hotspot is a connected region with frequency >= this
 save_png = true;
 save_csv = true;
