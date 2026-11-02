@@ -37,6 +37,12 @@ The scripts are intentionally coarse-grained. Detailed logic should live in `src
   plan view, one panel per depth band. Needs `pivlab_single.mat` and the same
   `secondary_metrics.mat`.
 
+- `s42_plot_divergence_sign_timeseries.m`
+  Time series of the up/down-welling area fractions of one run (inflow or
+  outflow). Block-mean D' (30 s) against a detection limit from the measured
+  single-frame noise of D; also writes `divergence_sign_blocks.csv`.
+  Needs the same inputs as `s41`.
+
 - `s40_make_paper_figures.m`
   Planned entry point for generating paper figures from derived outputs.
   Important: this script is currently a placeholder and is not yet implemented.

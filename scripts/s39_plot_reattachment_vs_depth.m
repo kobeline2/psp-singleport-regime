@@ -39,8 +39,23 @@ end
 % -------------------------------------------------------------------------
 % Figure
 % -------------------------------------------------------------------------
+% Literature reference (geometry only, no depth dependence): first reattachment
+% length of a symmetric shallow rectangular basin, Dufresne et al. (2010),
+%   R1 = 3.43 * dB^0.75 * b^0.25   [m],  dB = (B - b)/2, b = inlet width.
+% Fitted for h/dB > 0.8 and F ~ 0.2; this experiment has h/dB = 0.03-0.11, so
+% it is a reference for the geometry only, not a depth-aware prediction.
+dB_m = (C.basin.Ly_m - C.port.width_m) / 2;
+R1_dufresne_m = 3.43 * dB_m^0.75 * C.port.width_m^0.25;
+if strcmp(value_column, 'R_over_dB')
+    referenceValue = R1_dufresne_m / dB_m;
+else
+    referenceValue = R1_dufresne_m;
+end
+
 [fig, excludedRunIds] = plot_reattachment_vs_depth(tables, runIDs, flowLevels, ...
-    'value_column', value_column, 'min_valid_fraction', min_valid_fraction);
+    'value_column', value_column, 'min_valid_fraction', min_valid_fraction, ...
+    'reference_value', referenceValue, ...
+    'reference_label', 'Dufresne et al. (2010) R_1');
 fprintf('[s39] excluded (no reattachment): %s\n', strjoin(excludedRunIds, ', '));
 
 if save_png
