@@ -63,3 +63,8 @@
 - 当初「非対称注入なしで偏りが出た」と見えたのは窓平均の見かけ. 動画は未視聴
 - CN は alpha サブサイクル非対応なので nAlphaSubCycles を 1 にしている (2 変更). 切り分けに S08_euler_alpha1 (Euler のまま alpha サブサイクル 1) を回す
 
+## 2026-11-04 S08_euler_alpha1 (Euler のまま nAlphaSubCycles 2 -> 1)
+- 1000 s 完走 (4.6 h). 判定窓 485-950 s: bias +0.066 (小窓 -0.001/+0.033/+0.225), dominant 51.0%, largest 35.9%, lock 0.53, E_inst 0.000817, 変動 50.6%. S01 とほぼ同じ対称二渦. 渦核は x 1.7-2.3, y 1.2-1.5 m 付近
+- 時系列 (S08_vs_S07_vs_S01_timeseries.png): エネルギー・フレーム間変化とも S01 並みで突発なし. S07 の荒れは alpha サブサイクルでなく CrankNicolson 0.9 (PISO のみ) 由来と確定
+- CN は今の設定 (nOuterCorrectors 1, momentumPredictor no) では偏向流の再現手段にならない. 時間スキーム 2 次化を続けるなら nOuterCorrectors を増やす等の別変更が必要で, 費用 (約 22 h) に見合うかは要検討
+
