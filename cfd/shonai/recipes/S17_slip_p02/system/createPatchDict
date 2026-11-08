@@ -1,0 +1,8 @@
+FoamFile { version 2.0; format ascii; class dictionary; object createPatchDict; }
+// loFaces -> 壁 inletLowerWall, floorFaces -> 壁 floor. 境界条件は 0.orig/{U,p_rgh,alpha.water}.
+pointSync false;
+patches
+(
+    { name inletLowerWall; patchInfo { type wall; } constructFrom set; set loFaces; }
+    { name floor;          patchInfo { type wall; } constructFrom set; set floorFaces; }
+);

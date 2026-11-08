@@ -1,0 +1,11 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// S17 = S16 (床 slip) + P02 (流入面の上半分のみ注水). 2 つのレシピの topoSetDict を 1 つにまとめた.
+// loFaces: 流入面 inletOutlet のうち y <= 1.0005 の 24 面 (基準メッシュ). P02_upper_half_inlet と同じ.
+// floorFaces: 壁 walls のうち z = 0 の 30389 面 (基準メッシュ). S16_slip_floor と同じ.
+actions
+(
+    { name loFaces;    type faceSet; action new;    source patchToFace; patches (inletOutlet); }
+    { name loFaces;    type faceSet; action subset; source boxToFace;   box (-0.7 0.90 -0.01) (-0.55 1.0005 0.021); }
+    { name floorFaces; type faceSet; action new;    source patchToFace; patches (walls); }
+    { name floorFaces; type faceSet; action subset; source boxToFace;   box (-0.7 -0.1 -0.0005) (3.1 2.1 0.0005); }
+);

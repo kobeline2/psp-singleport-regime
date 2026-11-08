@@ -1,0 +1,8 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// 壁パッチ walls のうち z = 0 の面 (水槽底と導水路の床) だけを拾う. 面中心が z = 0 なので薄い箱で選ぶ.
+// 基準メッシュ: 水槽底 217 x 137 = 29729 面 + 導水路の床 60 x 11 = 660 面 = 30389 面.
+actions
+(
+    { name floorFaces; type faceSet; action new;    source patchToFace; patches (walls); }
+    { name floorFaces; type faceSet; action subset; source boxToFace;   box (-0.7 -0.1 -0.0005) (3.1 2.1 0.0005); }
+);

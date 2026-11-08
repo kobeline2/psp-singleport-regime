@@ -1,0 +1,5 @@
+FoamFile { version 2.0; format ascii; class dictionary; object createPatchDict; }
+// topoSet で拾った床の面を walls から外し, 新しいパッチ floor にする (type wall).
+// 境界条件は 0.orig/{U,p_rgh,alpha.water} の floor の項目 (U は slip).
+pointSync false;
+patches ( { name floor; patchInfo { type wall; } constructFrom set; set floorFaces; } );
