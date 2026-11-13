@@ -1,0 +1,9 @@
+FoamFile { version 2.0; format ascii; class dictionary; object topoSetDict; }
+// S21: 流入面 inletOutlet (基準メッシュで 44 面 = y 11 列 x z 4 層, 列の中心 y = 0.95, 0.96, ..., 1.05) のうち,
+// 面中心が y <= 0.9705 の 3 列 (12 面) だけを壁にする. 注水は残りの 8 列 (32 面 = 8/11) で, 流入速度は B03 の 11/8 = 1.375 倍.
+// P02_upper_half_inlet は 6 列 (24 面) を塞ぎ 5 列で 2.2 倍. S21 はその中間.
+actions
+(
+    { name loFaces; type faceSet; action new;    source patchToFace; patches (inletOutlet); }
+    { name loFaces; type faceSet; action subset; source boxToFace;   box (-0.7 0.90 -0.01) (-0.55 0.9705 0.021); }
+);

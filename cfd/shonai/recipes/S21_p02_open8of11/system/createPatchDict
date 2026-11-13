@@ -1,0 +1,5 @@
+FoamFile { version 2.0; format ascii; class dictionary; object createPatchDict; }
+// topoSet で拾った面を流入面から外し, 新しい壁パッチ inletLowerWall にする.
+// 境界条件は 0.orig/{U,p_rgh,alpha.water} の inletLowerWall の項目.
+pointSync false;
+patches ( { name inletLowerWall; patchInfo { type wall; } constructFrom set; set loFaces; } );
