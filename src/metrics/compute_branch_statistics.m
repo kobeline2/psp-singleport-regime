@@ -44,12 +44,12 @@ function T = compute_branch_statistics(cfg, varargin)
 % under review (doc/qdip_jet_check.md). It ignores the guide-channel plan area
 % below h = a, worth about 1%.
 %
-% Note on Q_transit_Lps: with the default deep bands the swept volume is
-% simply A_plan * dh, because both bands lie above the guide-channel ceiling
-% h = a. Below h = a the channel adds plan area and the volume would carry
-% that (still unconfirmed) geometry -- see scripts/s33_compare_cfd_experiment.m.
-% The transit-time estimate is preferred over the q_actual column, which is
-% rate-limited by the 1 mm quantization of the water-level logger.
+% Q_transit_Lps is RETRACTED as a quantity to quote, and is kept only as a
+% diagnostic. Every band-wise discharge drawn from the upper-basin level record
+% is unusable: the gauge misreads by up to ~10 mm near h/a = 1, which swings
+% the apparent band discharge by a factor of two to three even though the real
+% discharge is steady within each run (doc/settled_and_retracted.md 1-2).
+% Normalize with Q_run_mean_Lps instead.
 
     p = inputParser;
     p.addRequired('cfg', @isstruct);

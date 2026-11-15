@@ -101,23 +101,23 @@ fig, ax = plt.subplots(figsize=(8.8, 5.4))
 for _, r in bs.iterrows():
     lv = level_of[r.run_id]
     c = POS if r.branch_sign > 0 else NEG
-    ax.scatter(r.Q_transit_Lps, r.R_lock, s=170, marker=LEVELM[lv], c=c, zorder=3)
+    ax.scatter(r.Q_run_mean_Lps, r.R_lock, s=170, marker=LEVELM[lv], c=c, zorder=3)
 med = bs.assign(level=[level_of[r] for r in bs.run_id]).groupby("level")
 for lv in levels:
     g = med.get_group(lv)
-    ax.scatter(g.Q_transit_Lps.median(), g.R_lock.median(), s=650, marker=LEVELM[lv],
+    ax.scatter(g.Q_run_mean_Lps.median(), g.R_lock.median(), s=650, marker=LEVELM[lv],
                facecolor="none", edgecolor=INK, lw=2.0, zorder=4)
-for rid, dx, dy in [("R0002", 0.025, -0.25), ("R0007", 0.025, -0.25), ("R0008", -0.115, 0.45)]:
+for rid, dx, dy in [("R0002", 0.019, -0.25), ("R0007", 0.019, -0.25), ("R0008", -0.087, 0.45)]:
     r = bs[bs.run_id == rid].iloc[0]
-    ax.annotate(rid, (r.Q_transit_Lps, r.R_lock), xytext=(r.Q_transit_Lps + dx, r.R_lock + dy),
+    ax.annotate(rid, (r.Q_run_mean_Lps, r.R_lock), xytext=(r.Q_run_mean_Lps + dx, r.R_lock + dy),
                 fontsize=14, color="0.25")
 ax.scatter([], [], s=300, marker="s", facecolor="none", edgecolor=INK, lw=2.0,
            label="level median")
 ax.legend(loc="lower right", frameon=False, fontsize=14)
-ax.set_xlabel("measured discharge $Q$ over $B_3$+$B_4$  [L/s]")
+ax.set_xlabel("run-average discharge $Q$  [L/s]")
 ax.set_ylabel("lock strength  $R_{\\mathrm{lock}}$")
-ax.set_xlim(0.22, 0.92); ax.set_ylim(0, 14.5)
-ax.text(0.29, 13.6, "level medians: 3.6 $\\to$ 8.7 $\\to$ 11.8", fontsize=15, color=KUBLUE)
+ax.set_xlim(0.17, 0.70); ax.set_ylim(0, 14.5)
+ax.text(0.22, 13.6, "level medians: 3.6 $\\to$ 8.7 $\\to$ 11.8", fontsize=15, color=KUBLUE)
 ax.grid(alpha=0.25)
 save(fig, "lock_vs_q.png")
 
