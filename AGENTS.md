@@ -33,6 +33,16 @@ The goal is to support a short-to-medium-term research project on surface-flow r
    - Put assumptions in comments.
    - Do not hide important behavior in nested helper logic unless it is reused.
 
+5. **Read `doc/settled_and_retracted.md` before writing anything.**
+   - It is the one-page index of settled facts, retracted claims, and pending decisions
+     that cut across the three papers.
+   - Several chats touch the same objects (the experimental data, the metrics, the CFD),
+     and a session has in fact written a claim contradicting a finding another session
+     had already settled and committed (2026-11-14). The information was in the repo;
+     it simply was not read. Three stale hand-off notes were found the same day.
+   - When something is settled or retracted, put the detail in its own authoritative
+     file and add exactly one line to that index.
+
 ## Project layout
 
 ### Repository-side

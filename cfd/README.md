@@ -75,8 +75,12 @@ polyMesh をコピー, gmsh の `tank.geo`) は三角柱 + 全断面インレッ
    `save(fullfile(cfg.WORK_DIR,'C0001',cfg.PIV_SINGLE_MAT), 'piv', '-v7.3');`
 4. 以降 s30 (メトリクス) / s31 (水位マップ) / s32 (バンド集計) は無改造で動く
    (2026-07-23 に C0001 で実証済み). s33_compare_cfd_experiment.m で実験と比較:
-   実測Q² (透過時間 Q=dV_band/T_band) で E を正規化し, 同 mode/flow の実験反復レンジと
-   照合する. 比較用の CFD import は `C.metrics.omega_*` のグリッドに揃える (公平化).
+   **ラン一定の Q** で E/Up² を作り, 同 mode/flow の実験反復レンジと照合する
+   (CFD は流入 BC の厳密値, 実験はラン平均の実測値 = 公称の 0.75-0.89 倍).
+   比較用の CFD import は `C.metrics.omega_*` のグリッドに揃える (公平化).
+   - 2026-11-14 に帯ごとの透過時間 Q (dV_band/T_band) から変更した. 帯ごとの Q は
+     上池水位計由来で, 読みが h/a ~ 1 付近で最大 ~10 mm ずれるため使えない
+     (「ポンプの流量ランプ」は撤回. `doc/qdip_jet_check.md` §0, campaign.md §6).
    - 擬似 waterlevel.csv は waterVolume FO から生成 (生成ロジックは会話記録参照, 要スクリプト化).
 
 ## cases.csv のスキーマ

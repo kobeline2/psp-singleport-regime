@@ -11,6 +11,9 @@ and follow it for all code, metadata, Git, and writing tasks.
 
 ## Orientation
 
+- `doc/settled_and_retracted.md` — **read this before writing anything.** One page of
+  settled facts, retracted claims, pending decisions, and known-stale passages. Several
+  chats share this repo, so this is how a decision made elsewhere reaches you.
 - `README.md` — research concept, pipeline overview, repository policy, and data layout.
 - `AGENTS.md` — coding/Git/metrics/writing conventions (the rules above).
 - `paper/README.md` — **the three-paper plan (experiment / 3D CFD / 2D comparison) and which

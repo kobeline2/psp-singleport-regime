@@ -4,12 +4,19 @@ clear; clc;
 %
 % For one CFD run (piv_source = "cfd") and the experimental runs that share
 % its mode + flow_level, this driver builds a like-for-like comparison:
-%   - E is normalized by the ACTUAL port velocity U_p_act = Q_act/(a b),
-%     where Q_act is the transit-time discharge Q = dV_band / T_band. The lab
-%     pump ramps within a run (measured 2026-07-23), so nominal-Q E/U_p^2
-%     mixes the pump ramp into the physics; the actual-Q form is the honest
-%     scaling test. Normalization-free indices (I_asym, I_rot, I_unst) are
-%     compared directly.
+%   - E is normalized by the port velocity U_p = Q/(a b), with ONE constant Q
+%     per run. The discharge is steady within a run, verified 2026-10-26 by
+%     three independent routes (lower-tank level, PIV jet speed, and the level
+%     gauge's own noise statistics) -- see doc/qdip_jet_check.md section 0.
+%       CFD        -> the inflow BC value (nominal_Q_Lps is exact by construction)
+%       experiment -> the run mean, from the level record over the whole run
+%     The per-band transit-time Q = dV_band/T_band used here until 2026-11-14
+%     is NOT usable: it comes from the upper-tank gauge, whose reading is off by
+%     up to ~10 mm near h/a ~ 1, and that artefact is what produced the
+%     retracted "pump ramp" (cfd/campaign.md section 6). Note the experiment
+%     runs at ~0.75-0.89 of nominal, so normalizing it by nominal Q would
+%     overstate U_p^2 by 25-80%.
+%     Normalization-free indices (I_asym, I_rot, I_unst) are compared directly.
 %   - The experimental runs are pooled to a [min, max] band across repetitions
 %     (n typically 3), and the CFD value is flagged inside / outside that range.
 %
@@ -28,7 +35,7 @@ init
 % User settings
 % -------------------------------------------------------------------------
 cfdRunID = "C0001";
-% Metrics to tabulate. 'E' -> E/U_p_act^2. 'I_circ' -> |net circulation|
+% Metrics to tabulate. 'E' -> E/U_p^2 (constant per-run Q). 'I_circ' -> |net circulation|
 % (magnitude, to sidestep the y-orientation sign convention). 'I_circ_cov'
 % -> within-band coefficient of variation of I_circ(t) = std/|mean|, a direct
 % measure of whether the basin-scale gyre PULSES (the laminar-overactivity
@@ -58,37 +65,18 @@ fprintf('[s33] CFD %s  vs  experiment {%s}  (%s / %s)\n', ...
     char(cfdRunID), strjoin(cellstr(expRuns), ', '), char(mode), char(flow));
 
 a_m = C.port.height_m; b_m = C.port.width_m;
-bands = readtable(cfg.DEPTH_BANDS_CSV, 'TextType', 'string');
-
-% Geometric volume swept in each band [m^3], accounting for the plan-area
-% step at the channel ceiling (h = a): below a the guide channel adds area,
-% above a only the tank counts. Used with per-band transit time to get the
-% robust actual discharge Q = dV_band / T_band (transit-time method; more
-% reliable than the |dh/dt| q_actual column at low flow -- see audit).
-% The experiment and the CFD do not share a plan area: the real basin is
-% 2.952 x 1.962 m (5.7918 m^2) while the blockMesh was built on the nominal
-% 3.0 x 2.0 m (6.0 m^2). Using one area for both biased the experiment's
-% Q by +3.6% and therefore E/Up^2 by -6.8%, so keep them separate.
+% One constant discharge per run (see header). The experiment's plan area is
+% the measured basin 2.952 x 1.962 m (5.7918 m^2); the CFD's is the nominal
+% 3.0 x 2.0 m the blockMesh was built on. Using one area for both biased the
+% experiment's Q by +3.6% and E/Up^2 by -6.8%, so keep them separate (the CFD
+% area is only needed if its Q ever has to be re-derived from the depth).
 A_exp = C.basin.Aplan_m2;                 % measured basin
-A_cfd = 3.0 * 2.0;                        % blockMeshDict tank footprint
-dV_band = containers.Map('KeyType','char','ValueType','double');
-dV_band_cfd = containers.Map('KeyType','char','ValueType','double');
-for bi = 1:height(bands)
-    hlo = bands.h_min_m(bi); hhi = bands.h_max_m(bi);
-    below = max(0, min(hhi, a_m) - min(hlo, a_m));
-    above = max(0, max(hhi, a_m) - max(hlo, a_m));
-    % Below the channel ceiling (h = a) the guide channel adds plan area.
-    % 0.6 x b is the CFD culvert footprint; the real feed geometry is not
-    % yet confirmed, so the experimental A_below carries that assumption.
-    dV_band(char(bands.band_id(bi)))     = (A_exp + 0.6*b_m)*below + A_exp*above;
-    dV_band_cfd(char(bands.band_id(bi))) = (A_cfd + 0.6*b_m)*below + A_cfd*above;
-end
 
-% Per-run, per-band transit time from frame_metrics (actual time span in band).
-Q_act = iActualDischarge(cfg, expRuns, dV_band);
-Q_act_cfd = iActualDischarge(cfg, cfdRunID, dV_band_cfd);
-for k = keys(Q_act_cfd)
-    Q_act(k{1}) = Q_act_cfd(k{1});
+% Experiment: run mean from the level record.
+Q_run = iRunMeanDischarge(cfg, expRuns, A_exp, a_m, b_m);
+% CFD: the inflow BC value is exact, so do not re-estimate it from the depth.
+for b = ["B1","B2","B3","B4"]
+    Q_run(char(cfdRunID + "|" + b)) = cfdRow.nominal_Q_Lps / 1000;
 end
 
 % -------------------------------------------------------------------------
@@ -102,9 +90,9 @@ for bi = 1:numel(bandIDs)
     b = bandIDs(bi);
     for mi = 1:numel(metricsToShow)
         mname = metricsToShow(mi);
-        expVals = arrayfun(@(r) iBandMetric(BM, r, b, mname, a_m, b_m, Q_act), expRuns);
+        expVals = arrayfun(@(r) iBandMetric(BM, r, b, mname, a_m, b_m, Q_run), expRuns);
         expVals = expVals(~isnan(expVals));
-        cfdVal = iBandMetric(BM, cfdRunID, b, mname, a_m, b_m, Q_act);
+        cfdVal = iBandMetric(BM, cfdRunID, b, mname, a_m, b_m, Q_run);
         if isempty(expVals) || isnan(cfdVal); continue; end
         lo = min(expVals); hi = max(expVals);
         if cfdVal >= lo && cfdVal <= hi
@@ -114,27 +102,28 @@ for bi = 1:numel(bandIDs)
         else
             verdict = sprintf('%.2fx high', cfdVal/hi);
         end
-        label = mname; if mname == "E"; label = "E/Up_act^2"; end
+        label = mname; if mname == "E"; label = "E/Up^2"; end
         fprintf('%-4s %-11s [%8.4f,%8.4f] %10.4f  %s\n', ...
-            iBandLabel(b, bi), label, lo, hi, cfdVal, verdict);
+            iBandLabel(b, mi), label, lo, hi, cfdVal, verdict);
     end
 end
-fprintf('\nNote: E is actual-Q normalized. I_* are normalization-free.\n');
+fprintf('\nNote: E uses one constant Q per run (CFD: BC value; experiment:\n');
+fprintf('      run mean, ~0.75-0.89 of nominal). I_* are normalization-free.\n');
 fprintf('Fair comparison assumes the CFD surface was sampled on Omega (see s33 header).\n');
 
 % =========================================================================
 % Local helpers
 % =========================================================================
-function v = iBandMetric(BM, runID, band, mname, a_m, b_m, Q_act)
-%IBANDMETRIC One band value, with E converted to E/U_p_act^2.
+function v = iBandMetric(BM, runID, band, mname, a_m, b_m, Q_run)
+%IBANDMETRIC One band value, with E converted to E/U_p^2 (constant Q per run).
     row = BM(BM.run_id == runID & BM.band_id == band, :);
     if height(row) ~= 1; v = NaN; return; end
     switch mname
         case "E"
-            % Transit-time actual port velocity (see Q_act precompute).
+            % Constant per-run port velocity (see Q_run precompute).
             key = char(runID + "|" + band);
-            if isKey(Q_act, key) && Q_act(key) > 0
-                Q = Q_act(key);
+            if isKey(Q_run, key) && Q_run(key) > 0
+                Q = Q_run(key);
             else
                 Q = row.nominal_Q_Lps / 1000;   % fallback
             end
@@ -161,27 +150,41 @@ function v = iBandMetric(BM, runID, band, mname, a_m, b_m, Q_act)
     end
 end
 
-function Q = iActualDischarge(cfg, runIDs, dV_band)
-%IACTUALDISCHARGE Transit-time discharge Q = dV_band / T_band [m^3/s].
-% T_band = time span of frames assigned to the band in frame_metrics.
+function Q = iRunMeanDischarge(cfg, runIDs, A_plan, a_m, b_m)
+%IRUNMEANDISCHARGE One constant discharge per run [m^3/s], from the level record.
+% Q = (volume swept between the depths at the first and last frame) / elapsed time.
+% The discharge is steady within a run (doc/qdip_jet_check.md section 0), so the
+% gauge record is NOT broken down per band: the gauge reads up to ~10 mm off
+% near h/a ~ 1, which is local to the middle of the run and cancels over it.
+% The same Q is written under every band key, so the caller looks it up the
+% same way as before, as "<run>|<band>".
     Q = containers.Map('KeyType','char','ValueType','double');
     for i = 1:numel(runIDs)
         rid = runIDs(i);
         fmCsv = fullfile(cfg.DERIVED_METRICS_DIR, char(rid), 'frame_metrics.csv');
         if ~isfile(fmCsv); continue; end
         fm = readtable(fmCsv, 'TextType', 'string');
-        if ~ismember('band_id', fm.Properties.VariableNames); continue; end
+        if ~all(ismember({'time_s','depth_m'}, fm.Properties.VariableNames)); continue; end
+        ok = isfinite(fm.time_s) & isfinite(fm.depth_m);
+        if nnz(ok) < 2; continue; end
+        t = fm.time_s(ok); h = fm.depth_m(ok);
+        [~, iFirst] = min(t); [~, iLast] = max(t);
+        Trun = t(iLast) - t(iFirst);
+        hlo = min(h(iFirst), h(iLast)); hhi = max(h(iFirst), h(iLast));
+        if Trun <= 0 || hhi <= hlo; continue; end
+        % The plan area steps at the channel ceiling h = a: below a the guide
+        % channel adds area (0.6 x b is the CFD culvert footprint; the real feed
+        % geometry is unconfirmed, so the experiment carries that assumption).
+        below = max(0, min(hhi, a_m) - min(hlo, a_m));
+        above = max(0, max(hhi, a_m) - max(hlo, a_m));
+        Vrun = (A_plan + 0.6*b_m)*below + A_plan*above;
         for b = ["B1","B2","B3","B4"]
-            sel = fm.band_id == b & isfinite(fm.time_s);
-            if nnz(sel) < 2; continue; end
-            Tband = max(fm.time_s(sel)) - min(fm.time_s(sel));
-            if Tband > 0 && isKey(dV_band, char(b))
-                Q(char(rid + "|" + b)) = dV_band(char(b)) / Tband;
-            end
+            Q(char(rid + "|" + b)) = Vrun / Trun;
         end
     end
 end
 
-function s = iBandLabel(b, bi)
-    if bi == 1; s = char(b); else; s = ''; end
+function s = iBandLabel(b, rowInBand)
+%IBANDLABEL Print the band id on its first row only, blank on the rest.
+    if rowInBand == 1; s = char(b); else; s = ''; end
 end
