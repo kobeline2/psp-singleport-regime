@@ -10,13 +10,14 @@
 | `sections/*.tex` | 本文．英語と日本語の直訳を段落ごとに対にして持つ．二つのビルドで共有する |
 | `tables/*.tex` | 表（英語のみ）．`tables/all.tex` が初出の順に読み込む |
 | `figures/all.tex` | 図．まだ無い図は `\figplaceholder{…}` で場所だけ取る |
-| `notation.tex` | 記号のマクロ．**記号を手で書かず，必ずこのマクロを使う** |
+| `notation.tex` | 記号のマクロ．**名前のある量は手で書かず，必ずこのマクロを使う**（座標 $x, y, z$，時刻 $t$，添字 $i, j, k$ は直接書いてよい）．要る記号が無いときは，自分の節のファイルの先頭に `\providecommand` で仮に定義し，その旨を報告する（`notation.tex` は共有なので直接は足さない） |
 | `bilingual.sty` | 対の段落，空欄，出典の仕組み |
 | `main.tex` | 投稿用（英語のみ）．pdflatex，`tJHR2e.cls` |
 | `review.tex` | 精査用（日本語が主，英語は小さい字，出典つき）．lualatex，ltjsarticle |
 | `make_bib.py` | Zotero の export から `refs.bib` を作る（月などの欄を落とす）．書誌の正本は Zotero |
 | `evidence/*.md` | 各段落の根拠の控え（引用元のメモの場所，数値の出どころ） |
 | `build.sh` | 両方を組む．`./build.sh review` で精査用だけ |
+| `lint.py` | 対の構造，段落の番号，引用キー，空欄の数，表記の決まりを機械的に検査する．**書いたら必ず通す**（`python3 lint.py`．ERROR は 0 にする．WARN は一つずつ確かめる） |
 
 `tJHR2e.cls` と `template/` は出版社の配布物なので，公開リポジトリには入れていない
 （`.gitignore`）．投稿用を組む PC では，JHR の Instructions for authors の「Latex template」
