@@ -35,6 +35,9 @@
 \bibliography{refs}
 
 \clearpage
+% Tables are set in a smaller size here so that the long settings table fits on a page
+% of this wider-leaded layout (the submission build keeps the class default).
+\makeatletter\g@addto@macro\@floatboxreset{\footnotesize}\makeatother
 \input{tables/all}
 
 \clearpage

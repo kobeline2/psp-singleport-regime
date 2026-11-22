@@ -20,7 +20,7 @@ BIB = HERE.parents[2] / 'literature' / 'refs' / 'zotero_export.bib'
 DEFAULT = ['sections/intro.tex', 'sections/methods_a.tex', 'sections/methods_b.tex',
            'sections/backmatter.tex']
 
-ID_RE = re.compile(r'^(I|C|[MRD]\d)-\d+[a-z]?$')
+ID_RE = re.compile(r'^(I|C|B|[MRD]\d)-\d+[a-z]?$')
 CITE_RE = re.compile(r'\\cite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^}]*)\}')
 MACRO_RE = re.compile(r'\\([A-Za-z@]+)')
 MATH_RE = re.compile(r'\$[^$]*\$')
@@ -48,7 +48,7 @@ sum Re Im ell hbar imath jmath aa AA ss o O l L ae AE oe OE i j'''.split())
 
 AMERICAN = r'\b(colou?r(?<!colour)|center(?:ed|ing|s|line)?|behavior(?:s|al)?|analyz(?:e|ed|es|ing)|' \
            r'model(?:ed|ing)\b|label(?:ed|ing)\b|gray|favor(?:s|ed|able)?|neighbor\w*|vapor|liters?|' \
-           r'meters?\b|fiber|catalog\b|travel(?:ed|ing)\b|signal(?:ed|ing)\b|channel(?:ed|ing)\b)'
+           r'meters?\b|fiber|catalog\b|travel(?:ed|ing)\b|signal(?:ed|ing)\b|channel(?:ed|ing)\b)\b'
 ISE = r'\b\w*(characteris|normalis|visualis|stabilis|minimis|maximis|utilis|generalis|realis|recognis|' \
       r'summaris|organis|parameteris|synchronis|localis|standardis|optimis|randomis|linearis|' \
       r'emphasis(?:e[ds]?|ing))\w*'
@@ -93,13 +93,13 @@ def lint_file(path, bibkeys, macros, seen_ids):
     lines = path.read_text(encoding='utf-8').split('\n')
     state, cur_id, start = 'out', None, 0
     en, ja, last_end_en = [], [], None
-    words = 0
+    words = gapwords = 0
 
     def err(n, msg, level='ERROR'):
         out.append(f'{level} {rel}:{n + 1} [{cur_id or "-"}] {msg}')
 
     def close_pair(n):
-        nonlocal words
+        nonlocal words, gapwords
         e, j = '\n'.join(en), '\n'.join(ja)
         ce, cj = sorted(k.strip() for m in CITE_RE.findall(e) for k in m.split(',')), \
                  sorted(k.strip() for m in CITE_RE.findall(j) for k in m.split(','))
@@ -145,10 +145,12 @@ def lint_file(path, bibkeys, macros, seen_ids):
             if '#' in blk or r'\verb' in blk:
                 err(n, 'no # or verbatim inside en/ja')
         words += len(re.findall(r"[A-Za-z][A-Za-z'-]*", prose))
+        for g in re.findall(r'\\PH(?:ref)?\{((?:[^{}]|\{[^{}]*\})*)\}', e):
+            gapwords += len(re.findall(r"[A-Za-z][A-Za-z'-]*", strip_macros(g)))
 
     for n, raw in enumerate(lines):
         s = raw.strip()
-        for mname in MACRO_RE.findall(raw.split('%')[0] if not raw.lstrip().startswith('%') else ''):
+        for mname in MACRO_RE.findall(re.split(r'(?<!\\)%', raw)[0]):
             if mname not in KNOWN and mname not in macros:
                 err(n, f'unknown macro \\{mname} (define it in notation.tex)', 'WARN')
         m_en = re.match(r'^\\begin\{en\}(?:\[([^\]]*)\])?$', s)
@@ -163,7 +165,7 @@ def lint_file(path, bibkeys, macros, seen_ids):
             cur_id = m_en.group(1) or cur_id
             if m_en.group(1):
                 if not ID_RE.match(m_en.group(1)):
-                    err(n, f'paragraph ID "{m_en.group(1)}" does not match I-1 / M1-1 / R1-1 / D1-1 / C-1')
+                    err(n, f'paragraph ID "{m_en.group(1)}" does not match I-1 / M1-1 / R1-1 / D1-1 / C-1 / B-1')
                 if m_en.group(1) in seen_ids:
                     err(n, f'paragraph ID "{m_en.group(1)}" already used at {seen_ids[m_en.group(1)]}')
                 seen_ids[m_en.group(1)] = f'{rel}:{n + 1}'
@@ -195,7 +197,7 @@ def lint_file(path, bibkeys, macros, seen_ids):
             err(n, r'text between \end{en} and \begin{ja}')
     if state != 'out':
         out.append(f'ERROR {rel}:{len(lines)} [{cur_id}] file ends inside a block')
-    return out, words
+    return out, words, gapwords
 
 
 def main():
@@ -206,13 +208,13 @@ def main():
     for f in files:
         if not f.is_file():
             continue
-        out, words = lint_file(f, bibkeys, macros, seen)
+        out, words, gapwords = lint_file(f, bibkeys, macros, seen)
         for line in out:
             print(line)
         nerr = sum(1 for line in out if line.startswith('ERROR'))
         total_err += nerr
         print(f'-- {f.relative_to(HERE)}: {nerr} errors, {len(out) - nerr} warnings, '
-              f'{words} English words in en blocks')
+              f'{words} English words in en blocks ({words - gapwords} without the contents of \\PH and \\PHref)')
     return 1 if total_err else 0
 
 

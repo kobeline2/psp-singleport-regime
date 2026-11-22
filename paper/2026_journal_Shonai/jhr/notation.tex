@@ -22,8 +22,8 @@
 \newcommand{\Aplan}{A}                   % basin plan area
 \newcommand{\Qrun}{Q}                    % run-average discharge
 \newcommand{\Qnom}{Q_{\sub{n}}}          % nominal discharge
-\newcommand{\Up}{U_{\sub{p}}}            % port mean velocity, Q_n/(a b)
-\newcommand{\Trun}{T}                    % duration of the recorded interval
+\newcommand{\Up}{U_{\sub{p}}}            % port velocity scale, Q_n/(a b) (nominal discharge)
+\newcommand{\Trun}{T}                    % time between the first and last velocity fields of the analysed record
 \newcommand{\grav}{g}
 \newcommand{\visc}{\nu}
 
@@ -67,11 +67,11 @@
 \newcommand{\mmppx}{mm~pixel$^{-1}$}
 
 % --- further symbols used in Methods -------------------------------------------
-\newcommand{\hzero}{h_{0}}               % gauge reading at the start of the record
-\newcommand{\hone}{h_{1}}                % gauge reading at the end of the record
-\newcommand{\tzero}{t_{0}}               % time of the first recorded frame
-\newcommand{\tone}{t_{1}}                % time of the last recorded frame
-\newcommand{\Dh}{\Delta h}               % depth change over the record, |h_1 - h_0|
+\newcommand{\hzero}{h_{0}}               % first gauge reading of the analysed record
+\newcommand{\hone}{h_{1}}                % last gauge reading of the analysed record
+\newcommand{\tzero}{t_{0}}               % time of the first velocity field of the analysed record
+\newcommand{\tone}{t_{1}}                % time of the last velocity field of the analysed record
+\newcommand{\Dh}{\Delta h}               % difference between the first and last gauge readings, |h_1 - h_0|
 \newcommand{\dtp}{\Delta t}              % image-pair interval
 \newcommand{\EL}{E_{\sub{L}}}            % E over the half y < y_m
 \newcommand{\ER}{E_{\sub{R}}}            % E over the half y >= y_m
@@ -81,3 +81,16 @@
 \newcommand{\xjet}{x_{\sub{j}}}          % station at which the jet offset is taken
 \newcommand{\Lpage}{L_{\sub{P}}}         % Page's trend statistic
 \newcommand{\Nfr}{N}                     % number of frames
+
+% --- symbols introduced with the first draft of Methods (2026-11-22) ------------
+\newcommand{\ucomp}{u}                              % x component of the surface velocity
+\newcommand{\vcomp}{v}                              % y component of the surface velocity
+\newcommand{\indic}[1]{\mathbf{1}\left[#1\right]}   % indicator: 1 where the condition holds, 0 elsewhere
+\newcommand{\tmean}[2]{\mu_{#1}\left(#2\right)}     % mean over the frames of the set #1 (band k, or d)
+\newcommand{\tsd}[2]{\sigma_{#1}\left(#2\right)}    % sample standard deviation over the frames of the set #1
+\newcommand{\deep}{\sub{d}}                         % label of the pooled frames of bands B3 and B4
+\newcommand{\ublk}{\overline{\ucomp}}               % 20 s block mean of the x component (jet offset)
+\newcommand{\wjet}{w}                               % weight in the jet lateral offset
+\newcommand{\ranksum}{r}                            % rank sum of a discharge level (Page's test), r_q
+% The discharge level in Page's statistic is indexed by q, not j: the subscript j
+% of \yjet and \xjet stands for `jet'.

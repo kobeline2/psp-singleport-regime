@@ -6,8 +6,15 @@ R0001 and R0005-R0008. Original question: is R0007 symmetric in the deep
 bands, or only early in the run?
 
 Same jet-offset method as tmp/gyre_diagnosis/fig2_evidence.py (forward-momentum
-centroid of 20 s block-mean u at x = 1.0 m, offset from the port axis y = 0.981 m),
-then mapped onto the depth bands through frame_metrics time_s -> band_id.
+centroid of 20 s block-mean u at x = 1.0 m), then mapped onto the depth bands
+through frame_metrics time_s -> band_id.
+
+The offset is taken from the mid-line of the vector grid, y_m = 0.5 (min y + max y),
+the same line that splits E_L and E_R in compute_frame_metrics_basic.m. That line
+is the centre line of the rectified image, i.e. the port axis: in grid coordinates
+(pixel index times the single image scale) it reads 0.9853 m, while the true
+half-width is 0.981 m. Until 2026-11-22 this script subtracted 0.981 from the grid
+coordinate, which put a jet on the centre line at +0.004 m.
 """
 import numpy as np, h5py, pandas as pd, pathlib
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -18,12 +25,13 @@ def jet_series(rid, xv=1.0, blk_s=20.0):
     fps = float(np.squeeze(piv['meta/effective_sequence_fps_hz'][()]))
     n = piv['u'].shape[0]; blk = int(round(blk_s * fps)); nb = n // blk
     i = int(np.argmin(abs(x - xv)))
+    y_mid = 0.5 * (y.min() + y.max())
     t, o = [], []
     for ib in range(nb):
         u = np.nanmean(piv['u'][ib*blk:(ib+1)*blk, i, :], axis=0)
         w = np.clip(np.nan_to_num(u), 0, None) ** 2
         t.append((ib + 0.5) * blk / fps)
-        o.append(float((w * (y - 0.981)).sum() / max(w.sum(), 1e-12)))
+        o.append(float((w * (y - y_mid)).sum() / max(w.sum(), 1e-12)))
     return np.array(t), np.array(o)
 
 for rid in ('R0001', 'R0005', 'R0006', 'R0007', 'R0008'):

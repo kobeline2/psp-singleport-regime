@@ -1,0 +1,54 @@
+% tab_piv.tex -- settings of the surface PIV (Methods 2.4). English only.
+% Source of the values: doc/piv_conditions.md and evidence/methods_piv.md.
+% The two outflow rows, the displacement rows and the noise-floor row change if the outflow videos
+% are re-paired.
+% Displacement rows: the recorded level values (doc/piv_conditions.md: inflow 0.96, 0.98, 1.29 and
+% outflow 0.05, 0.08, 0.16 pixel) are unweighted means over the 16 band rows (4 runs x 4 bands) of a
+% level in band_metrics.csv, which is on the gauge depth at present, whereas the manuscript defines
+% the depth bands on the time-proportional depth. The inflow row is therefore a placeholder until
+% the values are recomputed with a repo tool (s31 with the depth option). The outflow values did
+% not move at two decimals in the cross-check and are kept; recompute them at the same time.
+% Analysis domain: the grid coordinates (x = 0.045-2.909 m, y = 0.041-1.929 m) are PIVlab
+% coordinates (pixel index x 1.96669 mm, origin at pixel 0). Read next to the true lengths of the
+% text (W = 1.962 m, y_p = 0.981 m) they suggest side-wall margins of 41 and 33 mm and a y
+% mid-point of 0.985 m, against "about 40 mm from the walls" (M4-4) and "the mid-line coincides
+% with the port axis" (M5-2), so they are not shown. In true distances the grid lies about 43 mm
+% from the end walls and about 39 mm from the side walls (evidence/methods_piv.md, section 7,
+% audit note). The area is 5.41 m^2 in PIVlab coordinates and 5.40 m^2 in true distances, hence
+% 5.4 m^2.
+\begin{table}[htbp]
+\caption{Settings of the surface particle image velocimetry (PIV).}
+\label{tab:piv}
+\begin{center}
+\begin{tabular}{p{0.30\textwidth}p{0.62\textwidth}}
+\hline
+Item & Value \\
+\hline
+Source video frame rate & 29.97~Hz \\
+Camera & \PH{camera model, lens, position and raw frame size} \\
+Tracer particles & \PH{type and representative size} \\
+Illumination & \PH{light source and arrangement} \\
+Rectification & Projective transformation fitted to the four inner corners of the basin; one transformation per run \\
+Rectified image & $1501 \times 1001$~pixel covering the inner basin, 2.952~m $\times$ 1.962~m \\
+Image scale & 1.968~\mmppx\ ($x$) and 1.962~\mmppx\ ($y$); a single scale of 1.967~\mmppx\ applied to velocities and coordinates \\
+Pre-processing before the PIV analysis & Conversion to greyscale; division by a Gaussian-blurred copy of the frame (standard deviation 30~pixel); clipping to the 1st--99th percentile; inversion \\
+Software & PIVlab, version \PH{PIVlab version}; no image enhancement inside the program \\
+Correlation algorithm & \PH{name of the algorithm; recorded only as a numeric code} \\
+Interrogation windows & 128, 64 and 32~pixel (three passes); overlap 75\%, 50\% and 50\% \\
+Sub-pixel estimator & \PH{name of the estimator; recorded only as a numeric code} \\
+Vector grid & $92 \times 61$ vectors; spacing 16~pixel (31.5~mm) \\
+Vector validation & Standard-deviation filter (threshold 6 standard deviations); local median filter (threshold 3); correlation-coefficient filter (threshold 0.5) \\
+Rejected vectors & Replaced by interpolation; 1--3\% of all vectors in the five inflow runs examined (one low, four medium) \\
+Smoothing & None \\
+Image-pair interval, inflow & 0.200, 0.100 and 0.067~s (low, medium, high); every 6th, 3rd and 2nd video frame retained \\
+Image-pair interval, outflow & 0.334~s (all levels); every 10th video frame retained \\
+Vector rate & 5, 10 and 15~Hz (inflow: low, medium, high); 3~Hz (outflow) \\
+Typical displacement, inflow & About 1~pixel; \PH{level values on the time-proportional depth bands; 0.96, 0.98 and 1.29~pixel (low, medium, high) on the gauge-depth bands} \\
+Typical displacement, outflow & 0.05, 0.08 and 0.16~pixel (low, medium, high) \\
+Analysis domain & Whole vector grid (5.4~\sqm); outermost vectors about 40~mm from the walls; no mask \\
+Noise-floor constant for $\Ekin$ & $2 \times 10^{-7}$~\sqmpss; level of $\Ekin$ in the outflow runs at the low level at the 0.334~s interval, not a null-displacement measurement (\PH{runs, frames and statistic used}) \\
+\hline
+\end{tabular}
+\end{center}
+Note: Pixel values refer to the rectified image; low, medium and high are the discharge levels; the typical displacement is defined in Section~\ref{sec:piv}; $\Ekin$ is the area-mean squared surface speed of Equation~(\ref{eq:E}).
+\end{table}

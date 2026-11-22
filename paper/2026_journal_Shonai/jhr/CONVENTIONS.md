@@ -35,7 +35,7 @@ English paragraph \citep{dufresneClassificationFlowPatterns2010}.
 \end{ja}
 ```
 
-- 段落の番号は，序論が `I-1, I-2, …`，方法が小節ごとに `M1-1, M1-2, …, M2-1, …`（小節 2.1 の 1 段落目が `M1-1`），結果 `R1-1`，考察 `D1-1`，結論 `C-1`．
+- 段落の番号は，序論が `I-1, I-2, …`，方法が小節ごとに `M1-1, M1-2, …, M2-1, …`（小節 2.1 の 1 段落目が `M1-1`），結果 `R1-1`，考察 `D1-1`，結論 `C-1`，後付け（謝辞，資金など）`B-1`．
   **一度振った番号は変えない．** 段落を足すときは `I-3a` のように枝番を使う（指摘が番号で来るため）．
 - `\begin{en}` `\end{en}` `\begin{ja}` `\end{ja}` は，それぞれ単独の行に書く．
 - **段落と段落の間は空行 1 つ．対の中（en と ja の間）には空行を入れない．**
@@ -56,7 +56,8 @@ English paragraph \citep{dufresneClassificationFlowPatterns2010}.
 - 記号，数値，単位，引用，式の番号，図表の番号は英語と同じものを同じ位置に書く．
 - 専門用語は 7. の訳語の表に従う．inflow，outflow，port，basin，run は訳さずそのまま書く
   （旧和文原稿と同じ）．
-- 句読点は「，．」．
+- 句読点は「，．」．英語の `;` と `:` は，文を分けずに「；」「：」で写してよい（文の数を英語と合わせるため）．
+- 英語の shows / reported / describes は，「示す」「報告した」「述べている」と，動詞の強さをそのまま写す．
 
 ## 4. 空欄と印
 
@@ -66,6 +67,9 @@ English paragraph \citep{dufresneClassificationFlowPatterns2010}.
 | `\PHref{…}` | **後で足す文献**（揚水発電の重要性などの周辺文献）．literature チャットが把握している | 同上．勝手に文献を探して埋めない |
 | `\unverified` | 人が原典と照合していない文献（AI-DRAFT に基づく記述）の印 | `\citep{…}\unverified` のように引用の直後に付ける |
 | `\src{…}` | 引用元のメモの場所と確認ページ，数値の出どころ | **ja の末尾**に置く（精査用にだけ出る）．`_` は `\_` と書く |
+
+空欄の中身は短い見出しにし，内訳（何を確かめれば埋まるか）は直後の `\jnote` に書く．空欄の中の語は
+分量に数えない（`lint.py` が両方の語数を出す）．
 
 現時点で空欄と決まっているもの：実験の開始手順（inflow の注水を始めた水位，撮影開始の水位，
 outflow を静水から始めたか），トレーサ粒子の種類と粒径，水温と動粘性係数，下池の計測の詳細，
@@ -109,6 +113,15 @@ outflow を静水から始めたか），トレーサ粒子の種類と粒径，
 | port | port |
 | feed channel | 給水路 |
 | inflow (pumping mode) / outflow (generating mode) | inflow（揚水運転）/ outflow（発電運転） |
+| mode（inflow と outflow の別） | 運転 |
+| discharging into / withdrawal, withdrawing from | 吐出 / 吸込 |
+| free surface | 自由表面 |
+| port velocity scale | port の流速尺度 |
+| gauge reading / gauge-derived discharge | 水位計の読み / 水位計由来の流量 |
+| jet test（流量一定の確認） | 噴流の試験（「検定」は統計的検定に取っておく） |
+| flowmeter | 流量計 |
+| analysed record | 解析した記録 |
+| frame（指標の文脈） | フレーム（流速場の一つ一つ．2.4 節の動画のフレームと区別する） |
 | run | run |
 | discharge / nominal discharge / run-average discharge | 流量 / 名目流量 / run 平均流量 |
 | water depth / relative submergence $h/a$ | 水深 / 相対水深 $h/a$ |
@@ -168,11 +181,15 @@ CFD の図と数値．
 ## 9. 分量の目安
 
 JHR は刷り上がり 15 頁（図表を含めて約 15,000 語相当）まで．序論は 900--1100 語，
-方法は 2200--2600 語と表 2--3 枚を目安にする．
+方法は 2200--2600 語と表 2--3 枚を目安にする．初稿（2026-11-22）は空欄の中身を除いて序論 1100 語，
+方法 2441 語で，どちらも上限に近い．**足すときは同じ節で同じだけ削る．**
 
 ## 10. 未決の表記
 
 - ロック強度 `\Rlock`（$R_{lock}$）が Reynolds 数 `\Rey`（サンセリフの R）と紛らわしい．
-  `notation.tex` の 1 行で変えられる．
+  `notation.tex` の 1 行で変えられる．Page の統計量 `\Lpage`（$L_P$）と basin の長さ `\Lx`（$L$）も近い．
+- フレームにわたる平均と標準偏差を $\mu_k(\cdot)$，$\sigma_k(\cdot)$，$\Band{3}$ と $\Band{4}$ をまとめた集合を添字 $d$ で
+  書いている（`\tmean`，`\tsd`，`\deep`）．Notation の一覧では演算子として載せている．
+- $\EL$，$\ER$ の L，R が実際のどちらの側壁かは，符号の向き（M5-3 の空欄）が決まるまで書けない．
 - 無次元数は，Instructions for authors（2026-11-16）では F と R，テンプレートの手引き（2025-09）では
   Fr と Re．前者に従っている．`notation.tex` の 2 行で変えられる．

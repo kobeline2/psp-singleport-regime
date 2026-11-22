@@ -1,1 +1,179 @@
-% backmatter: acknowledgements, funding, statements, notation (to be written)
+% backmatter.tex -- the unnumbered end sections that JHR requires, in this order:
+% Acknowledgements, Funding, Disclosure statement, Data availability statement,
+% Declaration of generative AI use, Notation.
+% The statements are en/ja pairs with the IDs B-1 ... B-5, so that their gaps appear
+% under their own ID in the list of open items of the review build.
+% Notation is English only and stands outside the en/ja blocks, so it is printed by
+% both builds. It lists the symbols used in sections/intro.tex, methods_a.tex and
+% methods_b.tex as of 2026-11-22; extend it when Results and Discussion exist.
+% All symbols are defined in notation.tex.
+
+\section*{Acknowledgements}
+
+\begin{en}[B-1]
+\PH{acknowledgements, to be supplied by the authors: the persons and organizations to be thanked; funding information is not given here but in the Funding section; the section can be omitted if there is nothing to acknowledge}.
+\end{en}
+\begin{ja}
+\PH{謝辞（著者が記入する）：謝意を表す個人と組織；資金に関する情報はここではなく資金の節に書く；謝辞とすることが無ければ，この節は省いてよい}．
+\end{ja}
+
+\jnote{後付け（全体）：(1) 謝辞，資金，利益相反，データの所在は，事実が分からないので，それぞれ一つの空欄にした．利益相反の標準の文は，空欄の中に候補として示しただけで，主張していない．(2) この節の対には段落の番号を付けていない（lint.py が受け付ける番号は I-，C-，M，R，D の系列だけのため）．そのため，精査用 PDF の「未確定の箇所の一覧」では，この節の空欄が，直前に番号を付けた段落（方法の最後の段落）の番号の下に並ぶ．(3) JHR が必須とする記載（paper/README.md の 1 本目 (8)）のうち，CRediT（著者の貢献）は，このファイルに入れていない（節の指定に無い）．投稿システムに入力するのか，原稿に節を立てるのかを確かめる．(4) 節の順は，謝辞，資金，利益相反，データの所在，生成 AI の使用の申告，Notation とした．同 (8) にある補足資料と付録は，いまは無い．}
+
+\section*{Funding}
+
+\begin{en}[B-2]
+\PH{funding, to be supplied by the authors: the funding bodies and grant numbers; if the work received no funding, JHR asks that this be stated explicitly}.
+\end{en}
+\begin{ja}
+\PH{資金（著者が記入する）：資金の提供元と課題番号；本研究が資金を受けていなければ，JHR はそのことを明記するよう求めている}．
+\end{ja}
+
+\jnote{資金：テンプレートの手引き（template/tJHRguide.tex，2025-09）は「資金の支援が無ければ，この節は省いてよい」としているが，執筆の指示は，投稿規定（2026-11-16）が資金の無い場合もその旨の明記を求めるとしている．このファイルの担当は投稿規定の原文を読んでいないので，原文で確かめる．謝辞に資金のことを書かないことと，謝辞が無ければ節を省けることは，テンプレートの手引きによる．}
+
+\section*{Disclosure statement}
+
+\begin{en}[B-3]
+\PH{disclosure statement, to be confirmed by all authors: any competing interests; if there are none, the standard sentence is `The authors report there are no competing interests to declare'}.
+\end{en}
+\begin{ja}
+\PH{利益相反の申告（全著者が確認する）：該当する利益相反；一つも無ければ，標準の文は「著者らは，申告すべき利益相反が無いことを報告する」である}．
+\end{ja}
+
+\section*{Data availability statement}
+
+\begin{en}[B-4]
+\PH{data availability statement, to be supplied by the authors: whether and where the data that support the findings and the analysis code are available, for example a repository with a persistent identifier, or the conditions under which they can be obtained from the authors}.
+\end{en}
+\begin{ja}
+\PH{データの所在の申告（著者が記入する）：結果を支えるデータと解析コードが入手できるかどうかと，その場所；たとえば永続的な識別子をもつリポジトリ，または著者から入手できる条件}．
+\end{ja}
+
+\section*{Declaration of generative AI use}
+
+\begin{en}[B-5]
+In the course of this work the authors used a generative artificial intelligence (AI) assistant (Claude, Anthropic; \PH{model versions and period of use}) under their direction. It was used to write and check the analysis scripts, to draft and cross-check notes on the cited publications, and to draft the text of the manuscript and its Japanese working translation. The authors verified these notes against the original publications, except for two cited papers, for which this verification is not yet complete and which are marked in the manuscript. The authors reviewed and edited all content produced with the assistant and take full responsibility for the content of the article.
+\end{en}
+\begin{ja}
+本研究の過程で，著者らは，生成人工知能（AI）のアシスタント（Claude，Anthropic；\PH{モデルの版と使用期間}）を，著者らの指示のもとで使用した．それは，解析スクリプトの作成と確認，引用文献についてのメモの起草と相互の照合，および原稿の本文とその日本語の作業用の翻訳の起草に用いられた．著者らは，これらのメモを原典と照合したが，引用した二つの論文は例外であり，それらについてはこの照合がまだ完了しておらず，それらには原稿の中で印を付けてある．著者らは，このアシスタントを用いて作成したすべての内容を精査して編集し，論文の内容に全責任を負う．
+\src{paper/README.md 1 本目「書き方の取り決め」(4)(5)(8)；AGENTS.md「Literature management」；照合が済んでいない二つの論文は Cherdron et al. (1978) と Fearn et al. (1990)（I-3 と I-5 の印）}
+\end{ja}
+
+\jnote{生成 AI の使用の申告：この節は全文が下書きであり，著者が確認するか，書き直す．(1) 書いた内容は，この repo での進め方（解析スクリプトの作成と確認，文献のメモの AI による下書きと照合，英語の本文と日本語の直訳の起草）に基づく．実際の使い方と合っているかを著者が確かめる．(2) 「二つの論文」は Cherdron et al. (1978) と Fearn et al. (1990) で，本文では引用の直後の印（\unverified）で示している．原典との照合が済んだら印を外し，第三文の except 以下（「が，引用した二つの論文は例外であり」以下）を削る．(3) 最後の文（著者らがすべての内容を精査して編集した）は，著者による精査が終わって初めて成り立つ．(4) モデルの版と使用期間は空欄にした．版は repo のコミットの記録（Co-Authored-By の行）に残っている．(5) 出版社の方針が，道具の版，使った理由，図の作成への使用の有無などの記載を求めるかどうかは，投稿規定の原文で確かめる（このファイルの担当は原文を読んでいない．paper/README.md の 1 本目 (8) にあるのは，生成 AI の使用の申告が必須であることだけである）．(6) 節の題は仮のものである．}
+
+\section*{Notation}
+
+$\Aplan$ = plan area of the basin (\sqm)
+
+$\aport$ = port height (m)
+
+$\Band{k}$ = depth band $k$ (--)
+
+$\bport$ = port width (m)
+
+$\Ekin$ = area-mean squared surface speed (\sqmpss)
+
+$\EL$ = mean of $\ucomp^{2} + \vcomp^{2}$ over the vectors with $y < \ymid$ (\sqmpss)
+
+$\Enoise$ = noise floor of $\Ekin$ (\sqmpss)
+
+$\ER$ = mean of $\ucomp^{2} + \vcomp^{2}$ over the vectors with $y \ge \ymid$ (\sqmpss)
+
+$\Fro$ = port Froude number (--)
+
+$\grav$ = gravitational acceleration (m~s$^{-2}$)
+
+$\hdep$ = water depth (m)
+
+$\hzero$ = first gauge reading of the analysed record (m)
+
+$\hone$ = last gauge reading of the analysed record (m)
+
+$\Iasym$ = asymmetry index (--)
+
+$\Icirc$ = net circulation index (--)
+
+$\Irot$ = rotation activity index (--)
+
+$\Iunst$ = unsteadiness index (--)
+
+$i$ = index of the vectors of the grid column used for the jet lateral offset (--)
+
+$k$ = index of the depth bands, 1 to 4 (--)
+
+$\Lx$ = length of the basin (m)
+
+$\Lpage$ = statistic of Page's trend test (--)
+
+$\Psign$ = sign persistence (--)
+
+$\Qrun$ = run-average discharge (m$^{3}$~s$^{-1}$)
+
+$\Qnom$ = nominal discharge (m$^{3}$~s$^{-1}$)
+
+$q$ = index of the discharge levels, 1 (low) to 3 (high) (--)
+
+$\Rey$ = port Reynolds number (--)
+
+$\Rlock$ = lock strength (--)
+
+$\ranksum_{q}$ = sum of the ranks of discharge level $q$ over the four days (--)
+
+$\Sside$ = signed counterpart of $\Iasym$, $(\EL - \ER)/(\EL + \ER)$ (--)
+
+$\Trun$ = time between the first and last velocity fields of the analysed record (s)
+
+$t$ = time (s)
+
+$\tzero$ = time of the first velocity field of the analysed record (s)
+
+$\tone$ = time of the last velocity field of the analysed record (s)
+
+$\Up$ = port velocity scale, based on the nominal discharge (\mps)
+
+$\uvec$ = surface velocity vector (\mps)
+
+$\ucomp$ = component of the surface velocity along $x$ (\mps)
+
+$\ublk_{i}$ = mean of $\ucomp$ over a 20~s block at the lateral position $y_{i}$ (\mps)
+
+$\uth$ = low-velocity threshold (\mps)
+
+$\vcomp$ = component of the surface velocity along $y$ (\mps)
+
+$\Wy$ = width of the basin (m)
+
+$\wjet_{i}$ = weight of vector $i$ in the jet lateral offset (\sqmpss)
+
+$x$ = coordinate along the length of the basin, measured from the port wall (m)
+
+$\xjet$ = station at which the jet lateral offset is taken (m)
+
+$y$ = coordinate across the basin, measured from one side wall (m)
+
+$\yjet$ = lateral offset of the jet from the port axis (m)
+
+$\ymid$ = mid-line of the vector grid (m)
+
+$\yport$ = lateral position of the port axis (m)
+
+$z$ = vertical coordinate, measured upwards from the floor (m)
+
+$\alphath$ = ratio of the low-velocity threshold $\uth$ to $\Up$ (--)
+
+$\Dh$ = difference between the first and last gauge readings of the analysed record (m)
+
+$\dtp$ = image-pair interval (s)
+
+$\tmean{k}{\cdot}$ = mean over the frames of depth band $\Band{k}$ or, with the subscript $\deep$, over the pooled frames of $\Band{3}$ and $\Band{4}$ (unit of the argument)
+
+$\visc$ = kinematic viscosity of water (\sqmps)
+
+$\tsd{k}{\cdot}$ = sample standard deviation over the same frames as $\tmean{k}{\cdot}$ (unit of the argument)
+
+$\philv$ = low-velocity area fraction (--)
+
+$\dom$ = analysis domain (--)
+
+$\vort$ = vertical vorticity of the surface velocity field (s$^{-1}$)
+
+\jnote{Notation：(1) 序論と方法（sections/intro.tex，methods\_a.tex，methods\_b.tex）の本文と式で実際に使っている記号だけを載せた（57 個）．結果と考察を書いたら足す．notation.tex にあっても本文で使っていない記号（フレーム数 $\Nfr$）は載せていない．(2) 順は，ラテン文字，ギリシア文字の順で，それぞれの中はアルファベット順である．同じ文字の中では，大文字を先に，添字の無いものを先にし，添字は数字，文字の順に並べた．$\Dh$ と $\dtp$ は，ギリシア文字の $\Delta$ の所に置いた．(3) notation.tex に無く，methods\_b.tex の先頭で仮に定義している記号（$\ucomp$，$\vcomp$，$\ublk$，$\wjet$，$\ranksum$，$\tmean{k}{\cdot}$，$\tsd{k}{\cdot}$，添字 $\deep$）も，本文で使っているので載せた．このファイルの先頭に同じ仮の定義を置いてある．(4) $\tmean{k}{\cdot}$ と $\tsd{k}{\cdot}$ は演算子で，単位は引数と同じなので，括弧の中にそう書いた（「記号 = 意味（SI 単位）」の様式から外れる）．添字 $\deep$ は，この二つの項目の中で説明した．添字の番号 $i$，$k$，$q$ も載せた．この五つを落とすかどうかは著者の判断による（JHR の Notation は主な変数を載せるものである）．(5) 山括弧 $\avg{\cdot}$，指示関数 $\indic{\cdot}$，符号関数 sgn は，文字の順に並べられないので載せていない（本文の M5-1 と M6-1 で定義または使用している）．(6) 流量 $\Qrun$ と $\Qnom$ の単位は SI の m$^{3}$~s$^{-1}$ と書いた．本文は値を \Lps{} で書いている．どちらにそろえるかは著者の判断による．(7) $\Sside$ は本文に名前が無いので，式と，$\Iasym$ の符号つきの対応物であることで説明した．(8) 無次元の量は (--) とした．水深帯 $\Band{k}$ と解析領域 $\dom$ は変数ではないが，同じく (--) とした．(9) $\hdep$ は「水深」とだけ書いた．解析で流速場に割り当てるのは時間比例の水深（Equation~(\ref{eq:htime})）である．(10) $\Rlock$ と $\Rey$ が紛らわしい点は未決のままである（CONVENTIONS.md 10 節）．}

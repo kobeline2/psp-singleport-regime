@@ -1,1 +1,221 @@
-% methods_b.tex -- subsections 2.4-2.6 (to be written)
+% methods_b.tex -- subsections 2.4-2.6 (surface PIV, flow metrics, branch identification)
+% All symbols are defined in notation.tex.
+
+\bisubsection{Surface particle image velocimetry}{表面 PIV}
+\label{sec:piv}
+
+\begin{en}[M4-1]
+Surface velocities were measured by surface PIV on video of the whole water surface recorded at 29.97~Hz with \PH{camera model, lens, position and raw frame size}; the tracer particles were \PH{tracer type and representative size} and the illumination was \PH{light source and arrangement}. Every frame was first rectified with a projective transformation fitted to the four inner corners of the basin, as in large-scale PIV \citep{fujitaLargescaleParticleImage1998a}, with one transformation per run determined on its first frame (\PH{elevation of the reference corners; scale change with water level}). Table~\ref{tab:piv} lists the image scale, the pre-processing and the settings, which were identical in all 24 runs except for the image-pair interval.
+\end{en}
+\begin{ja}
+表面流速は，\PH{カメラの機種，レンズ，位置，元のフレームの大きさ} により 29.97~Hz で収録した水面全体の動画に対する表面 PIV で計測し，トレーサ粒子は \PH{トレーサの種類と代表粒径}，照明は \PH{光源と配置} であった．すべてのフレームを，まず，basin の内側の四隅に当てはめた射影変換で幾何補正し（large-scale PIV と同様である \citep{fujitaLargescaleParticleImage1998a}），run ごとに，その最初のフレームで定めた一つの変換を用いた（\PH{基準とした四隅の高さ；水位に伴う尺度の変化}）．Table~\ref{tab:piv} に画像の尺度，前処理，設定を示し，これらは画像対間隔を除いて 24 run のすべてで同一であった．
+\src{evidence/methods\_piv.md §1--2．フレームレート：各 run の piv\_manifest.csv，doc/piv\_conditions.md L193．射影変換と run ごとに一つの変換：doc/piv\_preprocessing\_protocol.md L70--84，src/piv/select\_rectification\_points.m L96--101，scripts/s10\_prepare\_frames.m L25--28．基準点の高さと水位に伴う尺度の変化は記録が無い（methods\_piv.md §1，Gaps 10）．表に移した値：画像の大きさ config/constants.m L29--38；尺度 1.967（真の尺度との差は両方向とも 0.25\% 以内）doc/piv\_conditions.md L35，L62--68；前処理 src/piv/preprocess\_piv\_frame.m L6--11，L18--26，L37--48（ガウスぼかしの標準偏差 30 pixel の既定値は L75）．設定が 24 run で同一：doc/piv\_conditions.md L14--17．Fujita et al. 1998: review\_master.tex L686，確認 p.397--414．カメラ，トレーサ，照明は記録が無い（methods\_piv.md §1，§9）}
+\end{ja}
+
+\begin{en}[M4-2]
+The velocity fields were computed with PIVlab, version \PH{PIVlab version} \citep{thielickePIVlabUserfriendlyAffordable2014}. Three passes down to a $32 \times 32$~pixel interrogation window gave $92 \times 61$ vectors at a spacing of 31.5~mm. The correlation algorithm and the sub-pixel estimator were \PH{names; only numeric codes are recorded}. Spurious vectors were rejected by a standard-deviation filter, a local median filter and a correlation-coefficient filter (thresholds in Table~\ref{tab:piv}) and were replaced by interpolation. The replaced vectors amounted to 1--3\% of all vectors in the five inflow runs examined.
+\end{en}
+\begin{ja}
+流速場は PIVlab の版 \PH{PIVlab の版} \citep{thielickePIVlabUserfriendlyAffordable2014} で計算した．$32 \times 32$~pixel の検査窓に至る三つのパスにより，間隔 31.5~mm の $92 \times 61$ 個のベクトルを得た．相関アルゴリズムとサブピクセル推定法は \PH{名称（数値コードだけが記録されている）} であった．誤ベクトルは標準偏差フィルタ，局所中央値フィルタ，相関係数フィルタ（閾値は Table~\ref{tab:piv}）で除き，補間で置き換えた．置き換えたベクトルは，調べた五つの inflow の run で全ベクトルの 1--3\% であった．
+\src{evidence/methods\_piv.md §3--4．PIVlab の設定：doc/piv\_conditions.md L19--39（パス，検証），L44--47（格子）．検査窓の列（128，64，32 pixel），重なり，格子の間隔 16 pixel，PIVlab の中で画像強調をしないこと，平滑化しないこと（src/io/import\_pivlab\_result.m L43--53），三つのフィルタの閾値（標準偏差 6，局所中央値 3，相関係数 0.5）は表に移した；相関係数フィルタ（0.5）は各 run の PIVlab\_setting.mat と doc/qdip\_jet\_check.md L174 にあり，doc/piv\_conditions.md には無い．補間ベクトルの割合：doc/piv\_conditions.md L201--211（R0001 と R0005--R0008 の 5 run だけ；low が一つ，medium が四つであることは表に書いた）．Thielicke and Stamhuis 2014: review\_master.tex L708--710，確認 art. e30．版，アルゴリズム名，サブピクセル推定法の名称は記録が無い（doc/piv\_conditions.md L21，L26）}
+\end{ja}
+
+\jnote{M4-2：設定ファイルで名称が数値コードだけの項目は，本文の二つ（algorithm\_selection，subpix）のほかに，相関品質の設定（CorrQuality\_nr）と軸の向き（x\_axis\_direction，y\_axis\_direction）があり，24 run ともすべて 1 である．棄却したベクトルの補間の方法の名称も記録に無い．設定ファイルを PIVlab の GUI で一度開けば，まとめて確かめられる（evidence/methods\_piv.md Gaps 5）．相関品質の設定と補間の方法は本文に書いていない．語数を収めるため，検査窓の列と重なり，三つのフィルタの閾値，PIVlab の中で画像強調をしないこと，流速場を平滑化しないことは，本文から Table~\ref{tab:piv} に移した．}
+
+\begin{en}[M4-3]
+Each video was analysed with a single image-pair interval $\dtp$, set by subsampling the video and pairing each retained frame with the next. For inflow, $\dtp = 0.200$, 0.100 and 0.067~s at the low, medium and high levels, so the product of $\dtp$ and $\Qnom$ is the same at the three levels, which keeps the particle displacement comparable. For outflow, $\dtp = 0.334$~s at all levels. The typical displacement, the area-mean surface speed averaged with equal weight over the depth bands and runs of a level and multiplied by $\dtp$, was about 1~pixel for inflow (\PH{level values on time-proportional depth bands}) but only 0.05--0.16~pixel for outflow (Table~\ref{tab:piv}). The outflow displacements are thus at the level of sub-pixel accuracy: the minimum error reported for $32 \times 32$~pixel windows in laser-sheet PIV is 0.05--0.1~pixel \citep{sciacchitanoUncertaintyQuantificationParticle2019}. The instantaneous outflow fields, as processed here, are therefore close to the resolution limit.
+\end{en}
+\begin{ja}
+各動画は単一の画像対間隔 $\dtp$ で解析し，これは動画を間引き，残した各フレームを次のフレームと対にすることで設定した．inflow では，low，medium，high の水準で $\dtp = 0.200$，0.100，0.067~s であり，したがって $\dtp$ と $\Qnom$ の積は三つの水準で等しく，これにより粒子の変位は同程度に保たれる．outflow では，すべての水準で $\dtp = 0.334$~s である．代表的な変位，すなわち面平均の表面流速を一つの水準の水深帯と run にわたって等しい重みで平均し $\dtp$ を掛けたものは，inflow では約 1~pixel（\PH{時間比例の水深の水深帯による水準ごとの値}）であったが，outflow では 0.05--0.16~pixel にすぎなかった（Table~\ref{tab:piv}）．したがって outflow の変位はサブピクセル精度の水準にある：レーザーシートの PIV で $32 \times 32$~pixel の窓について報告されている最小誤差は 0.05--0.1~pixel である \citep{sciacchitanoUncertaintyQuantificationParticle2019}．ゆえに，ここで処理したままの outflow の瞬時の流速場は分解能の限界に近い．
+\src{evidence/methods\_piv.md §5--6．間引き（inflow は 6，3，2 フレームごと，outflow は 10 フレームごと．表に移した）と画像対間隔，残したフレームを次のフレームと対にすること（N 枚の画像から N - 1 個の流速場で，相続く流速場は一つの画像を共有する）：各 run の piv\_manifest.csv，doc/piv\_conditions.md L158--171（inflow は画像対間隔と名目流量の積が一定，outflow は全水準で 333.7 ms），methods\_piv.md §5．変位：doc/piv\_conditions.md L177--190（inflow は 0.96，0.98，1.29 pixel で「約 1 px」，outflow は 0.05，0.08，0.16 pixel）．この六つの値は band\_metrics.csv の mean\_speed\_mean を水準ごとの 16 行（4 run x 4 帯）で重みなしに平均したものに当たり（methods\_piv.md §5 の監査；2026-11-22 に再計算して一致），その帯は水位計の水深の帯である．時間比例の水深の水深帯による値は repo の道具でまだ出していないので，inflow の水準ごとの値は空欄とし，本文には照合で軸を替えても変わらなかった範囲（inflow は約 1 pixel，outflow は 0.05--0.16 pixel）だけを書いた；outflow の水準ごとの値は表にある．Sciacchitano 2019: review\_master.tex L825（32 x 32 窓の最小誤差 0.05--0.1 px），L833（レーザーシートの実験室 PIV が前提で表面 PIV は想定外），確認 art. 092001}
+\end{ja}
+
+\jnote{M4-3：outflow の画像対の取り直し（より長い画像対間隔での再エクスポートと再解析）は未実施である（doc/settled\_and\_retracted.md §1，paper/README.md「投稿前に片付ける項目」1）．この段落は，いま在る 0.334~s の処理を記述している．再解析を行えば，この段落の outflow の記述，Table~\ref{tab:piv} の outflow の行，M4-4 のノイズ床の値（outflow の画像対間隔で決めた定数である）が変わる．間引きのフレーム数（inflow は 6，3，2 フレームごと，outflow は 10 フレームごと）は表に移した．変位の画素は幾何補正した画像の画素である（表の注）．代表的な変位の記録の値（inflow 0.96，0.98，1.29 pixel，outflow 0.05，0.08，0.16 pixel）は，水位計の水深の帯ごとの平均を重みなしに平均したものであり，本文の定義（2.3 節の時間比例の水深の水深帯）から出る値ではない．照合では，時間比例の水深の水深帯で inflow 1.03，1.04，1.41 pixel，outflow 0.05，0.08，0.16 pixel，全フレームの平均で inflow 1.02，1.04，1.39 pixel，outflow 0.055，0.081，0.17 pixel になる（どちらも repo の道具による値ではないので本文には引いていない）．そこで本文は，inflow を「約 1 pixel」と空欄に，outflow を範囲（0.05--0.16 pixel）に改め，Table~\ref{tab:piv} の inflow の行を空欄にした（outflow の行は，照合で小数第 2 位まで動かないので残したが，同時に出し直す）．空欄は，s31 に水深の選択肢が入った時点で repo の道具で出し直して埋める．定義を「全フレームの平均」に替えて帯への依存を無くす手もあり（文も短くなる；その場合 outflow の high は 0.17 pixel になり，BRIEF の決定 8 の「0.05--0.16 画素」も動く），どちらにするかは著者の判断が要る．inflow の変位は約 1 pixel で精度はサブピクセル推定に支配されるが，peak locking の確認は未実施で（doc/piv\_conditions.md L188--189），この実験の流速の不確かさの見積もりも無い．なお inflow の画像対間隔の選び方は，実験者の言葉としての理由が記録に無く，「積が一定である」という設定の性質として書いた．名目流量の語と記号 $\Qnom$ は M1-3 で定義してあるので，この段落では記号だけを書く（方法の後半で前半の定義を繰り返さないため）．}
+
+\begin{en}[M4-4]
+The analysis domain $\dom$ is, in all runs, the whole vector grid (Table~\ref{tab:piv}); its outermost vectors lie about 40~mm from the walls, and no mask was applied, in particular none around the port. The noise floor of the area-mean squared surface speed $\Ekin$ (Section~\ref{sec:metrics}) was set to $\Enoise = 2 \times 10^{-7}$~\sqmpss. This value is the level of $\Ekin$ found in a pilot analysis for the outflow runs at the low level (\PH{runs, frames and statistic used}); it corresponds to a root-mean-square displacement of 0.076~pixel at the outflow image-pair interval and is not an independent null-displacement measurement. The same constant is applied to the inflow runs, although their image-pair intervals are 1.7--5 times shorter.
+\end{en}
+\begin{ja}
+解析領域 $\dom$ は，すべての run で，ベクトル格子の全域である（Table~\ref{tab:piv}）；その最も外側のベクトルは壁から約 40~mm にあり，マスクは適用しておらず，とくに port の周りにも適用していない．面平均の表面流速の二乗 $\Ekin$（Section~\ref{sec:metrics}）のノイズ床は $\Enoise = 2 \times 10^{-7}$~\sqmpss\ とした．この値は，pilot 解析において low の水準の outflow の run で得られた $\Ekin$ の水準である（\PH{用いた run，フレーム，統計量}）；これは outflow の画像対間隔で二乗平均平方根の変位 0.076~pixel に相当し，独立した零変位の計測ではない．同じ定数を inflow の run にも適用しているが，その画像対間隔は 1.7--5 倍短い．
+\src{evidence/methods\_piv.md §7--8．解析領域，マスクなし：doc/piv\_conditions.md L48，L233，config/constants.m L106--115，src/metrics/compute\_frame\_metrics\_basic.m L86（面積は表に移した；格子の範囲の座標は表に載せていない．下の注）．壁から約 40 mm：methods\_piv.md §7 の監査の注記．ノイズ床：config/constants.m L100--104（記録はこの注記だけ；どの run，フレーム，統計量かは記録が無い：methods\_piv.md Gaps 8）．0.076 pixel は控えでの換算（sqrt(2e-7) x 0.3337 s / 1.96669 mm；旧原稿の 0.06 pixel は合わない）．inflow の画像対間隔は outflow の 1/1.7 から 1/5（0.3337 s に対し 0.2002，0.1001，0.0667 s）：doc/piv\_conditions.md L158--171；単一の定数を全 run に用いる：scripts/s32\_aggregate\_band\_metrics.m L29--32，methods\_piv.md §8}
+\end{ja}
+
+\jnote{M4-4：「分解能限界」の判定の文は，記号 $\Icirc$，$\Irot$，$\Iunst$ と帯の平均が定義より前に出るのを避けるため，M5-4 の末尾に移した．基準を 3 とした理由は記録が無い．単一の定数を，画像対間隔が 1.7--5 倍短い inflow にもそのまま用いていることを本文に書いた；同じ 0.076 pixel を inflow の画像対間隔に直すと 3--25 倍大きい $\Ekin$ に当たる（控えの換算）が，この数値は本文に書いていない．格子の範囲の座標（$x = 0.045$--2.909 m，$y = 0.041$--1.929 m）は単一の尺度の座標（画素番号に 1.96669 mm を掛けた値で，原点は画素 0）であり，M1-1 の真の長さ（$\Wy = 1.962$ m，$\yport = 0.981$ m）と並べて読むと，側壁までの余白が 41 mm と 33 mm，$y$ の中点が 0.985 m に見えて，本文の「壁から約 40 mm」（M4-4）と「中線は port の軸に一致する」（M5-2）に反して見える．そこで Table~\ref{tab:piv} の「Analysis domain」の行から座標を外して「最も外側のベクトルは壁から約 40 mm」と書き，表の注の座標の句も外した．真の尺度では格子は両端壁から約 43 mm，両側壁から約 39 mm にあり，格子は幾何補正した画像の中央にある（methods\_piv.md §7 の監査；R0001 と R0007 の格子で 2026-11-22 に再確認）．面積は，単一の尺度の座標で 5.41~\sqm（記録の値），真の尺度に直すと 5.40~\sqm\ になるので，表では 5.4~\sqm\ と丸めた．旧原稿にあった「時間平均でノイズが 1/sqrt(N) に下がる」は，連続する流速場が画像を共有していて独立でないので書いていない．「port の近傍は解析領域の 1\% 未満」「格子は壁面境界層の内側から始まる」も，根拠の記録が無いので書いていない．}
+
+\bisubsection{Flow metrics}{流れの指標}
+\label{sec:metrics}
+
+\begin{en}[M5-1]
+Six metrics were computed from the surface velocity fields $\uvec = (\ucomp, \vcomp)$, where $\ucomp$ and $\vcomp$ are the components along $x$ and $y$; angle brackets $\avg{\cdot}$ denote the unweighted mean over all vectors of $\dom$. Normalization uses the port velocity scale $\Up$ based on the nominal discharge (Section~\ref{sec:programme}) and the port height $\aport$; $\Ekin$ is kept dimensional. The intensity of the surface motion is measured by the area-mean squared surface speed,
+\end{en}
+\begin{ja}
+六つの指標を，表面流速場 $\uvec = (\ucomp, \vcomp)$ から計算し，ここで $\ucomp$ と $\vcomp$ は $x$ と $y$ に沿う成分である；山括弧 $\avg{\cdot}$ は $\dom$ のすべてのベクトルにわたる重みなしの平均を表す．正規化には，名目流量（Section~\ref{sec:programme}）に基づく port の流速尺度 $\Up$ と port の高さ $\aport$ を用いる；$\Ekin$ は有次元のままとする．表面の運動の強さは，面平均の表面流速の二乗で測り，
+\src{evidence/methods\_metrics.md §0--1．面平均（重みなし，全格子点）：src/metrics/compute\_frame\_metrics\_basic.m L86，L99--104．U\_p は名目流量から作る：scripts/s30\_compute\_metrics.m L46--58．E：compute\_frame\_metrics\_basic.m L99，L104（係数 1/2 なし，有次元のまま．正規化しているのは低流速の閾値と I\_circ，I\_rot だけ：methods\_metrics.md §1，§2，§4，§5）}
+\end{ja}
+\begin{equation}
+\Ekin(t) = \avg{\ucomp^{2} + \vcomp^{2}} ,
+\label{eq:E}
+\end{equation}
+\begin{en}
+and the extent of slow flow by the low-velocity area fraction,
+\end{en}
+\begin{ja}
+流れの遅い範囲の広がりは，低流速域面積率で測る，
+\end{ja}
+\begin{equation}
+\philv(t) = \avg{\indic{|\uvec| < \uth}} , \qquad \uth = \alphath \Up ,
+\label{eq:philv}
+\end{equation}
+\begin{en}
+where $\indic{\cdot}$ is 1 where the condition holds and 0 elsewhere, and the threshold $\uth$ uses $\alphath = 0.2$ in all runs.
+\end{en}
+\begin{ja}
+ここで $\indic{\cdot}$ は条件が成り立つところで 1，それ以外で 0 であり，閾値 $\uth$ にはすべての run で $\alphath = 0.2$ を用いる．
+\src{evidence/methods\_metrics.md §2．定義（閾値未満の格子点の割合，真の不等号）：src/metrics/compute\_frame\_metrics\_basic.m L99--100，L106--108．閾値の係数 0.2：config/metrics\_defaults.m L11--17，scripts/s30\_compute\_metrics.m L61--64}
+\end{ja}
+
+\jnote{M5-1：$\Up$ の呼び名を，M2-4 の定義に合わせて「port の流速尺度」（port velocity scale）にそろえた（前の版は「port の流速」）．$\hdep < \aport$ では port での実際の平均流速は $\Up$ より大きいので（M2-4 の注），「尺度」の語を落とさない．}
+
+\begin{en}[M5-2]
+The lateral imbalance of the surface motion is measured by the asymmetry index,
+\end{en}
+\begin{ja}
+表面の運動の横方向の不均衡は，左右非対称指標で測る，
+\end{ja}
+\begin{equation}
+\Iasym(t) = \frac{\left| \EL - \ER \right|}{\EL + \ER} ,
+\label{eq:Iasym}
+\end{equation}
+\begin{en}
+where $\EL$ and $\ER$ are the means of $\ucomp^{2} + \vcomp^{2}$ over the vectors with $y < \ymid$ and with $y \ge \ymid$, respectively. The mid-line $\ymid$ is the lateral mid-point of the vector grid, which is the centre line of the rectified image and thus, to the accuracy of the rectification, coincides with the port axis $\yport$; the grid row on it is counted in $\ER$. Being an absolute value, $\Iasym$ expresses the strength of the imbalance in each frame (velocity field) but not its side.
+\end{en}
+\begin{ja}
+ここで $\EL$ と $\ER$ は，それぞれ，$y < \ymid$ のベクトルと $y \ge \ymid$ のベクトルにわたる $\ucomp^{2} + \vcomp^{2}$ の平均である．中線 $\ymid$ はベクトル格子の横方向の中点であり，これは幾何補正した画像の中心線であって，したがって幾何補正の精度の範囲で port の軸 $\yport$ に一致する；その上にある格子の行は $\ER$ に数える．絶対値であるので，$\Iasym$ は各フレーム（流速場）での不均衡の強さを表すが，不均衡の側は表さない．
+\src{evidence/methods\_metrics.md §3，evidence/methods\_piv.md §7（監査：中線は幾何補正した画像の中心線）．定義と絶対値：src/metrics/compute\_frame\_metrics\_basic.m L110--130．中線は格子の y の範囲の中点：src/metrics/compute\_frame\_metrics\_basic.m L110--115．格子の行は幾何補正した画像の画素 21--981 にあり，中点は画素 501（1001 画素の中央）：local/work/R0001，R0006，R0007 の pivlab\_single.mat から再計算（2026-11-22）．側壁は画素 1 と 1001 に写す：src/piv/select\_rectification\_points.m L93--101．port の軸 y\_p は幅の中央（幅 1.962 m の半分の 0.981 m）にとる：M1-1，config/constants.m L22．中線上の行は y >= y\_m 側（30 行と 31 行）：src/metrics/compute\_frame\_metrics\_basic.m L114--115}
+\end{ja}
+
+\jnote{M5-2：BRIEF の決定 10 は中線を「y = 0.9853 m．port の軸 0.981 m から 4 mm」としているが，この 4 mm は物理的なずれではない．0.9853 m はベクトル格子の座標（単一の尺度 1.96669 mm/pixel，原点は画素 0）での値で，幾何補正した画像の画素 501（1001 画素の中央）にあたる．側壁は画素 1 と 1001 に写してあるので，真の長さでは 500 x 1.962 mm = 0.981 m で，port の軸をとる位置と一致する（evidence/methods\_piv.md §7 の監査；保存された格子から再計算して確かめた）．二つの数値は別の長さの尺度のもので，引き算できない．そこで本文から数値の比較を外し，位置関係だけを書いた．BRIEF の決定 10 と evidence/methods\_metrics.md §3，evidence/methods\_branch\_stats.md §4 の「4 mm」「2--4 mm」は，2026-11-22 に主セッションが訂正した．また，port の軸の上の行（まっすぐな噴流の芯を含む）をすべて $\ER$ 側に数えることによる $\Iasym$ の下駄の大きさは評価されていない（methods\_metrics.md の G3）．「フレーム」は流速場の一つ一つを指す（2.4 節では動画のフレームを指し，方法の前半は「流速場」と書いている）ので，指標の文脈での初出であるこの段落で，括弧で示した．}
+
+\begin{en}[M5-3]
+Rotation is described through the vertical vorticity of the surface field,
+\end{en}
+\begin{ja}
+回転は，表面の流速場の鉛直渦度によって記述し，
+\end{ja}
+\begin{equation}
+\vort = \frac{\partial \vcomp}{\partial x} - \frac{\partial \ucomp}{\partial y} ,
+\label{eq:vort}
+\end{equation}
+\begin{en}
+which was evaluated by central differences on the vector grid (one-sided at its edges) without smoothing. Two indices are formed from it, the net circulation index and the rotation activity index:
+\end{en}
+\begin{ja}
+これはベクトル格子の上の中心差分（格子の端では片側）により，平滑化せずに求めた．この渦度から二つの指標，すなわち正味循環の指標と回転活動度を作る：
+\src{evidence/methods\_metrics.md §4--5．渦度と差分：src/metrics/compute\_frame\_metrics\_circ.m L88--93．平滑化なし（sigma = 0）：config/metrics\_defaults.m L27--31，scripts/s30\_compute\_metrics.m L80；24 run の frame\_metrics.mat の opts.smooth\_sigma\_circ がすべて 0 であることを確認（2026-11-22）}
+\end{ja}
+\begin{align}
+\Icirc(t) &= \frac{\aport}{\Up} \avg{\vort} , \label{eq:Icirc}\\
+\Irot(t) &= \frac{\aport}{\Up} \avg{\left| \vort \right|} . \label{eq:Irot}
+\end{align}
+\begin{en}
+The signed $\Icirc$ is close to zero both without rotation and when counter-rotating cells cancel; $\Irot$ separates the two cases, being large in the second. Because interior contributions to the area mean cancel, $\Icirc$ depends only on the two outermost rows and columns of the vector grid: it is a discrete circulation around the perimeter of $\dom$ divided by its area. The sign of $\Icirc$ is defined in the coordinate system of Section~\ref{sec:facility}: with $x$ drawn to the right and $y$ upwards, $\Icirc > 0$ denotes net anticlockwise rotation (\PH{sense seen from above; which side wall is $y = 0$}).
+\end{en}
+\begin{ja}
+符号付きの $\Icirc$ は，回転が無いときにも，逆向きに回るセルが打ち消し合うときにも零に近い；$\Irot$ は，後者で大きくなることで，この二つの場合を区別する．面平均への内側の寄与は打ち消し合うので，$\Icirc$ はベクトル格子の最も外側の二行と二列だけに依存する：これは，$\dom$ の周に沿う離散的な循環をその面積で割ったものである．$\Icirc$ の符号は Section~\ref{sec:facility} の座標系で定義する：$x$ を右向きに，$y$ を上向きに描いたとき，$\Icirc > 0$ は正味で反時計回りの回転を表す（\PH{上から見たときの向き；$y = 0$ がどちらの側壁か}）．
+\src{evidence/methods\_metrics.md §4--5．定義：src/metrics/compute\_frame\_metrics\_circ.m L4--5，L91--100．二つの指標の役割（二つの場合を区別する）：src/metrics/compute\_frame\_metrics\_circ.m L13--17．外側の二行二列だけに依存すること：methods\_metrics.md §4「Derived property of the estimator」（差分の式から導いた性質；控えと監査が数値で確認），methods\_branch\_stats.md「Points a referee may question」12．符号の向き（x が右，y が上）：src/metrics/compute\_frame\_metrics\_circ.m L19--22，scripts/s40\_make\_paper\_figures.m L148--150，src/viz/plot\_band\_mean\_fields.m L36--39．実験室での向きと y = 0 の側壁は記録が無い（methods\_metrics.md G1，G2）．BRIEF の決定 11}
+\end{ja}
+
+\jnote{M5-3：$\Icirc > 0$ が反時計回りであるのは，解析の座標系（$x$ が右，$y$ が上の図）の中での定義である．保存された格子では piv.y は行の番号とともに増え（画素 21 から 981 までに単一の尺度を掛けた値），取り込みで反転していない（src/io/import\_pivlab\_result.m L43--53）．PIVlab\_setting.mat の x\_axis\_direction と y\_axis\_direction は 24 run とも 1，原点の移動は 0 である（数値コードで，名称は記録に無い）．したがって piv.y は幾何補正した画像の下向きに増えるとみられ（src/metrics/compute\_frame\_metrics\_basic.m L20--21 も $y$ の小さい側を「画像の上半分」と呼ぶ），そのとおりなら $y$ を上向きに描いた図は保存された画像の上下の鏡像である．残る未確認は，軸の向きのコード 1 の名称，$v$ が piv.y の増える向きであること（間接的な裏づけだけ），幾何補正した画像が上から見たままの像であることで，これらが成り立てば，上から見た $\Icirc > 0$ は時計回りになる．元画像 1 枚との照合で閉じる．結果の節で分枝を側壁の名前で書く前に閉じる必要がある．「$\Icirc$ はベクトル格子の最も外側の二行と二列だけに依存する」の一文は，控え（methods\_metrics.md §4）の導いた性質に基づいて足したもので，方法に載せるかどうかは著者の判断が要る．$\Irot$ は平滑化しない微分の絶対値の平均なので計測ノイズが正の寄与をもつが，その大きさは評価されておらず（methods\_metrics.md の G9），本文には書いていない．「解析の座標系」の英語（analysis frame）は，フレーム（流速場）と紛れるので，M1-1 と Fig.~\ref{fig:facility} の題に合わせて「座標系」（coordinate system）に直した．}
+
+\begin{en}[M5-4]
+For each run and depth band $\Band{k}$ (Section~\ref{sec:discharge}), these five metrics were averaged over the frames of the band, and the unsteadiness index was formed as
+\end{en}
+\begin{ja}
+各 run の各水深帯 $\Band{k}$（Section~\ref{sec:discharge}）について，これら五つの指標をその帯のフレームにわたって平均し，非定常指標を次のように作った，
+\src{evidence/methods\_metrics.md §6，§8．帯ごとの平均：scripts/s32\_aggregate\_band\_metrics.m L22--26，L82--87．非定常指標：scripts/s32\_aggregate\_band\_metrics.m L99--106}
+\end{ja}
+\begin{equation}
+\Iunst(\Band{k}) = \frac{\tsd{k}{\Ekin}}{\tmean{k}{\Ekin}} ,
+\label{eq:Iunst}
+\end{equation}
+\begin{en}
+where $\tmean{k}{\cdot}$ and $\tsd{k}{\cdot}$ denote the mean and the sample standard deviation over the frames of $\Band{k}$. Because $\Iunst$ includes the trend of $\Ekin$ within the band, it cannot be read directly as a fluctuation intensity. Nor is it a turbulence intensity: large-scale PIV describes the mean field and large-scale structures only \citep{fujitaLargescaleParticleImage1998a}. A depth band of a run is called `resolution-limited' when $\tmean{k}{\Ekin} < 3\Enoise$ (Section~\ref{sec:piv}); $\Ekin$, $\Icirc$, $\Irot$ and $\Iunst$ of that band are then not interpreted quantitatively.
+\end{en}
+\begin{ja}
+ここで $\tmean{k}{\cdot}$ と $\tsd{k}{\cdot}$ は，$\Band{k}$ のフレームにわたる平均と標本標準偏差を表す．$\Iunst$ は帯の中での $\Ekin$ のトレンドを含むので，そのまま変動の強さとして読むことはできない．また乱流強度でもない：large-scale PIV は平均場と大規模な構造だけを記述する \citep{fujitaLargescaleParticleImage1998a}．ある run の水深帯は，$\tmean{k}{\Ekin} < 3\Enoise$（Section~\ref{sec:piv}）のとき「分解能限界」と呼ぶ；そのときその帯の $\Ekin$，$\Icirc$，$\Irot$，$\Iunst$ は定量的には解釈しない．
+\src{evidence/methods\_metrics.md §6，§8．標本標準偏差（N - 1）：scripts/s32\_aggregate\_band\_metrics.m L87--89．帯の中のトレンドを含む：doc/metrics\_primer.md L101--103，doc/qdip\_jet\_check.md L94．BRIEF の決定 10．Fujita et al. 1998: review\_master.tex L691（LSPIV は乱れを測れず，平均場と大規模な構造だけ），確認 p.397--414．「乱流強度ではない」は著者らの読みである（review\_master.tex L700）．分解能限界の判定（帯の平均がノイズ床の 3 倍未満）：config/metrics\_defaults.m L19--22，scripts/s32\_aggregate\_band\_metrics.m L108--113（M4-4 から移した文）}
+\end{ja}
+
+\bisubsection{Branch identification and statistical tests}{分枝の判定と統計的検定}
+\label{sec:branch}
+
+\begin{en}[M6-1]
+The sign of $\Icirc$ is an outcome of each run, namely the branch on which the flow settled, and averaging the signed index over runs on opposite branches would cancel it. Each inflow run was therefore reduced to three quantities evaluated over the pooled frames of bands $\Band{3}$ and $\Band{4}$ ($\hdep \ge 0.060$~m), a set denoted by the subscript $\deep$. The branch sign is $\operatorname{sgn} \tmean{\deep}{\Icirc}$, and the lock strength is
+\end{en}
+\begin{ja}
+$\Icirc$ の符号は各 run の結果，すなわち流れが落ち着いた分枝であり，逆の分枝にある run にわたって符号付きの指標を平均すると打ち消し合ってしまう．そこで inflow の各 run を，水深帯 $\Band{3}$ と $\Band{4}$（$\hdep \ge 0.060$~m）のフレームをまとめたもの，すなわち添字 $\deep$ で表す集合の上で求める三つの量に要約した．分枝の符号は $\operatorname{sgn} \tmean{\deep}{\Icirc}$ であり，ロック強度は
+\src{evidence/methods\_branch\_stats.md §1--2．run ごとに符号を保つ理由：src/metrics/compute\_branch\_statistics.m L4--9．フレームをまとめる規則と分枝の符号：src/metrics/compute\_branch\_statistics.m L107--116，L132．水深帯の境界：metadata/depth\_bands.csv L4--5．BRIEF の決定 12}
+\end{ja}
+\begin{equation}
+\Rlock = \frac{\left| \tmean{\deep}{\Icirc} \right|}{\tsd{\deep}{\Icirc}} ,
+\label{eq:Rlock}
+\end{equation}
+\begin{en}
+which expresses how far the mean net circulation stands from zero relative to its variation in time; no detrending is applied. The sign persistence $\Psign$ is the fraction of the pooled frames in which $\Icirc$ has the branch sign. Because $\aport/\Up$ is a positive constant within a run, none of the three depends on the discharge used in $\Up$; the run mean $\tmean{\deep}{\Icirc}$, which the trend test below compares between levels, does.
+\end{en}
+\begin{ja}
+であり，これは正味循環の平均が，その時間的な変動に比べてどれだけ零から離れているかを表す；トレンドの除去は行わない．符号保持率 $\Psign$ は，まとめたフレームのうち $\Icirc$ が分枝の符号をもつものの割合である．$\aport/\Up$ は一つの run の中で正の定数であるから，三つのいずれも $\Up$ に用いる流量に依存しない；run 平均 $\tmean{\deep}{\Icirc}$ は，下の傾向検定が水準の間で比べる量であり，これに依存する．
+\src{evidence/methods\_branch\_stats.md §2--3．ロック強度（標本標準偏差，トレンド除去なし）：src/metrics/compute\_branch\_statistics.m L113--114，L130．符号保持率：src/metrics/compute\_branch\_statistics.m L131．正規化の流量に依らないこと：scripts/s30\_compute\_metrics.m L58--59，doc/settled\_and\_retracted.md L63--65．run 平均は名目流量で正規化した値で，水準の間の比較は正規化に依る：scripts/checks/branch\_block\_tests.py L23--33，L45--56，methods\_branch\_stats.md「Points a referee may question」13}
+\end{ja}
+
+\jnote{M6-1：水深帯は時間比例の水深で定義する取り決めだが，compute\_branch\_statistics.m と branch\_stats.csv はまだ水位計の水深の帯でフレームを選んでいる（scripts/checks/branch\_block\_tests.py は両方の軸で計算する）．第二の指標 $\Sside$（scripts/checks/branch\_sign\_tests.py L24）と，噴流の横ずれのブロックの帯への対応づけ（scripts/checks/jet\_offset\_by\_band.py L31--34）も，水位計の水深の帯を使っており，時間比例の水深での $\Sside$ は控えの照合値だけである．符号は両方の軸で同じだが，ロック強度と符号保持率の値は軸で変わる．Page の検定が順位づける run 平均は，名目流量の $\Up$ で正規化した $\Icirc$ であり，$\aport/\Up$ は水準ごとに違うので，順位は原理的には正規化に用いる流量に依存する．いまのデータでは，正規化なしの渦度の平均でも，run 平均流量による正規化でも，日の中の順位は変わらない（2026-11-22 の照合．結果の節で書くなら repo の道具で出し直す）．ロック強度の記号 $\Rlock$ が Reynolds 数の記号と紛らわしい点は未決である（CONVENTIONS.md 10 節）．}
+
+\begin{en}[M6-2]
+The shallower bands are excluded because, for $\hdep < \aport$, the jet is exposed at the free surface and the net circulation has not yet developed in some runs, and because $\Band{2}$ straddles $\hdep = \aport$, where the submergence of the port is completed (Section~\ref{sec:facility}). A second indicator of the branch is the side on which the squared surface speed is concentrated. It is given by the sign of $\tmean{\deep}{\Sside}$, with $\Sside = (\EL - \ER)/(\EL + \ER)$ evaluated in each frame, and uses the same fields and frames as $\Icirc$.
+\end{en}
+\begin{ja}
+より浅い水深帯を除くのは，$\hdep < \aport$ では噴流が自由表面に露出し，正味循環がまだ育っていない run があるからであり，また $\Band{2}$ が，port の潜没が完了する $\hdep = \aport$ をまたぐからである（Section~\ref{sec:facility}）．分枝の第二の指標は，表面流速の二乗が集中する側である．これは，各フレームで求めた $\Sside = (\EL - \ER)/(\EL + \ER)$ による $\tmean{\deep}{\Sside}$ の符号で与え，$\Icirc$ と同じ流速場と同じフレームを用いる．
+\src{evidence/methods\_branch\_stats.md §1（浅い帯を除く理由），§4．除く理由の言い方は BRIEF の決定 12（「I\_unst が 1 桁大きい」とは書かない）．B2 は 0.050 <= h < 0.060 m で h = a（0.055 m）をまたぐ：metadata/depth\_bands.csv L3；h = a で port の潜没が完了する：M1-2（BRIEF の決定 7）．第二の指標：scripts/checks/branch\_sign\_tests.py L23--27（フレームごとの比の平均の符号）．E\_L は y の小さい側の半分：src/metrics/compute\_frame\_metrics\_basic.m L113--115}
+\end{ja}
+
+\begin{en}[M6-3]
+The direction of the jet was followed in time through its lateral offset at the station $\xjet = 1.0$~m (grid column at $x = 0.989$~m),
+\end{en}
+\begin{ja}
+噴流の向きは，断面 $\xjet = 1.0$~m（$x = 0.989$~m の格子の列）での噴流の横ずれによって時間的に追い，
+\src{evidence/methods\_branch\_stats.md §5a．scripts/checks/jet\_offset\_by\_band.py L15--27（定義），格子の列 x = 0.989 m は控えの Appendix C}
+\end{ja}
+\begin{equation}
+\yjet = \frac{\sum_{i} \wjet_{i} \left( y_{i} - \yport \right)}{\sum_{i} \wjet_{i}} , \qquad \wjet_{i} = \left[ \max\left( \ublk_{i}, 0 \right) \right]^{2} ,
+\label{eq:yjet}
+\end{equation}
+\begin{en}
+where $\ublk_{i}$ is the mean of $\ucomp$ over a non-overlapping block of 20~s at the lateral position $y_{i}$ of that column and the sums run over its 61 vectors. The offset $\yjet$ is thus the centroid of the squared forward velocity relative to the port axis; return flow has no weight, and $\yjet > 0$ lies on the side of larger $y$.
+\end{en}
+\begin{ja}
+ここで $\ublk_{i}$ は，その列の横方向の位置 $y_{i}$ における，重なりのない 20~s のブロックにわたる $\ucomp$ の平均であり，和はその列の 61 個のベクトルにわたる．したがって横ずれ $\yjet$ は，port の軸を基準とした前向きの流速の二乗の重心である；逆流は重みをもたず，$\yjet > 0$ は $y$ の大きい側にある．
+\src{evidence/methods\_branch\_stats.md §5a．ブロック 20 s（重なりなし），重みはブロック平均の流速の正の部分の二乗，基準は格子の中線（幾何補正した画像の中心線で，port の軸にあたる），列の 61 点：scripts/checks/jet\_offset\_by\_band.py（2026-11-22 に基準を格子の中線に直した）}
+\end{ja}
+
+\jnote{M6-3：噴流の横ずれは，inflow の 12 run のうち 5 run（R0001 と R0005--R0008．low 1，medium 4，high 0）でしか計算できていない．残りの 7 run は流速場（pivlab\_single.mat）がこの PC に無い．断面（1.0~m），ブロックの長さ（20~s）を選んだ理由は記録が無い．時刻は各ブロックの中央の時刻で，原点は解析した PIV の最初のフレームであり，それが収録の開始と一致するかは未確認である（結果の節で時刻を引くなら，方法にこの定義を一文で足す）．式と実装の 4 mm の食い違いは 2026-11-22 に解消した．それまでの実装は，ベクトル格子の座標（単一の尺度，原点は画素 0）の $y_i$ から真の長さの半幅 0.981 m を引いていたので，中心線の上をまっすぐ進む噴流が $\yjet = +0.004$ m になっていた．スクリプトの基準を格子の中線（M5-2 の $\ymid$．幾何補正した画像の中心線で，port の軸にあたる）に直して出し直した．5 run の値は一様に 0.004 m 小さくなり，R0007 の帯平均は +0.02 から +0.11 m（B1 は +0.015 m），飽和した run は 0.33--0.44 m で，0.2 m を超える時刻は変わらない．本文の式（port の軸を基準とする）は，これで実装と合っている．また，定義から，$y$ の小さい側への横ずれは $\yjet < 0$ であり，$y$ の小さい側に流速の二乗が集中すると $\Sside > 0$ であるから，同じ側を指すとき $\yjet$ と $\Sside$ は逆の符号をもつ（控えの照合では $\Icirc$ とも逆）．この対応を方法に一文で書くかどうかは著者の判断が要る．結果の節で使う閾値（0.2~m など）は方法には書いていない．}
+
+\begin{en}[M6-4]
+The two main tests permute the runs within a day only, in keeping with the randomized complete block design (Section~\ref{sec:programme}). Their common null hypothesis is that, within a day, all six assignments of the three runs to the three levels are equally likely. The first is Page's trend test \PHref{Page's trend test} on the run means $\tmean{\deep}{\Icirc}$, ranked within each day from 1 (smallest) to 3 (largest), with the statistic
+\end{en}
+\begin{ja}
+二つの主な検定は，乱塊法（Section~\ref{sec:programme}）に合わせて，run を一日の中だけで並べ替える．両者に共通の帰無仮説は，一日の中で，三つの run を三つの水準に割り当てる六通りのすべてが等しく起こりやすい，というものである．第一は，run 平均 $\tmean{\deep}{\Icirc}$ を各日の中で 1（最小）から 3（最大）まで順位づけたものについての Page の傾向検定 \PHref{Page の傾向検定} であり，統計量は
+\src{evidence/methods\_branch\_stats.md §6（計画），BRIEF の決定 13．検定の実装と帰無仮説：scripts/checks/branch\_block\_tests.py L1--12，L45--63．乱塊法（4 日 x 3 水準，日の中の順番は無作為）：doc/settled\_and\_retracted.md §1，metadata/runs.csv L3--14．Page の検定の文献は bib に無い（空欄）}
+\end{ja}
+\begin{equation}
+\Lpage = \sum_{q=1}^{3} \left( 4 - q \right) \ranksum_{q} ,
+\label{eq:Lpage}
+\end{equation}
+\begin{en}
+where $q = 1$, 2 and 3 denote the low, medium and high levels and $\ranksum_{q}$ is the sum of the ranks of level $q$ over the four days. The alternative, formulated after inspection of the data, is that $\Icirc$ decreases from the low to the high level, and the one-sided probability is the fraction of the $6^{4} = 1296$ rank arrangements in which $\Lpage$ is at least as large as observed. The second is a stratified exact permutation test on the branch signs. Its statistic is the sum of the level scores 0, 1 and 2 (low, medium, high) of the runs with a positive branch sign. The one-sided probability is that of a value no larger than observed when the signs are permuted among the levels within each day. A supplementary Fisher's exact test (two-sided) of branch sign against level for the low and high runs treats the runs as exchangeable across days.
+\end{en}
+\begin{ja}
+であり，ここで $q = 1$，2，3 は low，medium，high の水準を表し，$\ranksum_{q}$ は水準 $q$ の順位の四日にわたる和である．対立仮説は，データを見た後に定めたもので，$\Icirc$ が low から high の水準へ向かって減少するというものであり，片側の確率は，$6^{4} = 1296$ 通りの順位の並びのうち，$\Lpage$ が観測値以上となるものの割合である．第二は，分枝の符号についての層別の正確な順列検定である．その統計量は，分枝の符号が正の run にわたる水準の得点 0，1，2（low，medium，high）の和である．その片側の確率は，符号を各日の中で水準の間で並べ替えたときに，値が観測値以下となる確率である．補助的な Fisher の正確検定（両側）は，low と high の run についての分枝の符号と水準に対するもので，run が日をまたいで交換可能であるとみなす．
+\src{Page の傾向検定（重み 3，2，1，順位 3 が最大，片側，6 の 4 乗通り）：scripts/checks/branch\_block\_tests.py L45--63．符号の層別の順列検定（得点 0，1，2，観測値以下）：scripts/checks/branch\_block\_tests.py L65--79．対立仮説をデータを見た後に定めたこと：methods\_branch\_stats.md「Points a referee may question」2（検定のスクリプトは 2026-11-22 に追加）．Fisher の正確検定（low と high の 8 run，周辺を固定）：scripts/checks/branch\_sign\_tests.py L44--46；両側とするのは paper/README.md「中心的な結果」の記載による．p 値は方法に書かない（BRIEF の決定 13）}
+\end{ja}
+
+\jnote{M6-4：検定の向き（片側）と対立仮説は結果を見た後に決めたもので，その旨を本文に書いた（「データを見た後に定めた」）．片側のままにするか両側にするか，Fisher の検定を載せるか，三つの検定の多重性に触れるかは，著者の判断が要る（evidence/methods\_branch\_stats.md「Points a referee may question」2--5）．Page の傾向検定の文献は，文献の空欄にした；Fisher の正確検定には文献の空欄を置いていない．水準の番号は，噴流の横ずれの添字 j（jet）と紛れないよう $q$ にした．一日の中の run の順番（実際に行った順）と run の間の basin の状態は記録が無く，同じ日の run の独立性は確かめられていない．}

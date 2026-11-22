@@ -183,7 +183,7 @@ Old manuscript = `paper/2026_journal_Shonai/sections/methods.tex` ("Metrics and 
 | # | old manuscript | code / data | sources |
 |---|---|---|---|
 | M1 | U_p = Q / (a b) without saying which Q; elsewhere "the actual discharge of each run was evaluated ... and used in the analysis" | The metrics use the nominal discharge of the level for U_p, hence for u_th, I_circ and I_rot. The run-average discharge enters none of s30-s32 | old methods:107-111, :182-187, :21 vs s30:46-58 |
-| M2 | The basin is split "at the centreline" into Omega_L and Omega_R | Split at the mid-point of the y extent of the vector grid (0.9853 m, about 2-4 mm from the centreline); the central row of vectors goes entirely to one half (30 vs 31 rows) | old methods:189 vs basic.m:113-115; section 3 |
+| M2 | The basin is split "at the centreline" into Omega_L and Omega_R | Split at the mid-point of the y extent of the vector grid (0.9853 m in grid coordinates, which is the centre line of the rectified image and so the basin centre line; see the correction under section 3); the central row of vectors goes entirely to one half (30 vs 31 rows) | old methods:189 vs basic.m:113-115; section 3 |
 | M3 | "The numerical differentiation and smoothing conditions needed for the vorticity were common to all conditions" | No smoothing is applied (sigma = 0). The scheme (central differences, one-sided at the edges, 31.47 mm spacing) is not stated | old methods:219 vs defaults.m:31, circ.m:83-93 |
 | M4 | Positive I_circ is "counterclockwise in the analysis frame (x right, y up; the frame of the figures)", jet attached to the wall at y < y_port | Consistent with the plotting code. But the code header warns that positive is clockwise in physical space if piv.y increases downward, and basic.m describes small piv.y as the upper image half. The manuscript does not say that the figure frame may be a mirror image of the camera view | old methods:223 vs circ.m:19-22, basic.m:20-21, `src/viz/plot_band_mean_fields.m:39` |
 | M5 | h(t) in the definition of I_unst is "the water depth at time t" | Gauge depth interpolated by normalized time; the manuscript is to use the time-proportional depth, which is not implemented | old methods:243 vs bands.m:38-49; `paper/README.md:61-63` |
@@ -254,7 +254,7 @@ What was changed
 Recomputed and confirmed without change
 - 5612 vectors and valid fraction 1 in every frame of the 24 runs; threshold column = 0.2 U_p (0.008264 / 0.016529 / 0.024793 m s^-1); a / U_p = 1.33100 / 0.66550 / 0.44367 s from both `I_circ / omega_mean` and `I_rot / omega_abs_mean`.
 - (E_R - E) / (E_R - E_L) = 0.49180 = 2760 / 5612 in every frame of the 24 runs, i.e. 30 rows in L and 31 in R.
-- y_mid = 0.9853 m; offset +0.0043 m from 0.981 m (0.14 grid spacings, 0.22% of the width); +0.002 m in the PIV coordinate scale; area of Omega 5.406 m^2 = 93.3% of 5.7918 m^2.
+- y_mid = 0.9853 m in grid coordinates. **Corrected 2026-11-22 (main session, recomputed from the stored grid of R0007):** the grid rows sit at pixels 21-981 of the 1001-pixel rectified image, so y_mid is pixel 501, the image centre; with the walls mapped to pixels 1 and 1001 its true position is 500 x 1.962 mm = 0.981 m. The "+0.0043 m offset from 0.981 m" compares a grid coordinate (pixel index times the single scale 1.96669 mm) with a true length and is not a physical offset; area of Omega 5.406 m^2 = 93.3% of 5.7918 m^2.
 - Threshold factors 0.228 / 0.255 / 0.241 and I_circ factors 1.14 / 1.28 / 1.20 relative to the run-average discharge.
 - Frames per band; I_unst level means and per-run ranges; detrended level means (B1 0.085 / 0.130 / 0.190, B2 0.029 / 0.025 / 0.041, B3 0.021 / 0.018 / 0.018, B4 0.030 / 0.020 / 0.020), per-run B1 0.074-0.217; outflow high B1 0.38, 0.41, 0.39, 0.50 (mean 0.42; as computed 0.756); trend share 76 / 67 / 51% by level and 42-78% per run.
 - Non-contiguous bands (B1 in 12 of 12 inflow runs, B2 in 11 of 12; R0001 239 backward steps in 9291 frames); unassigned frames 7 / 23 / 55 = 85.
@@ -266,7 +266,7 @@ Not verified by the audit
 - The orientation of the quiver movie (item 2 above). MATLAB was not run.
 - Anything stored only in `.mat` files: `opts.smooth_sigma_circ` of each run (Gap G7), the direction of piv.y against the row index, the PIVLab axis setting (Gap G1). The sign convention therefore remains "counterclockwise in the y-up figure frame, jet on the small-y wall" and nothing more.
 - What PIVLab writes into `u_filtered` and `v_filtered`; the sheet relies on pivcond:28-30 and :201.
-- The "+0.002 m" offset in the PIV coordinate scale assumes that piv.y = 0 lies on the wall; the origin of the PIVLab coordinates is not recorded in git. Either way the offset is 2-4 mm.
+- The "+0.002 m" offset in the PIV coordinate scale assumes that piv.y = 0 lies on the wall; the origin of the PIVLab coordinates is not recorded in git. **Corrected 2026-11-22:** there is no physical offset; see above.
 - The size of the I_asym floor from the central row (Gap G3) was not computed.
 
 Check against `doc/settled_and_retracted.md`

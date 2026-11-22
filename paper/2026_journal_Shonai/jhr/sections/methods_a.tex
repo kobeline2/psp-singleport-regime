@@ -1,1 +1,201 @@
-% methods_a.tex -- subsections 2.1-2.3 (to be written)
+% methods_a.tex -- Methods 2.1 Facility, 2.2 Experimental programme,
+% 2.3 Discharge and water depth.
+% Evidence: evidence/methods_facility_programme.md, evidence/methods_discharge_depth.md,
+% evidence/methods_literature.md (rows for "2.1 facility/scaling").
+% Decisions: evidence/BRIEF.md section 2, items 1-7 and 14-16.
+% No provisional macro is defined here: every symbol is in notation.tex.
+% The placeholders are kept short; what each one stands for is itemized in the
+% \jnote that follows its paragraph.
+
+\bisubsection{Facility}{装置}
+\label{sec:facility}
+
+\begin{en}[M1-1]
+The experiments used a shallow rectangular basin with measured inner plan dimensions of length $\Lx = 2.952$~m and width $\Wy = 1.962$~m (plan area $\Aplan = 5.7918$~\sqm{}) and a depth of 0.33~m (Fig.~\ref{fig:facility}; \PH{floor and wall material and finish; floor levelness}). A single rectangular port of width $\bport = 0.11$~m and height $\aport = 0.055$~m, its lower edge at floor level, is placed at mid-width of one short wall and serves both inflow and outflow (\PH{port details: partitions, edges, lateral offset}). The coordinate $x$ is measured from the port wall along the length of the basin, $y$ from one side wall across it (port axis taken at $y = \yport = 0.981$~m) and $z$ upwards from the floor.
+\end{en}
+\begin{ja}
+実験には，実測の内寸が平面で長さ $\Lx = 2.952$~m，幅 $\Wy = 1.962$~m（平面積 $\Aplan = 5.7918$~\sqm{}），深さが 0.33~m の浅い矩形の basin を用いた（Fig.~\ref{fig:facility}；\PH{底と壁の材質と仕上げ；底面の水平の精度}）．幅 $\bport = 0.11$~m，高さ $\aport = 0.055$~m の単一の矩形の port を，下端を底面の高さにして，一方の短辺の壁の幅の中央に置き，これが inflow と outflow の両方を担う（\PH{port の細部：仕切り板，縁，横方向のずれ}）．座標 $x$ は port のある壁から basin の長手方向に，$y$ は一方の側壁から basin を横切る方向に（port の軸は $y = \yport = 0.981$~m に取る），$z$ は底面から上向きに測る．
+\src{内寸と平面積：config/constants.m:16-24，AGENTS.md:98．深さ 0.33 m：config/constants.m:23．port の寸法と下端：config/constants.m:44-47．port の位置と可逆：README.md:23．座標軸：AGENTS.md:106-109．port の軸 0.981 m：幅 1.962 m の半分（config/constants.m:22）．底と壁の材質，仕上げ，水平の精度は記録が無い：控え evidence/methods\_facility\_programme.md 1 節，Gaps 10．控え：同 1--3 節}
+\end{ja}
+
+\jnote{M1-1：port が短辺の中央にあること，座標の原点（$x$ は port のある壁から，$y$ は一方の側壁から），$y$ の向きは，README と解析コードの取り決めであり，実測や正式な定義の記録は無い．port の内部の仕切り板は，確認項目として記録に出るだけで，実物を確認した記録が無い（cfd/campaign\_log.md:563）．深さ 0.33 m が壁の高さを指すかどうかも資料に無い（控え methods\_facility\_programme.md 1--3 節，Gaps 9，10，15）．底と壁の材質，仕上げ（粗さ），底面の水平の精度も記録が無いので，空欄を足した．port の細部の空欄の内訳は，内部の仕切り板の有無と枚数，縁の形と壁の厚さ，短辺の中央からのずれの実測である．inflow，outflow，$\hdep$，$\ha$ の定義は序論の I-6 にあるので，ここでは繰り返していない．}
+
+\begin{en}[M1-2]
+The port connects to a feed channel of the same cross-sectional height $\aport$, which flows with a free surface while $\hdep < \aport$; it is straight upstream of the port, with coarse flow straightening (\PH{channel dimensions, cover, floor elevation, material; flow-straightening method}). This design introduces a confound: when $\hdep$ reaches $\aport$, the submergence of the port is completed and the full-pipe transition of the feed channel occurs at the same instant. They cannot be separated in this facility, so a flow change near $\ha = 1$ cannot be attributed to either.
+\end{en}
+\begin{ja}
+port は，断面の高さが同じ $\aport$ の給水路につながり，給水路は $\hdep < \aport$ の間は自由表面をもって流れる；給水路は port の上流でまっすぐで，整流は粗い（\PH{給水路の寸法，蓋，底の高さ，材質；整流の方法}）．この設計は交絡をもたらす：$\hdep$ が $\aport$ に達すると，port の潜没が完了し，同じ瞬間に給水路の満管遷移が起こる．両者は本装置では分離できないので，$\ha = 1$ の近くでの流れの変化を，そのどちらにも帰属できない．
+\src{給水路が自由表面をもつ開水路で圧力管ではないこと，断面の高さ 55 mm：cfd/campaign\_log.md:41-43（実験者への照会 2026-07-31）．水位が $\aport$ に達した瞬間に満管になること（それまでは自由水面）と交絡：paper/README.md:147-152，doc/settled\_and\_retracted.md:24，cfd/campaign\_log.md:56-65．上流がまっすぐで整流が粗い：cfd/campaign.md:407（ユーザー確認 2026-11-15）．控え：evidence/methods\_facility\_programme.md 4 節}
+\end{ja}
+
+\jnote{M1-2：交絡の記述は，給水路の底が basin の底と同じ高さにあることを前提にしている．これを明記した資料は無い（控え methods\_facility\_programme.md Gaps 19）ので，本文の空欄と，図の場所取りの「確かめること」に，給水路の底の高さを入れた．前の版の本文の「開水路」（an open channel）は，直後の「満管遷移」と矛盾して読めるので，実験者の回答（開水路＝自由表面を持つ，圧力管ではない．cfd/campaign\_log.md:41-42）の中身を書き，「$\hdep < \aport$ の間は自由表面をもって流れる」とした．「開水路」の語を本文に残すかどうかは著者の判断による．$\hdep$ が $\aport$ に達すると満管になるのは，給水路に高さ 55 mm の天端（蓋）があるからと読めるが，実物の天端を記述した資料は無い（「天端は壁」は数値計算の格子の記述で，実物と照合したのは高さだけである．cfd/campaign\_log.md:45-49）．そのため，本文には天端を閉じているとは書かず，本文の空欄と，図の場所取りの「確かめること」に蓋を入れた．確認できれば，天端を閉じた給水路であることを本文に明記するのがよい．断面の高さは，port の高さと同じであることを記号 $\aport$ で示した．$\hdep$ の定義は序論の I-6 にあるので，語数のために「水深」の語は繰り返していない．同じく語数のために，第三文の a change of the flow を a flow change に縮めた（和文は同じ）．空欄の内訳は，給水路の幅，長さ，材質，底の高さ，天端の蓋の有無と形，および整流の方法（何を，どこに置いたか）である．整流については「整流はあるが粗い」という記録しか無く，器具の有無は分からないので，空欄は「整流の方法」とした．free surface の訳は，M6-2 と同じ「自由表面」にそろえた（前の版は「自由水面」）．}
+
+\begin{en}[M1-3]
+The inflow discharge was set by the pump frequency (\PH{pump model and settings; flowmeter, if any; water circuit; outflow drive and setting}). The three levels, low, medium and high, are identified by the nominal discharges $\Qnom = 0.25$, 0.50 and 0.75~\Lps{}. These are targets, not measurements (Section~\ref{sec:discharge}): they follow from target rates of water-level change of 2.5, 5.0 and 7.5~\mmpmin{} and the nominal plan area of 6.0~\sqm{}, which exceeds the measured area by 3.6\%.
+\end{en}
+\begin{ja}
+inflow の流量は，ポンプの周波数で設定した（\PH{ポンプの機種と設定；流量計の有無；水の回路；outflow の駆動と設定}）．三つの水準 low，medium，high は，名目流量 $\Qnom = 0.25$，0.50，0.75~\Lps{} で区別する．これらは目標であって実測ではない（Section~\ref{sec:discharge}）：目標の水位変化率 2.5，5.0，7.5~\mmpmin{} と名目の平面積 6.0~\sqm{} から決まる値であり，名目の平面積は実測の平面積を 3.6\% 上回る．
+\src{inflow の流量をポンプの周波数で設定：cfd/campaign.md:407-408，doc/settled\_and\_retracted.md:30（ユーザー確認 2026-11-15．注水の手順の文脈）．outflow の駆動と設定は記録が無い：控え methods\_facility\_programme.md 6 節の最終行，Gaps 3，doc/qdip\_jet\_check.md:110-111．名目流量と目標の水位変化率：metadata/flow\_levels.csv:2-4．名目流量が平面積と水位変化率から決めた値であること：metadata/README.md:75．6.0 m2 との一致と 3.6\%：doc/settled\_and\_retracted.md:25，控え methods\_facility\_programme.md 6 節と methods\_discharge\_depth.md C13（計算）}
+\end{ja}
+
+\jnote{M1-3：空欄の内訳は次のとおり（控え methods\_facility\_programme.md 4 節，6 節，Gaps 3，6，7）．(1) ポンプの機種，各水準の周波数の値，周波数を何に合わせたか（水位変化率か名目流量か．両者は実測の平面積では 3.6\% 食い違う），日ごとに合わせ直したか．(2) 流量を直接測る計器（流量計）の有無．(3) 水の回路（ポンプ，下池，配管とホース，給水路への入れ方）を inflow と outflow のそれぞれについて．下池は 2.3 の M3-2 で根拠に使うので，ここで導入する必要がある．(4) outflow の駆動の方式（ポンプか自然流下か）と，その流量の設定方法．第一文は inflow に限った：ユーザー確認の文言「流量はポンプの Hz で設定」（cfd/campaign.md:407-408）は inflow の注水の手順の文脈にあり，outflow に当てはまるかの記録が無い（控え methods\_facility\_programme.md 6 節の最終行）．outflow もポンプの周波数で設定したと確認できれば，第一文を「The discharge was set by the pump frequency」（流量はポンプの周波数で設定した）に戻してよい．自然流下などであれば，その方式を第一文に足す．各 run の流量を水位の記録から評価したことを述べていた文は，2.3 と重なるので，語数のために Section の参照だけに縮めた．}
+
+\begin{en}[M1-4]
+The basin water level was recorded with a 60~GHz radar water-level gauge (FR-S01, Keyence) mounted close to the wall opposite the port, its lens about 0.50~m above the floor and 0.40--0.47~m above the water surface. The record holds the reading in steps of 1~mm at a mean interval of 0.31~s. The specified accuracy of $\pm 1$~mm presumes the recommended mounting and a water surface at rest, not a rippled surface close to a wall (\PH{gauge position; logger settings; zero reference}).
+\end{en}
+\begin{ja}
+basin の水位は，60~GHz のレーダー式の水位計（FR-S01，Keyence）で記録し，水位計は port に対面する壁の際に取り付け，そのレンズは底面から約 0.50~m，水面から 0.40--0.47~m の高さにある．記録は，読みを 1~mm の刻みで，平均 0.31~s の間隔で保持している．仕様の精度 $\pm 1$~mm は，推奨の取り付けと静止した水面を前提としており，壁の近くの波立った水面を前提としていない（\PH{水位計の位置；ロガーの設定；零点の基準}）．
+\src{機種，方式，位置，レンズの高さ，水面までの距離，仕様の精度とその条件：doc/qdip\_jet\_check.md:20-26，doc/settled\_and\_retracted.md:19．読みの刻み 1 mm：doc/qdip\_jet\_check.md:117．記録の間隔の平均 0.310--0.312 s：local/raw/R0001--R0024/waterlevel.csv から計算（控え methods\_facility\_programme.md 5 節）}
+\end{ja}
+
+\jnote{M1-4：「中心線上」とは書いていない（正本は「inlet 対面の壁際」だけ．BRIEF 2 節の決定 6）．記録の間隔 0.31 s は 24 本のログから計算した平均の値で，ロガーの設定の記録は無い．そのため，機器の設定としてではなく，格納された記録の性質として書いた．空欄の内訳は，壁に沿った水位計の位置と壁からの距離，ロガーとアンプの機種，記録の間隔と平均化（応答）の設定，零点の合わせ方である．}
+
+\begin{en}[M1-5]
+The study is a prototype-informed laboratory experiment motivated by the upper reservoirs of PSH plants, not a strict similitude model (\PH{reference prototype values and scale ratio, if reported}). A model that is not at full scale and uses the prototype fluid can match only one force ratio, so scale effects arise \citep{hellerScaleEffectsPhysical2011}. The dimensionless numbers of Section~\ref{sec:programme} characterize the experiment and are not matched to a prototype.
+\end{en}
+\begin{ja}
+本研究は，揚水発電所の上池を念頭に置いた，実機を参照した室内実験であり，厳密な相似模型ではない（\PH{参照した実機の値と縮尺比（報告する場合）}）．実物大でなく，実機の流体を使う模型は，力の比を一つしか一致させられないので，縮尺効果が生じる \citep{hellerScaleEffectsPhysical2011}．Section~\ref{sec:programme} の無次元数は実験を特徴づけるものであり，実機と一致させたものではない．
+\src{位置づけ：AGENTS.md:218，README.md:7．Heller 2011：review\_master.tex L1032（式 13），確認 p.293--306（L1050）；控え methods\_literature.md H1．実機の値と縮尺比の記録は無い（控え methods\_facility\_programme.md 12 節）}
+\end{ja}
+
+\jnote{M1-5：第一文は序論 I-6 の最後の文とほぼ同じ内容である．どちらに寄せるかは著者の判断による．「実機と一致させたものではない」は，参照した実機の値と，Froude 数から水準を決めたという記録が無いことに基づく（控え methods\_facility\_programme.md 12 節，BRIEF 2 節の決定 14）．どれかの力の比を実機に合わせて条件を決めたのであれば，第三文を直す必要がある．}
+
+\bisubsection{Experimental programme}{実験計画}
+\label{sec:programme}
+
+\begin{en}[M2-1]
+The programme comprises 24 runs: two modes (inflow and outflow), three discharge levels and four replicates of each combination (Table~\ref{tab:programme}). In every run the water level sweeps the depth range 0.03--0.10~m ($0.55 \le \ha \le 1.82$), rising in inflow and falling in outflow, so that depth is a coordinate swept within a run, not a run factor. At least one outflow run was repeated on a later day and its earlier recording was not used (\PH{number of repeated runs, reasons, criterion}).
+\end{en}
+\begin{ja}
+実験計画は 24 run からなる：二つの運転（inflow と outflow），三つの流量水準，および各組合せの四回の反復である（Table~\ref{tab:programme}）．どの run でも，水位は水深の範囲 0.03--0.10~m（$0.55 \le \ha \le 1.82$）を掃引し，inflow では上昇，outflow では下降するので，水深は run の中で掃引される座標であって，run の因子ではない．少なくとも一つの outflow の run は後日にやり直し，先の記録は使わなかった（\PH{やり直した run の数，理由，基準}）．
+\src{24 run の構成：metadata/runs.csv:3-26．水深の範囲と向き：config/constants.m:52-54，metadata/runs.csv:3-26（start\_depth\_m，end\_depth\_m），metadata/depth\_bands.csv:2-5．やり直し：local/raw/Failure/R0016 waterlevel.csv（2026-06-18），local/raw/a.txt:26（控え methods\_facility\_programme.md 7 節）}
+\end{ja}
+
+\jnote{M2-1：やり直しの文は，local/raw/Failure/ に 2026-06-18 の R0016 のログがあること（採用された R0016 は 2026-06-24）と，R0024 の「6/26 にやり直す」のメモに基づく．数，理由，採否の基準は記録が無い．ログは残っているので，「捨てた」を「使わなかった」に直した．不採用の 2026-06-18 の記録（読み 100 mm から 30 mm，1499.9 s）に Equation~(\ref{eq:Q}) を当てると 0.270~\Lps{}（名目の 1.08 倍）で，採用された outflow の low の 4 run（0.195--0.249~\Lps{}）のどれよりも大きい．理由を実験者に聞くときの手がかりになる（本文には書いていない）．この文を本文に残すかどうかは著者の判断による．やり直す前の実施を指していた「試行」（trial）の語は，ほかの節と用語をそろえて run に直した（採用した 24 run のほかに実施があったことは，「先の記録は使わなかった」で読める）．}
+
+\begin{en}[M2-2]
+The 12 inflow runs follow a randomized complete block design with the day as the block: on each of four days one run was made at each level, in randomized order (\PH{randomization method, actual order, interval between runs}). This separates the effect of the level from day-to-day differences. The 12 outflow runs were made on 12 different days, without block structure (\PH{randomization of the outflow order}); Table~\ref{tab:programme} gives the dates.
+\end{en}
+\begin{ja}
+inflow の 12 run は，日をブロックとする乱塊法に従う：四日のそれぞれに，各水準の run を一つずつ，無作為な順番で行った（\PH{無作為化の方法，実際の順番，run の間隔}）．これは，水準の効果を，日ごとの違いから分離する．outflow の 12 run は，12 の異なる日に行い，ブロックの構造をもたない（\PH{outflow の順番の無作為化}）；日付は Table~\ref{tab:programme} に示す．
+\src{inflow の日程と構成：metadata/runs.csv:3-14．乱塊法と一日の中の順番：cfd/campaign.md:409，doc/settled\_and\_retracted.md:30（ユーザー確認 2026-11-15）．outflow の日程：metadata/runs.csv:15-26．控え：evidence/methods\_facility\_programme.md 7 節}
+\end{ja}
+
+\jnote{M2-2：「無作為な順番で行った」の根拠は，ユーザー確認の文言「1 日の中の run の順番は乱塊法 (順番の交絡はない)」だけである．無作為化の方法と各日の実際の順番は記録が無い（runs.csv の planned\_order は通し番号のまま）．outflow の順を無作為に決めたかも記録が無い．同じ日の run の間隔と，間の処置（排水，待ち時間，水位の戻し方，残留流の確認）も記録が無い（控え methods\_facility\_programme.md 7 節，8 節の問い 8，Gaps 4）．分枝の選択に直接効くので，空欄（run の間隔）に足した．間の処置もこの空欄に含める．「日ごとの違い」の内訳（装置の設定と周囲の条件）は，控えに無い言い方だったので削った．}
+
+\begin{en}[M2-3]
+In all 24 runs the analysed record spans gauge readings from 30 to 100~mm, traversed upwards in inflow and downwards in outflow. \PH{start procedure in both modes; how the analysed record was trimmed}.
+\end{en}
+\begin{ja}
+24 run のすべてで，解析した記録は水位計の読み 30 から 100~mm にわたり，inflow では上向きに，outflow では下向きにたどる．\PH{両方の運転の開始の手順；解析した記録の切り落とし方}．
+\src{記録の始点と終点：local/raw/R0001--R0024/waterlevel.csv の先頭と末尾，local/derived/metrics/R00xx/frame\_metrics.csv，metadata/runs.csv:3-26（控え methods\_facility\_programme.md 8 節）．開始の手順は空欄：paper/README.md:85-87，BRIEF 2 節の決定 2}
+\end{ja}
+
+\jnote{M2-3：開始の手順は BRIEF の決定 2 に従って空欄にした．資料は食い違う：ユーザー確認（2026-11-15，cfd/campaign.md:408）は「注入しながら水位計を見て，20 mm になったらすぐ撮影開始」，格納された記録は 24 run とも 30 mm（outflow は 100 mm）から始まる．「静水から開始」とは書いていない．空欄の内訳は次のとおり（控え methods\_facility\_programme.md 8 節の問い 1--9）．inflow：(1) 注水を始めたときの basin の状態と水位．(2) 撮影を始めた水位は 20 mm か 30 mm か．(3) ポンプの周波数を収録の前に固定し，100 mm まで触らなかったか．outflow：(4) 水の張り方と，張り終えてから排水までの待ち時間．(5) 排水を始めた水位と，そのとき静水だったか．両方の運転：(6) 解析した記録の最初と最後のフレームをどう決め，何を切り落としたか（local/raw/a.txt に，R0015「スタート未定→逆算」，R0022「短 カット済み」，R0008 と R0010「短」のメモがある．意味は確認されていない）．同じ日の run の間隔と間の処置は，M2-2 の空欄に入れた．}
+
+\begin{en}[M2-4]
+The port velocity scale $\Up$ and the port Reynolds and Froude numbers, $\Rey$ and $\Fro$, are based on the nominal discharge:
+\end{en}
+\begin{ja}
+port の流速尺度 $\Up$ と，port の Reynolds 数 $\Rey$ および Froude 数 $\Fro$ は，名目流量に基づく：
+\src{定義：scripts/s30\_compute\_metrics.m:46-59，doc/metrics\_primer.md:23-25，notation.tex:25,31-32}
+\end{ja}
+\begin{align}
+\Up &= \frac{\Qnom}{\aport \bport}, \label{eq:Up}\\
+\Rey &= \frac{\Up \aport}{\visc}, \label{eq:Rey}\\
+\Fro &= \frac{\Up}{\sqrt{\grav \hdep}}, \label{eq:Fro}
+\end{align}
+\begin{en}
+where $\grav$ is the gravitational acceleration and $\visc$ the kinematic viscosity of water. Formed with $\Qnom$, the scale $\Up$ takes one value per level (0.041, 0.083 and 0.124~\mps{}) and gives the four replicates of a level the same reference velocity for the flow metrics (Section~\ref{sec:metrics}). As $\hdep$ increases from 0.03 to 0.10~m, $\Fro$ falls from 0.076 to 0.042, from 0.152 to 0.083 and from 0.229 to 0.125 at the low, medium and high levels, respectively. The port Reynolds numbers are \PH{water temperature and resulting Reynolds numbers} (about 2300, 4500 and 6800 if $\visc = 1.0 \times 10^{-6}$~\sqmps{} is assumed).
+\end{en}
+\begin{ja}
+ここで，$\grav$ は重力加速度，$\visc$ は水の動粘性係数である．尺度 $\Up$ は，$\Qnom$ から作るので，水準ごとに一つの値（0.041，0.083，0.124~\mps{}）をとり，一つの水準の四回の反復に，流れの指標のための同じ基準流速を与える（Section~\ref{sec:metrics}）．$\hdep$ が 0.03 から 0.10~m に増すと，$\Fro$ は low，medium，high の水準でそれぞれ 0.076 から 0.042，0.152 から 0.083，0.229 から 0.125 に下がる．port の Reynolds 数は \PH{水温と，それによる Reynolds 数} である（$\visc = 1.0 \times 10^{-6}$~\sqmps{} を仮定すると約 2300，4500，6800）．
+\src{$\Up$ を名目流量から作ることとその理由：scripts/s30\_compute\_metrics.m:46-59．$\Up$，Froude 数，Reynolds 数の値：控え methods\_facility\_programme.md 11 節（計算．$\grav$ = 9.81 m s$^{-2}$，config/constants.m:60）．動粘性係数は仮の値：config/constants.m:61．水温は空欄：paper/README.md:90}
+\end{ja}
+
+\jnote{M2-4：$\Up$ は実装のとおり名目流量から作る（BRIEF 2 節の決定 10，14）．run 平均流量で作ると，inflow で 0.75--0.89 倍，outflow で 0.78--1.00 倍になる．Reynolds 数の括弧内の値は $\visc = 1.0 \times 10^{-6}$~\sqmps{} を仮定した暫定値である．水温は記録が無いので，空欄は「水温と，それによる Reynolds 数」とした．Froude 数から水準を決めた記録は無いので，そうは書いていない．$\hdep < \aport$ では port は一部しか満たされず，port での平均流速は $\Up$ の $\aport/\hdep$ 倍（$\hdep$ = 0.03 m で 1.8 倍）になる（控え methods\_facility\_programme.md 11 節）．本文は $\Up$ を「尺度」と呼ぶだけで，この点を述べる文は語数のために入れていない．入れるかどうかは著者の判断による．}
+
+\bisubsection{Discharge and water depth}{流量と水深}
+\label{sec:discharge}
+
+\begin{en}[M3-1]
+Each run is assigned its run-average discharge $\Qrun$ over the analysed record:
+\end{en}
+\begin{ja}
+各 run には，解析した記録にわたる run 平均流量 $\Qrun$ を割り当てる：
+\src{定義：src/metrics/compute\_branch\_statistics.m:37-38,101-105，doc/qdip\_jet\_check.md:50-51}
+\end{ja}
+\begin{equation}
+\Qrun = \frac{\Aplan \, \Dh}{\Trun},
+\label{eq:Q}
+\end{equation}
+\begin{en}
+where $\Dh = |\hone - \hzero|$ is the difference between the first and last gauge readings of the record, $\hzero$ and $\hone$, and $\Trun = \tone - \tzero$ is the time between its first and last velocity fields, at $\tzero$ and $\tone$. In every run $\Dh = 0.070$~m, so a 1~mm step of the reading corresponds to 1.4\% of $\Qrun$. In inflow, $\Qrun$ was 0.207--0.223, 0.373--0.405 and 0.597--0.634~\Lps{} at the low, medium and high levels (medians of the four runs 0.219, 0.392 and 0.623~\Lps{}), that is, 0.75--0.89 of $\Qnom$. In outflow it was 0.78--1.00 of $\Qnom$ (Table~\ref{tab:programme}).
+\end{en}
+\begin{ja}
+ここで，$\Dh = |\hone - \hzero|$ は，記録の最初と最後の水位計の読み $\hzero$ と $\hone$ の差であり，$\Trun = \tone - \tzero$ は，記録の最初と最後の流速場（時刻 $\tzero$ と $\tone$）の間の時間である．どの run でも $\Dh = 0.070$~m であるので，読みの 1~mm の一刻みは $\Qrun$ の 1.4\% に当たる．inflow では，$\Qrun$ は low，medium，high の水準で 0.207--0.223，0.373--0.405，0.597--0.634~\Lps{}（四つの run の中央値は 0.219，0.392，0.623~\Lps{}）であり，これは $\Qnom$ の 0.75--0.89 倍に当たる．outflow では $\Qnom$ の 0.78--1.00 倍であった（Table~\ref{tab:programme}）．
+\src{実装：src/metrics/compute\_branch\_statistics.m:101-105（$\Dh$ は最初と最後のフレームの水深の差，$\Trun$ は流速場の時刻の幅）．読みの刻み 1 mm と 1.4\%：doc/qdip\_jet\_check.md:117，控え methods\_facility\_programme.md 9 節．inflow の run ごとの値：local/derived/metrics/branch\_stats.csv（Q\_run\_mean\_Lps）．中央値 0.219 / 0.392 / 0.623：doc/settled\_and\_retracted.md:16．名目に対する比：doc/qdip\_jet\_check.md:50-51．outflow：local/derived/metrics/R0013--R0024/frame\_metrics.csv から計算（正本の表は無い）．控え：methods\_discharge\_depth.md 1 節，methods\_facility\_programme.md 9 節}
+\end{ja}
+
+\jnote{M3-1：run 平均流量の分解能を足した．$\Dh$ = 70 mm は 1 mm 刻みの読み二つの差なので，1 刻みが $\Qrun$ の 1.4\% に当たる．主結果で比べる medium の R0007 と R0008 の差（2.2\%）と同じ桁である（控え methods\_facility\_programme.md 9 節）．$\hzero$ と $\hone$ は記録の最初と最後の読み，$\Trun$ は流速場の時刻の幅であり，両者の対応づけは M3-4 に書いた．}
+
+\begin{en}[M3-2]
+Differentiating the gauge record gives a discharge (the gauge-derived discharge) that dips to about 0.35 of $\Qnom$ at readings of 44--50~mm in all 12 inflow runs. In outflow it shows a shallower, broader depression (about 0.7 of $\Qnom$ at readings of about 44--55~mm). Three observations indicate that the port discharge did not dip. First, in the five inflow runs tested (one low, four medium) the surface speed of the port jet, taken as the maximum over $y$ of the 5~s block-mean speed, averaged over $x = 0.19$--0.52~m (Section~\ref{sec:piv}), did not follow the dip. Over readings of 35--62~mm its log--log slope against the gauge-derived discharge was $-0.17$ to $-0.07$, with upper 95\% bounds (moving-block bootstrap, 60~s blocks) of at most $+0.01$. A real dip would give $+0.8$ to $+1.1$, the exponent relating the two between the low and medium levels within fixed ranges of the reading. Second, the water level of the lower reservoir of the facility was reported to change at a constant rate even while the gauge reading fluctuated (\PH{mode, discharge level, instrument, interval covered, constancy}). Third, in all 12 inflow runs the dip coincides with a fall in the number of changes of the gauge reading from about 15--50 to 5--15 per minute (\PH{counting rule}). This number stays low after the gauge-derived discharge has recovered, so the calmer surface is not a consequence of a lower discharge.
+\end{en}
+\begin{ja}
+水位計の記録を微分すると流量（水位計由来の流量）が得られ，これは inflow の 12 run のすべてで読み 44--50~mm において $\Qnom$ の約 0.35 倍まで落ち込む．outflow では，より浅く広いくぼみを示す（読み約 44--55~mm で $\Qnom$ の約 0.7 倍）．三つの観察が，port の流量は落ち込まなかったことを示す．第一に，試験した五つの inflow の run（low が一つ，medium が四つ）で，port の噴流の表面流速（5~s のブロック平均の流速の $y$ にわたる最大値を，$x = 0.19$--0.52~m で平均したものとして取る；Section~\ref{sec:piv}）は，落ち込みに追従しなかった．読み 35--62~mm にわたって，水位計由来の流量に対するその両対数の傾きは $-0.17$ から $-0.07$ であり，95\% の上限（移動ブロック・ブートストラップ，60~s のブロック）は高々 $+0.01$ であった．落ち込みが本物であれば $+0.8$ から $+1.1$ を与えるはずであり，これは，読みの一定の範囲の中で low と medium の水準の間で両者を関係づける指数である．第二に，本装置の下池の水位は，水位計の読みが揺れている間も一定の割合で変化したと報告されている（\PH{運転，流量水準，計測器，含まれた区間，一定の程度}）．第三に，inflow の 12 run のすべてで，落ち込みは，水位計の読みの変化回数が毎分約 15--50 回から 5--15 回に落ちることと一致する（\PH{数え方の規則}）．この回数は水位計由来の流量が回復した後も低いままであるので，より静かな水面は，流量の低下の結果ではない．
+\src{落ち込みの位置と大きさ：doc/qdip\_jet\_check.md:12,117-120（そこでの水深は水位計の読み．outflow の位置 0.8--1.0 倍の port 高は読み約 44--55 mm に換算）．噴流の試験（5 run，主の統計量の定義，$x$ = 0.19--0.52 m，読み 35--62 mm，傾きと 95\% 区間，期待値）：doc/qdip\_jet\_check.md:135-142,150-160，scripts/checks/qdip\_jet\_check.py:49-59,217-229,252-270，local/derived/qc/qdip\_jet\_check/run\_summary.csv（beta\_core）．水準間の指数 0.82--1.11：doc/qdip\_jet\_check.md:143-144,162-163，scripts/checks/qdip\_jet\_check.py:366-383．下池：doc/qdip\_jet\_check.md:17-19．読みの変化回数とその解釈：doc/qdip\_jet\_check.md:20-24．控え：methods\_discharge\_depth.md 2--5 節，C14}
+\end{ja}
+
+\jnote{M3-2：噴流の試験は，流速場がこの Mac にある 5 run（R0001，R0005--R0008）だけで行った．本文の傾き（$-0.17$ から $-0.07$）と 95\% の上限（高々 $+0.01$）は，主の統計量（5 s のブロック平均の流速の $y$ にわたる最大値を $x$ で平均したもの）の値である．補助の統計量（フレームごとの最大値の 5 s のブロック平均）では，傾きが $-0.13$ から $-0.05$，上限が高々 $+0.03$ であり，正本の要約（$-0.17$ から $-0.05$，上限 $+0.03$ 以下）は二つを合わせた範囲である（控え methods\_discharge\_depth.md C14）．語数のために本文には主の統計量だけを書いた．両方を書くかどうかは著者の判断による．ブートストラップは 60 s の移動ブロックで 2000 回である．期待値 $+0.8$ から $+1.1$ は，同じ読みの窓の中での，水位計由来の流量の水準間の比（medium と low）に対する指数であり，独立に測った流量に対する指数ではない．落ち込みの位置は，本論文の $\hdep$（時間比例の水深）ではなく，水位計の読みで書いた（読み 44--50 mm は，時間比例の水深では inflow で 40--62 mm に当たる）．下池の計測の詳細（運転，流量水準，run の数，計測器，下池の平面積，読み 40--60 mm の区間を含んだか，「一定」の程度）と，読みの変化回数の数え方は記録が無い（後者は監査でも再計算できていないので，「約」を付けた）．水準どうしの流量比がどの水深でも保たれること（high/low 2.8--3.4，medium/low 1.8--2.3）は，語数のために本文に入れていない．流量の一定性は結果の節の最初の項目でもある（paper/README.md の 1 本目 (2)）．試験の細目を方法と結果のどちらに置くかは著者の判断による．}
+
+\begin{en}[M3-3]
+On these grounds the discharge is treated as steady within each run, and no depth-resolved discharge from the gauge record is used. The grounds are partial. The jet test covers only the dip (readings of 35--62~mm) and the surface of the jet, includes no run at the high level and takes its sensitivity to discharge from one run at the low level. It was not applied to outflow, where a steady discharge is an assumption not verified separately. We attribute the dip to the gauge reading, although a gauge error and temporary storage of water on the basin side have not been separated by a direct test.
+\end{en}
+\begin{ja}
+これらの根拠に基づいて，流量を各 run の中で一定として扱い，水位計の記録による水深ごとの流量は使わない．根拠は部分的である．噴流の試験は，落ち込み（読み 35--62~mm）と噴流の表面だけを対象とし，high の水準の run を含まず，流量に対する感度を low の水準の一つの run から得ている．この試験は outflow には適用しておらず，outflow で流量が一定であることは，別途に検証していない仮定である．著者らは落ち込みを水位計の読みに帰するが，水位計の誤差と basin の側での一時的な水の貯留とは，直接の試験で分離できていない．
+\src{判断：doc/settled\_and\_retracted.md:16-17，doc/qdip\_jet\_check.md:10-13．試験の範囲と限界：doc/qdip\_jet\_check.md:148,163,241-248．outflow は別に確かめる：doc/qdip\_jet\_check.md:110-111．水位計の誤差と貯留を区別できていない：doc/qdip\_jet\_check.md:42-43．控え：methods\_discharge\_depth.md 2b，2c，8 節，C11，C12}
+\end{ja}
+
+\jnote{M3-3：最後の文の限定（水位計の誤差と basin の側の貯留を分離できていない）は doc/qdip\_jet\_check.md:42-43 による．索引（doc/settled\_and\_retracted.md:19,41）は水位計の見かけとして決着と書いており，食い違う（控え methods\_discharge\_depth.md C11．ユーザーの判断待ち）．貯留と分かれば主軸は水位計の水深に戻る（doc/qdip\_jet\_check.md:103）．静的な較正で決まる．噴流の試験が判定できるのは落ち込みの区間だけで，$\hdep > \aport$ での水位計由来の流量の上昇（名目の約 0.75 倍から約 1.25 倍）は判定できない（doc/qdip\_jet\_check.md:247-248）．}
+
+\begin{en}[M3-4]
+With a steady discharge and a constant plan area the water level changes in proportion to time. The depth assigned to a velocity field recorded at time $t$ is therefore the time-proportional depth:
+\end{en}
+\begin{ja}
+流量が一定で平面積が一定であれば，水位は時間に比例して変化する．したがって，時刻 $t$ に記録した流速場に割り当てる水深は，時間比例の水深とする：
+\src{理由：doc/qdip\_jet\_check.md:32,101-102．主軸の決定：doc/settled\_and\_retracted.md:20，paper/README.md:61-63（ユーザー決裁 2026-11-22）}
+\end{ja}
+\begin{equation}
+\hdep(t) = \hzero + (\hone - \hzero)\,\frac{t - \tzero}{\tone - \tzero},
+\label{eq:htime}
+\end{equation}
+\begin{en}
+with $\hzero = 0.030$~m and $\hone = 0.100$~m in inflow and the reverse in outflow. This is the primary depth of the paper; the gauge depth is retained as a sensitivity check. It is interpolated from the gauge record at the same normalized time, on the assumption that this record and the image sequence span the same interval (their durations differ by at most 6.3~s).
+\end{en}
+\begin{ja}
+ここで，inflow では $\hzero = 0.030$~m，$\hone = 0.100$~m であり，outflow ではその逆である．これが本論文の主たる水深である；水位計の水深は感度の確認として残す．水位計の水深は，同じ正規化した時間で水位計の記録から内挿し，その際，この記録と画像の列が同じ区間にわたると仮定する（両者の長さの差は最大で 6.3~s である）．
+\src{時間比例の水深の定義（始点と終点を結ぶ直線，s31 と同じ正規化時間）：doc/qdip\_jet\_check.md:60，src/metrics/assign\_depth\_bands.m:41-46．水位計の水深の対応づけ（同じ区間の記録とみなし，正規化した時間で対応させる）：src/metrics/assign\_depth\_bands.m:21-28,38-48．長さの差：控え methods\_facility\_programme.md 8 節（計算）．控え：methods\_discharge\_depth.md 6a，6b}
+\end{ja}
+
+\jnote{M3-4：水位計の記録と画像の列は，共通の時計ではなく，同じ区間の記録とみなして正規化した時間で対応づけている（ログの時刻そのものは使わない）．両者の長さの差は，21 run で 0.61 s 以下，R0006 で 6.30 s，R0022 で 1.46 s，R0010 で 1.29 s である（控え methods\_facility\_programme.md 8 節）．$\hzero$，$\hone$ と $\Qrun$ も，この対応づけに依る．}
+
+\begin{en}[M3-5]
+For band-wise statistics the record is divided into four depth bands defined on the time-proportional depth: $\Band{1}$ for $0.030 \le \hdep < 0.050$~m ($0.55 \le \ha < 0.91$), $\Band{2}$ for $0.050 \le \hdep < 0.060$~m ($0.91 \le \ha < 1.09$), $\Band{3}$ for $0.060 \le \hdep < 0.075$~m ($1.09 \le \ha < 1.36$) and $\Band{4}$ for $0.075 \le \hdep \le 0.100$~m ($1.36 \le \ha \le 1.82$). Band $\Band{2}$ isolates the interval around $\hdep = \aport$.
+\end{en}
+\begin{ja}
+水深帯ごとの統計のために，記録を，時間比例の水深で定義した四つの水深帯に分ける：$\Band{1}$ は $0.030 \le \hdep < 0.050$~m（$0.55 \le \ha < 0.91$），$\Band{2}$ は $0.050 \le \hdep < 0.060$~m（$0.91 \le \ha < 1.09$），$\Band{3}$ は $0.060 \le \hdep < 0.075$~m（$1.09 \le \ha < 1.36$），$\Band{4}$ は $0.075 \le \hdep \le 0.100$~m（$1.36 \le \ha \le 1.82$）である．水深帯 $\Band{2}$ は $\hdep = \aport$ の前後の区間を切り出す．
+\src{水深帯の境界：metadata/depth\_bands.csv:2-5．境界の扱い（下端を含み，最も深い帯だけ上端も含む）：src/metrics/assign\_depth\_bands.m:51-65．時間比例の水深で定義すること：BRIEF 2 節の決定 5，doc/settled\_and\_retracted.md:20}
+\end{ja}
+
+\jnote{M3-5：解析のパイプライン（s31）は，まだ水位計の水深で水深帯を割り当てている．s31 に水深の選択肢を足す作業は未実施で，今ある frame\_metrics.csv，band\_metrics.csv，branch\_stats.csv の帯ごとの値は水位計の軸のものである．時間比例の軸での帯ごとの値は，一度きりの計算の範囲（doc/qdip\_jet\_check.md:76-84）としてしか存在しない（控え methods\_discharge\_depth.md 7 節）．}
+
+\begin{en}[M3-6]
+The gauge reading falls below the depth of Equation~(\ref{eq:htime}) by up to about 10~mm in inflow, at readings of about 50--60~mm, and about 5~mm in outflow, at readings of about 53--67~mm. About one third of the record in inflow and about 10--18\% in outflow therefore changes its depth band between the two depths. Both depths share the end readings $\hzero$ and $\hone$. Whether these readings are true depths, that is, whether the span of the gauge is correct, has not been verified independently (\PH{independent check of gauge span}). The absolute values of $\hdep$ and $\Qrun$, including the ratios of $\Qrun$ to $\Qnom$, rest on this assumption. Equations~(\ref{eq:Q}) and (\ref{eq:htime}) also neglect the plan area of the feed channel, whose water surface follows that of the basin while $\hdep < \aport$ (\PH{feed-channel plan area}).
+\end{en}
+\begin{ja}
+水位計の読みは，inflow では読み約 50--60~mm において最大で約 10~mm，outflow では読み約 53--67~mm において最大で約 5~mm，Equation~(\ref{eq:htime}) の水深を下回る．そのため，inflow では記録の約三分の一，outflow では約 10--18\% が，二つの水深の間で水深帯を替える．二つの水深は，端点の読み $\hzero$ と $\hone$ を共有する．これらの読みが真の水深であるかどうか，すなわち水位計の span が正しいかどうかは，独立には検証していない（\PH{水位計の span の独立な確認}）．$\hdep$ と $\Qrun$ の絶対値は，$\Qrun$ の $\Qnom$ に対する比を含めて，この仮定に依っている．Equation~(\ref{eq:Q}) と Equation~(\ref{eq:htime}) はまた，給水路の平面積を無視しており，給水路の水面は $\hdep < \aport$ の間 basin の水面に追従する（\PH{給水路の平面積}）．
+\src{ずれの大きさと帯が替わる割合：doc/qdip\_jet\_check.md:35-38，doc/settled\_and\_retracted.md:17，控え methods\_discharge\_depth.md 6c，C8（丸めて書く：BRIEF 2 節の決定 5）．端点の共有と span が未検証であること：doc/settled\_and\_retracted.md:23,55，paper/README.md:162-166．給水路の平面積：src/metrics/compute\_branch\_statistics.m:44-45，doc/piv\_conditions.md:132（約 1\% は長さを仮定した見積もり），控え methods\_discharge\_depth.md 6a（直線への影響）．控え：同 6c，8 節}
+\end{ja}
+
+\jnote{M3-6：ずれは「読み $-$ 直線」の負の側の最大（run ごとの値）で，位置は水位計の読みで書いた．正本（doc/qdip\_jet\_check.md:35-38）の記載は，inflow が $-9$ から $-11$ mm（読み 50--59 mm），31--39\%，outflow が $-4$ から $-6$ mm（読み 53--67 mm），10--18\% である．ただし，その定義（平滑，時間の取り方）の記録が無い．本文の定義（Equation~(\ref{eq:htime}) と，正規化した時間で内挿した読み）をフレームごとに当てた再計算は，inflow が $-10.0$ から $-12.2$ mm（読み 50--60 mm），31.8--37.5\%，outflow が $-4.5$ から $-6.5$ mm（読み 53--68 mm），8.9--17.6\% で，一つの定義では正本の数値の全部を再現できない（控え methods\_discharge\_depth.md C8）．そのため，BRIEF の決定 5 に従って丸めて書いた．s31 に水深の選択肢が入ったら，一つの定義で計算し直した値に差し替える．収録の初めには読みが直線より上にある（inflow で最大 $+2.1$ から $+4.9$ mm，outflow で $+1.0$ から $+1.8$ mm）．ずれが最大になる所の時間比例の水深は，inflow で 61--71 mm（$\ha$ = 1.12--1.30）であり，「$\ha \approx 1$ 付近」は水位計の読みについてだけ成り立つ（同 6c，監査）．給水路の平面積は，Equation~(\ref{eq:Q}) だけでなく，Equation~(\ref{eq:htime}) の前提（平面積が一定）にも入る（長さ 0.6 m を仮定した見積もりで，直線からのずれは約 0.2 mm）．span の確認の方法は，静的な較正か，下池の平面積の実測である（doc/settled\_and\_retracted.md 3 節）．}
