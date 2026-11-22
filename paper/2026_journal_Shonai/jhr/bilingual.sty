@@ -31,9 +31,9 @@
 \DeclareOption{review}{\reviewtrue}
 \ProcessOptions\relax
 
-\newcommand{\bl@id}{}
-\newcommand{\bl@lastid}{}
-\newcommand{\bl@src}{}
+\def\bl@id{}
+\def\bl@lastid{}
+\def\bl@src{}
 \long\def\bl@en{}
 
 \ifreview
@@ -75,7 +75,7 @@
 % In the review build the Japanese-side gaps are also collected, with their
 % paragraph ID, and printed as one list by \printopenitems.
 \newif\ifbl@inja \bl@injafalse
-\newcommand{\bl@openlist}{}
+\def\bl@openlist{}
 \newcommand{\bl@collect}[2]{%
   \ifbl@inja
     \begingroup

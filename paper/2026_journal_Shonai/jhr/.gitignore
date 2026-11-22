@@ -16,3 +16,5 @@ refs.bib
 # tJHR2e.cls next to main.tex. review.tex does not need it.
 template/
 tJHR2e.cls
+# tracked by hand at milestones (git add -f): the content-review PDF
+review.pdf

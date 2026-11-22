@@ -9,7 +9,7 @@ cd "$(dirname "$0")"
 what="${1:-both}"
 python3 make_bib.py
 run() { # engine, jobname
-  "$1" -interaction=nonstopmode -halt-on-error "$2" >/dev/null || { tail -30 "$2.log"; exit 1; }
+  "$1" -interaction=nonstopmode -halt-on-error "$2" >/dev/null || { grep -n -A8 '^!' "$2.log" | head -40; echo "BUILD FAILED: $2"; exit 1; }
 }
 if [ "$what" = both ] || [ "$what" = review ]; then
   run lualatex review; bibtex review >/dev/null || true; run lualatex review; run lualatex review
