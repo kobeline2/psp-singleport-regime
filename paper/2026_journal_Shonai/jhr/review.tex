@@ -1,0 +1,40 @@
+% review.tex -- content-review build: Japanese literal translation as the main
+% text, the canonical English small underneath, source notes below that.
+%   lualatex review && bibtex review && lualatex review && lualatex review   (or ./build.sh)
+% The section files are shared with main.tex; see CONVENTIONS.md.
+\documentclass[a4paper,11pt]{ltjsarticle}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage[natbibapa,nodoi]{apacite}
+\usepackage[review]{bilingual}
+\input{notation}
+
+\title{精査用：Journal of Hydraulic Research 投稿原稿（序論と方法）}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent 英語が正本である．各段落は，段落の番号，日本語の直訳，英語（小さい字），出典（引用元のメモの場所）の順に並ぶ．指摘は段落の番号で受ける．印の意味は次のとおりである．
+
+\begin{description}\setlength{\itemsep}{1pt}
+\item[\textbf{[TBD: …]}] 未確定の数値または事実．推測で埋めていない．
+\item[\textbf{[REF: …]}] 後で足す文献（揚水発電の重要性などの周辺文献）．
+\item[\unverified] 人が原典と照合していない文献（AI が読んだ要約に基づく記述）．
+\end{description}
+
+\input{sections/intro}
+\input{sections/methods}
+\input{sections/backmatter}
+
+\section*{未確定の箇所の一覧}
+\printopenitems
+
+\bibliographystyle{apacite}
+\bibliography{refs}
+
+\clearpage
+\input{tables/all}
+
+\end{document}

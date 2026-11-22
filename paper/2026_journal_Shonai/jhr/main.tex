@@ -1,0 +1,56 @@
+% main.tex -- submission build: English only.
+%   pdflatex main && bibtex main && pdflatex main && pdflatex main   (or ./build.sh)
+% The section files are shared with review.tex; see CONVENTIONS.md.
+\documentclass{tJHR2e}
+
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage[natbibapa,nodoi]{apacite}% APA author-date through natbib commands
+\usepackage{graphicx}
+\usepackage{bilingual}
+\input{notation}
+\parskip8pt
+
+\begin{document}
+
+\articletype{Research paper}
+
+\title{\PH{working title, at most 80 characters, no abbreviations:} Discharge selects the circulation branch in a shallow single-port basin}
+
+\author{Takahiro Koshiba, \textit{\PH{affiliation}}\\
+\textit{Email: \PH{email} (author for correspondence)}
+\and
+Yuna Shonai, \textit{\PH{affiliation}}
+\and
+Daniel Wenker, \textit{\PH{affiliation}}
+\and
+Kenji Kawaike, \textit{\PH{affiliation}}
+\and
+Christian Auel, \textit{\PH{affiliation}}}
+
+\maketitle
+
+\noindent\textit{Running Head}: \PH{running head, up to seven words}
+
+\begin{abstract}
+\PH{abstract of about 150 words; no acronyms, abbreviations, references or symbols}
+\end{abstract}
+
+\begin{keywords}
+\PH{five to seven keywords in alphabetical order, preferably from the JHR list}
+\end{keywords}
+
+\input{sections/intro}
+\input{sections/methods}
+% \input{sections/results}
+% \input{sections/discussion}
+% \input{sections/conclusions}
+\input{sections/backmatter}
+
+\bibliographystyle{apacite}
+\bibliography{refs}
+
+\clearpage
+\input{tables/all}
+
+\end{document}

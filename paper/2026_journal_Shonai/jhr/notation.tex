@@ -1,0 +1,67 @@
+% notation.tex -- every symbol of the manuscript, defined once.
+%
+% Section files must use these macros and never write a symbol out by hand, so
+% that a notation decision is a one-line change here. Use them in math mode.
+%
+% JHR rules encoded here (Instructions for authors, 2026-11-16):
+%   - scalar variables italic; numbers and brackets never italic
+%   - sub- and superscripts in the same style as their variable, i.e. italic
+%     (\sub below), except numbers and `max'/`min', which are upright
+%   - dimensionless similarity numbers in upright sans serif
+%   - units upright, written as m s^{-1}, never m/s
+
+\newcommand{\sub}[1]{\mathit{#1}}        % descriptive subscript (JHR: italic)
+
+% --- geometry and operation ----------------------------------------------------
+\newcommand{\hdep}{h}                    % water depth
+\newcommand{\aport}{a}                   % port height
+\newcommand{\bport}{b}                   % port width
+\newcommand{\ha}{h/a}                    % relative submergence
+\newcommand{\Lx}{L}                      % basin length (x)
+\newcommand{\Wy}{W}                      % basin width (y)
+\newcommand{\Aplan}{A}                   % basin plan area
+\newcommand{\Qrun}{Q}                    % run-average discharge
+\newcommand{\Qnom}{Q_{\sub{n}}}          % nominal discharge
+\newcommand{\Up}{U_{\sub{p}}}            % port mean velocity, Q_n/(a b)
+\newcommand{\Trun}{T}                    % duration of the recorded interval
+\newcommand{\grav}{g}
+\newcommand{\visc}{\nu}
+
+% --- dimensionless numbers (upright sans serif) --------------------------------
+\newcommand{\Rey}{\mathsf{R}}            % port Reynolds number, U_p a / nu
+\newcommand{\Fro}{\mathsf{F}}            % port Froude number, U_p / sqrt(g h)
+
+% --- velocity field ------------------------------------------------------------
+\newcommand{\uvec}{\boldsymbol{u}}       % surface velocity vector (u, v)
+\newcommand{\vort}{\omega}               % vertical vorticity of the surface field
+\newcommand{\dom}{\Omega}                % analysis domain
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}   % area mean over \dom
+
+% --- flow metrics --------------------------------------------------------------
+\newcommand{\Ekin}{E}                    % area-mean squared surface speed
+\newcommand{\Enoise}{E_{\sub{noise}}}    % PIV noise floor of E
+\newcommand{\philv}{\phi_{\sub{lv}}}     % low-velocity area fraction
+\newcommand{\uth}{u_{\sub{th}}}          % low-velocity threshold
+\newcommand{\Iasym}{I_{\sub{asym}}}      % left-right asymmetry index (unsigned)
+\newcommand{\Icirc}{I_{\sub{circ}}}      % signed net circulation index
+\newcommand{\Irot}{I_{\sub{rot}}}        % rotation activity index (unsigned)
+\newcommand{\Iunst}{I_{\sub{unst}}}      % band-wise unsteadiness index
+\newcommand{\Band}[1]{B_{#1}}            % depth band, \Band{1} ... \Band{4}
+
+% --- branch selection ----------------------------------------------------------
+% OPEN: R_lock sits next to the Reynolds number R (sans serif). Kept for
+% continuity with the repo (branch_stats.csv, figures); change here if the
+% clash bothers a reader.
+\newcommand{\Rlock}{R_{\sub{lock}}}      % lock strength, |mean I_circ| / s.d.
+\newcommand{\Psign}{P_{\sub{sign}}}      % sign persistence (fraction of frames)
+\newcommand{\yjet}{y_{\sub{j}}}          % jet lateral offset from the port axis
+\newcommand{\Sside}{S}                   % signed energy-side index (E_L-E_R)/(E_L+E_R)
+
+% --- units (text mode; JHR: upright, written as m s^{-1}, never m/s) -----------
+\newcommand{\Lps}{L~s$^{-1}$}
+\newcommand{\mps}{m~s$^{-1}$}
+\newcommand{\sqm}{m$^{2}$}
+\newcommand{\sqmps}{m$^{2}$~s$^{-1}$}
+\newcommand{\sqmpss}{m$^{2}$~s$^{-2}$}
+\newcommand{\mmpmin}{mm~min$^{-1}$}
+\newcommand{\mmppx}{mm~pixel$^{-1}$}

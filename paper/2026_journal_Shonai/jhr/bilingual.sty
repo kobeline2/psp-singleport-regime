@@ -1,0 +1,94 @@
+% bilingual.sty -- paired English / Japanese paragraphs for the JHR manuscript.
+%
+% English is the canonical text. Every paragraph carries a literal Japanese
+% translation, used only for the content review (paper/README.md, 1 本目,
+% 書き方の取り決め). The same section files feed two builds:
+%
+%   main.tex    (pdflatex, tJHR2e class)   -> English only, for submission
+%   review.tex  (lualatex, ltjsarticle)    -> Japanese first, English small
+%
+% Usage in a section file:
+%
+%   \begin{en}[I-3]
+%   English paragraph.
+%   \end{en}
+%   \begin{ja}
+%   日本語の直訳．
+%   \src{Dufresne 2010: review_master.tex L395-410, 確認 p.3-5}
+%   \end{ja}
+%
+% Rules that keep both builds correct (see CONVENTIONS.md):
+%   - One blank line between paragraphs, none inside an en/ja pair.
+%   - \begin{en}, \end{en}, \begin{ja}, \end{ja} each on their own line.
+%   - Display equations sit outside both blocks. A paragraph that runs through
+%     an equation is written as pair / equation / pair with no blank lines.
+%   - No verbatim material inside en or ja (the body is read as an argument).
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bilingual}[2026/11/22 paired English/Japanese paragraphs]
+
+\newif\ifreview \reviewfalse
+\DeclareOption{review}{\reviewtrue}
+\ProcessOptions\relax
+
+\newcommand{\bl@id}{}
+\newcommand{\bl@lastid}{}
+\newcommand{\bl@src}{}
+\long\def\bl@en{}
+
+\ifreview
+  % --- review build: Japanese as the main text, English small underneath ----
+  \NewDocumentEnvironment{en}{o +b}{%
+    \IfValueTF{#1}{\gdef\bl@id{#1}\gdef\bl@lastid{#1}}{\gdef\bl@id{}}%
+    \long\gdef\bl@en{#2}}{\ignorespacesafterend}
+  \NewDocumentEnvironment{ja}{+b}{%
+    \gdef\bl@src{}%
+    \par\noindent
+    \ifx\bl@id\@empty\else\textbf{[\bl@id]}\enspace\fi
+    \bl@injatrue #1\bl@injafalse\par\nobreak\vspace{1pt}%
+    {\noindent\small\bl@en\par}%
+    \ifx\bl@src\@empty\else
+      \nobreak\vspace{1pt}{\noindent\footnotesize 出典: \bl@src\par}%
+    \fi
+    \vspace{7pt}}{\ignorespacesafterend}
+  \newcommand{\src}[1]{\gdef\bl@src{#1}\ignorespaces}
+  \newcommand{\bisection}[2]{\section{#1\quad{\normalsize #2}}}
+  \newcommand{\bisubsection}[2]{\subsection{#1\quad{\normalsize #2}}}
+  % a note to the reviewer that is not part of the manuscript
+  \newcommand{\jnote}[1]{\par{\noindent\footnotesize 注: #1\par}\vspace{4pt}}
+\else
+  % --- submission build: English only ---------------------------------------
+  \NewDocumentEnvironment{en}{o +b}{#2}{}
+  \NewDocumentEnvironment{ja}{+b}{}{\ignorespacesafterend}
+  \newcommand{\src}[1]{}
+  \newcommand{\bisection}[2]{\section{#1}}
+  \newcommand{\bisubsection}[2]{\subsection{#1}}
+  \newcommand{\jnote}[1]{}
+\fi
+
+% --- gaps, visible in BOTH builds until they are closed ----------------------
+% \PH{...}     an unknown number or fact. Never guess; leave it here.
+% \PHref{...}  literature still to be supplied (the literature chat knows).
+% \unverified  placed right after a citation whose source note is still an
+%              AI-DRAFT, i.e. not yet checked against the original by a human.
+%
+% In the review build the Japanese-side gaps are also collected, with their
+% paragraph ID, and printed as one list by \printopenitems.
+\newif\ifbl@inja \bl@injafalse
+\newcommand{\bl@openlist}{}
+\newcommand{\bl@collect}[2]{%
+  \ifbl@inja
+    \begingroup
+      \protected@xdef\bl@openlist{\expandafter\unexpanded\expandafter{\bl@openlist}%
+        \noexpand\item[\noexpand\textbf{[\bl@lastid]}] #1\enspace\unexpanded{#2}}%
+    \endgroup
+  \fi}
+\newcommand{\PH}[1]{\textbf{[TBD: #1]}\bl@collect{未確定:}{#1}}
+\newcommand{\PHref}[1]{\textbf{[REF: #1]}\bl@collect{文献:}{#1}}
+\newcommand{\unverified}{\textsuperscript{\textdagger}}
+\newcommand{\printopenitems}{%
+  \ifx\bl@openlist\@empty\else
+    \begin{description}\setlength{\itemsep}{1pt}\bl@openlist\end{description}%
+  \fi}
+
+\endinput

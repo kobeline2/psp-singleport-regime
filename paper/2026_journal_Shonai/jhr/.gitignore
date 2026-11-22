@@ -1,0 +1,18 @@
+# build products
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+main.pdf
+# generated from the Zotero export by make_bib.py
+refs.bib
+# The publisher's template is not ours to redistribute from a public repo.
+# Get it from the JHR instructions for authors ("Latex template") and put
+# tJHR2e.cls next to main.tex. review.tex does not need it.
+template/
+tJHR2e.cls
